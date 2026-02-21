@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { showToast } from "../../../component/ShowToast";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -15,21 +14,59 @@ import { AgreementModal } from "./AgreementModal";
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const navigate = useNavigate(); // To navigate to the success page
-
   const [showAgreement, setShowAgreement] = useState(false);
-  const [agreeChecked, setAgreeChecked] = useState(false);
+  const [hasAgreed, setHasAgreed] = useState(false); // Track if user has agreed after reading
+  const navigate = useNavigate();
 
-  // Use the useForm hook
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm();
 
+  // Watch the agreement checkbox value
+  const agreementChecked = watch("agreement", false);
+
+  // Handle agreement checkbox click
+  const handleAgreementClick = (e) => {
+    const isChecked = e.target.checked;
+    setValue("agreement", isChecked);
+    
+    if (isChecked && !hasAgreed) {
+      // If checking without having agreed yet, show the modal
+      setShowAgreement(true);
+    } else if (!isChecked) {
+      // If unchecking, reset agreement status
+      setHasAgreed(false);
+    }
+  };
+
+  // Handle agreement modal close
+  const handleAgreementClose = (userAgreed) => {
+    setShowAgreement(false);
+    
+    if (userAgreed) {
+      // User clicked "I understand" - mark as agreed
+      setHasAgreed(true);
+      setValue("agreement", true);
+    } else {
+      // User closed without agreeing - uncheck the box
+      setHasAgreed(false);
+      setValue("agreement", false);
+    }
+  };
+
+  // Handle agreement link click (when user clicks the text)
+  const handleAgreementLinkClick = () => {
+    setShowAgreement(true);
+  };
+
   const onSubmit = async (data) => {
-    if (!agreeChecked) {
-      showToast("You must agree to the Partner Agreement before registering.");
+    // Validate that user has actually agreed after reading
+    if (!hasAgreed || !data.agreement) {
+      showToast("Please read and agree to the Partner Agreement before registering.");
       return;
     }
 
@@ -40,7 +77,7 @@ const Register = () => {
         password: data.password,
         email: data.email,
         phoneNumber: data.phoneNumber,
-        agreement: data.agreement,
+        agreement: hasAgreed, // Send the actual agreement status
       });
 
       if (response.status === 201) {
@@ -48,11 +85,7 @@ const Register = () => {
         navigate("/registration-success", { state: { email: data.email } });
       }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      if (error.response?.data?.message) {
         showToast(error.response.data.message);
       } else {
         showToast(
@@ -64,18 +97,13 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    setShowAgreement(true);
-  }, []);
-
   return (
     <div className="max-w-md mx-auto mt-4 p-4 bg-white shadow-md rounded">
-      {showAgreement && (
-        <AgreementModal
-          isOpen={showAgreement}
-          onClose={() => setShowAgreement(false)}
-        />
-      )}
+      <AgreementModal
+        isOpen={showAgreement}
+        onClose={handleAgreementClose}
+      />
+      
       <Heading
         level="2"
         className="text-2xl font-semibold mb-4 font-body"
@@ -88,6 +116,7 @@ const Register = () => {
       >
         Create your Partner Account
       </Heading>
+      
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <LabelImportant htmlFor="username">Username</LabelImportant>
@@ -105,6 +134,7 @@ const Register = () => {
             </Text>
           )}
         </div>
+        
         <div className="mb-4">
           <LabelImportant htmlFor="phoneNumber">Phone Number</LabelImportant>
           <LongInputWithPlaceholder
@@ -173,16 +203,29 @@ const Register = () => {
         <div className="mb-4 flex text-sm items-center justify-start space-x-2">
           <input
             type="checkbox"
+            id="agreement"
             className="accent-primary3"
-            {...register("agreement", { required: true })}
+            checked={agreementChecked}
+            onChange={handleAgreementClick}
           />
-          <div
-            onClick={() => setShowAgreement(true)}
-            className="text-primary3 hover:underline cursor-pointer lg:whitespace-nowrap"
-          >
-            I agree to the Dimpified Independent Sales Partner Agreement
+          <div className="flex items-center">
+            <span>I agree to the </span>
+            <button
+              type="button"
+              onClick={handleAgreementLinkClick}
+              className="text-primary3 hover:underline cursor-pointer ml-1"
+            >
+              Dimpified Independent Sales Partner Agreement
+            </button>
           </div>
         </div>
+        
+        {!hasAgreed && agreementChecked && (
+          <Text className="text-amber-600 text-sm mb-2">
+            Please read the agreement above by clicking the link.
+          </Text>
+        )}
+        
         {errors.agreement && (
           <Text className="text-red-500 text-sm">
             You must agree before registering.
@@ -192,10 +235,10 @@ const Register = () => {
         <ButtonLongPurple
           type="submit"
           className="w-full bg-primary3 text-white py-2 rounded hover:bg-primary4 transition duration-300"
+          disabled={loading}
         >
           {loading ? (
             <Text className="flex ml-2 items-center justify-center">
-              {" "}
               <LoadingSmall /> Registering...
             </Text>
           ) : (

@@ -3,9 +3,76 @@ import { updateAccessToken } from "../features/authentication";
 import AxiosInterceptor from "../component/AxiosInterceptor";
 
 // Define your API endpoints
-
 const API_URL = `${import.meta.env.VITE_API_URL}/creator`;
 const PLAIN_API_URL = `${import.meta.env.VITE_API_URL}`;
+
+// Create axios instance with default config
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+});
+
+// Helper function to update headers
+export const setAuthHeader = (token) => {
+  if (token) {
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+};
+
+// Clear auth header
+export const clearAuthHeader = () => {
+  delete apiClient.defaults.headers.common['Authorization'];
+  delete axios.defaults.headers.common['Authorization'];
+};
+
+const GoogleSignUp = async ({ token, refcode = null }) => {
+  try {
+    console.log("Sending Google auth request with payload:", { token, refcode });
+    
+     let processedRefcode = refcode;
+    
+    // If refcode is "null" string, treat it as empty
+    if (processedRefcode === "null" || processedRefcode === null) {
+      processedRefcode = "";
+    }
+    
+    const payload = {
+      token: token,
+     refCode: refcode
+    };
+    
+    const response = await apiClient.post(`${API_URL}/google-auth`, payload, {
+      timeout: 15000,
+    });
+    
+    console.log("Google auth response:", response.data);
+    return response;
+  } catch (error) {
+    console.error("Google auth API error:", error);
+    
+    if (error.code === 'ECONNABORTED') {
+      throw new Error("Connection timeout. Please try again.");
+    } else if (error.response) {
+      const errorData = error.response.data;
+      console.error("Server error response:", errorData);
+      throw new Error(
+        errorData?.message || 
+        errorData?.error || 
+        "Google authentication failed"
+      );
+    } else if (error.request) {
+      console.error("No response received:", error.request);
+      throw new Error("Cannot connect to server. Please check your connection.");
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
 
 // Registration API call
 const creatorRegister = async ({
@@ -20,7 +87,7 @@ const creatorRegister = async ({
   organizationName,
 }) => {
   try {
-    const response = await axios.post(`${API_URL}/signup`, {
+    const response = await apiClient.post(`${API_URL}/signup`, {
       fullName,
       email,
       password,
@@ -34,19 +101,6 @@ const creatorRegister = async ({
     return response;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Registration failed");
-  }
-};
-
-const GoogleSignUp = async ({ token }) => {
-  try {
-    const response = await axios.post(`${API_URL}/new/google-signup`, {
-      token,
-    });
-    return response;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || " New Registration with Google failed"
-    );
   }
 };
 
@@ -90,6 +144,7 @@ const creatorVerifyToken = async ({ email, OTP }) => {
     throw new Error(error.response?.data?.message || "Registration failed");
   }
 };
+
 const creatorResendVerifyToken = async ({ email, phoneNumber }) => {
   try {
     const response = await axios.post(`${API_URL}/resend-otp`, {
@@ -177,6 +232,7 @@ const creatorResetPasswordOtp = async ({ email, OTP }) => {
     throw new Error(error.response?.data?.message || "Password reset failed");
   }
 };
+
 const teamMemberOnboarding = async ({
   email,
   dateOfBirth,
@@ -244,7 +300,6 @@ const CreatorSelectBusinessType = async ({
     );
   }
 };
-
 export const createBusinessIdentity = async ({
   creatorId,
   businessAddress,
@@ -254,13 +309,15 @@ export const createBusinessIdentity = async ({
   category,
   timezone,
   week,
-  accessToken,
-  refreshToken
+  dispatch,
+  navigate
 }) => {
-  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+  // Create axios instance with interceptors
+  const authFetch = AxiosInterceptor(dispatch, navigate);
+  
   try {
     const response = await authFetch.post(
-      `${API_URL}/create-business-identity`,
+      `${import.meta.env.VITE_API_URL}/creator/create-business-identity`,
       {
         creatorId,
         businessName,
@@ -283,7 +340,6 @@ export const createBusinessIdentity = async ({
     throw new Error(message);
   }
 };
-
 export default {
   newCreatorRegister,
   CreatorSelectBusinessType,

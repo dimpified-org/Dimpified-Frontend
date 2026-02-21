@@ -363,7 +363,7 @@ const FreeOnboardingReview = () => {
           <ButtonLongPurple
             onClick={() => navigate("/free/creator/dashboard/overview")}
             width="w-full"
-            className="h-14 text-lg rounded-xl font-semibold bg-purple-700"
+            className="h-14 text-lg font-semibold"
           >
             Go to Dashboard
           </ButtonLongPurple>

@@ -5,7 +5,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
 import {
   creatorLogin,
@@ -17,6 +17,7 @@ import { setEcosystemPlan } from "../../../features/ecosystemPlan";
 import { setEcosystemStatus } from "../../../features/ecosystemStatus";
 import { LongInputWithPlaceholder } from "../../../component/Inputs";
 import { ButtonLongPurple } from "../../../component/Buttons";
+import axios from "axios";
 
 const GoogleLogo = () => (
   <svg
@@ -46,6 +47,13 @@ const GoogleLogo = () => (
   </svg>
 );
 
+// Get refcode from URL if it exists
+const getRefCodeFromURL = () => {
+  const params = new URLSearchParams(location.search);
+  // Try "ref" first (new format), then "refcode" (old format)
+  return params.get("ref") || params.get("refcode") || null;
+};
+
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -57,10 +65,31 @@ const schema = yup.object().shape({
     .required("Password is required"),
 });
 
+// Helper function to set axios auth headers
+const setAuthHeaders = (token) => {
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    // Also update the api client if it exists
+    try {
+      const authApis = require("../../../api/authApis");
+      if (authApis.default && authApis.default.apiClient) {
+        authApis.default.apiClient.defaults.headers.common["Authorization"] =
+          `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.warn("Could not update api client headers:", error);
+    }
+  }
+};
+
 export default function UserLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading, error, user } = useSelector((state) => state.auth);
+
+  // Get refcode from URL if it exists
+  const refcode = getRefCodeFromURL();
 
   const {
     register,
@@ -70,70 +99,64 @@ export default function UserLogin() {
     resolver: yupResolver(schema),
   });
 
-const handleNavigation = (step, plan) => {
-  // Treat undefined/null plan as "free"
-  const isFreePlan = !plan || plan?.toLowerCase() === "free";
-  
+  const handleNavigation = (step, plan) => {
+    // Treat undefined/null plan as "free"
+    const isFreePlan = !plan || plan?.toLowerCase() === "free";
 
+    switch (step) {
+      case 1:
+        const step1Path = isFreePlan
+          ? "/free/auth/email-verification"
+          : "/auth/email-verification";
 
-  switch (step) {
-    case 1:
-      const step1Path = isFreePlan
-        ? "/free/auth/email-verification"
-        : "/auth/email-verification";
-    
-      navigate(step1Path);
-      break;
+        navigate(step1Path);
+        break;
 
-    case 2:
-      const step2Path = isFreePlan 
-        ? "/free/auth/business-identity" 
-        : "/auth/business-type";
-    
-      navigate(step2Path);
-      break;
+      case 2:
+        const step2Path = isFreePlan
+          ? "/free/auth/business-identity"
+          : "/auth/business-type";
 
-    case 3:
-      const step3Path = isFreePlan 
-        ? "/free/auth/availability" 
-        : "/auth/business-info";
+        navigate(step2Path);
+        break;
 
-      navigate(step3Path);
-      break;
+      case 3:
+        const step3Path = isFreePlan
+          ? "/free/auth/availability"
+          : "/auth/business-info";
 
-    case 4:
-       const step4Path = isFreePlan 
-        ? "/free/auth/service-payment" 
-        : "/auth/select-template";
-     
-      navigate(step3Path);
-      break;
-    case 5:
-  
-      navigate("/auth/select-template");
-      break;
+        navigate(step3Path);
+        break;
 
-    case 6:
-     
-      navigate("/auth/edit-template");
-      break;
+      case 4:
+        const step4Path = isFreePlan
+          ? "/free/auth/service-payment"
+          : "/auth/select-template";
 
-    case 7:
-      const dashboardPath = isFreePlan
-        ? "/free/creator/dashboard/overview"
-        : "/creator/dashboard/overview";
-    
-      navigate(dashboardPath);
-      break;
+        navigate(step3Path);
+        break;
+      case 5:
+        navigate("/auth/select-template");
+        break;
 
-    default:
-     
-      navigate("/auth/personal-information");
-      break;
-  }
-  
- 
-};
+      case 6:
+        navigate("/auth/edit-template");
+        break;
+
+      case 7:
+        const dashboardPath = isFreePlan
+          ? "/free/creator/dashboard/overview"
+          : "/creator/dashboard/overview";
+
+        navigate(dashboardPath);
+        break;
+
+      default:
+        navigate("/auth/personal-information");
+        break;
+    }
+  };
+
   const onSubmit = async (data, e) => {
     e.preventDefault();
     try {
@@ -141,7 +164,7 @@ const handleNavigation = (step, plan) => {
         creatorLogin({
           email: data.email,
           password: data.password,
-        })
+        }),
       );
       console.log("Login resultAction:", resultAction);
 
@@ -153,7 +176,7 @@ const handleNavigation = (step, plan) => {
 
         if (resultAction.payload.user.ecosystemDomain) {
           dispatch(
-            setEcosystemDomain(resultAction.payload.user.ecosystemDomain)
+            setEcosystemDomain(resultAction.payload.user.ecosystemDomain),
           );
         }
         if (resultAction.payload.user.plan) {
@@ -168,13 +191,13 @@ const handleNavigation = (step, plan) => {
         if (resultAction.payload.user.subCategory) {
           sessionStorage.setItem(
             "subCategory",
-            resultAction.payload.user.subCategory
+            resultAction.payload.user.subCategory,
           );
         }
 
         handleNavigation(
           resultAction.payload.user.step,
-          resultAction.payload.user.plan || "free" // Pass "free" if plan is undefined
+          resultAction.payload.user.plan || "free", // Pass "free" if plan is undefined
         );
       }
     } catch (error) {
@@ -182,43 +205,172 @@ const handleNavigation = (step, plan) => {
     }
   };
 
-  const handleGoogleSuccess = async (tokenResponse) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
+    console.log("=== Google Auth Debug ===");
+    console.log("Full Google response:", credentialResponse);
+
+    // Debug token types
+    if (credentialResponse.credential) {
+      console.log("✓ ID Token (credential) received");
+      console.log(
+        "ID Token starts with eyJ:",
+        credentialResponse.credential.startsWith("eyJ"),
+      );
+      console.log(
+        "ID Token segments:",
+        credentialResponse.credential.split(".").length,
+      );
+    }
+
+    // Always use the ID token (credential) for backend authentication
+    const idToken = credentialResponse.credential;
+    localStorage.setItem("googleCredential", idToken);
+
+    if (!idToken) {
+      console.error("No ID token (credential) received from Google");
+      showToast("Google authentication failed: No ID token received", "error");
+      return;
+    }
+
+    console.log("Sending ID token to backend...");
+
     try {
       const resultAction = await dispatch(
-        creatorLoginWithGoogle({ token: tokenResponse.access_token })
+        creatorLoginWithGoogle({
+          token: idToken, // Send ID token (JWT)
+          refcode: refcode || null,
+        }),
       );
 
       if (creatorLoginWithGoogle.rejected.match(resultAction)) {
         const errorPayload = resultAction.payload;
-        showToast(errorPayload || "Google login failed", "error");
+        const errorMessage =
+          errorPayload?.message || errorPayload || "Google login failed";
+
+        console.error("Google auth rejected:", errorMessage);
+
+        // Handle timeout/connection errors
+        if (
+          errorMessage.includes("timeout") ||
+          errorMessage.includes("cannot connect")
+        ) {
+          showToast(
+            "Connection issue. Please try again or use email login.",
+            "error",
+          );
+          return;
+        }
+
+        // Handle token validation errors
+        if (
+          errorMessage.includes("Wrong number of segments") ||
+          errorMessage.includes("Invalid token") ||
+          errorMessage.includes("JWT")
+        ) {
+          showToast(
+            "Google authentication failed: Invalid token format",
+            "error",
+          );
+          return;
+        }
+
+        // Check if user doesn't exist
+        if (
+          errorMessage.toLowerCase().includes("not found") ||
+          errorMessage.toLowerCase().includes("user not found") ||
+          errorMessage.toLowerCase().includes("no user found")
+        ) {
+          showToast("Account not found. Please sign up first.", "error");
+
+          // Store Google credential for signup flow
+          localStorage.setItem("googleCredential", idToken);
+          localStorage.setItem(
+            "googleUserData",
+            JSON.stringify({
+              token: idToken,
+              timestamp: new Date().toISOString(),
+            }),
+          );
+
+          if (refcode) {
+            localStorage.setItem("pendingRefcode", refcode);
+          }
+
+          // Navigate to signup page
+          if (refcode) {
+            navigate(`/auth/landing?refcode=${refcode}&googleAuth=true`);
+          } else {
+            navigate("/auth/landing?googleAuth=true");
+          }
+          return;
+        }
+
+        showToast(errorMessage, "error");
       } else if (creatorLoginWithGoogle.fulfilled.match(resultAction)) {
-        showToast(resultAction.payload.message);
+        const responseData = resultAction.payload;
+        console.log("✓ Backend Google auth success:", responseData);
 
-        if (resultAction.payload.user.ecosystemDomain) {
-          dispatch(
-            setEcosystemDomain(resultAction.payload.user.ecosystemDomain)
-          );
+        // Validate response structure
+        if (!responseData) {
+          showToast("Invalid response from server", "error");
+          return;
         }
-        if (resultAction.payload.user.plan) {
-          dispatch(setEcosystemPlan(resultAction.payload.user.plan));
+
+        // Store tokens and set headers HERE in the component
+        const accessToken = responseData.accessToken || responseData.token;
+        const refreshToken = responseData.refreshToken;
+
+        if (accessToken) {
+          console.log("Storing access token...");
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("jwtToken", accessToken);
+
+          // Set axios headers
+          setAuthHeaders(accessToken);
+        }
+
+        if (refreshToken) {
+          localStorage.setItem("refreshToken", refreshToken);
+        }
+
+        // Check if this is a new user or existing user
+        const isNewUser =
+          responseData.isNewUser || responseData.isNewUser === true;
+        const userData = responseData.user || responseData;
+        const message =
+          responseData.message || (isNewUser ? "Welcome!" : "Login successful");
+
+        showToast(message, "success");
+
+        // Set user data in Redux
+        if (userData.ecosystemDomain) {
+          dispatch(setEcosystemDomain(userData.ecosystemDomain));
+        }
+
+        // Set plan (default to 'free' if undefined)
+        const userPlan = userData.plan || "free";
+        dispatch(setEcosystemPlan(userPlan));
+
+        if (userData.status) {
+          dispatch(setEcosystemStatus(userData.status));
+        }
+
+        if (userData.subCategory) {
+          sessionStorage.setItem("subCategory", userData.subCategory);
+        }
+
+        // Navigate based on user's current step
+        if (isNewUser) {
+          // New user - navigate to onboarding
+          console.log("New user detected, navigating to onboarding");
+          showToast("Welcome! Please complete your profile.", "success");
+          navigate("/auth/email-verification");
         } else {
-          // Handle undefined plan by setting as "free"
-          dispatch(setEcosystemPlan("free"));
+          // Existing user - navigate based on their step
+          const userStep = userData.step || 1;
+          console.log(`Existing user, step ${userStep}, plan ${userPlan}`);
+          handleNavigation(userStep, userPlan);
         }
-        if (resultAction.payload.user.status) {
-          dispatch(setEcosystemStatus(resultAction.payload.user.status));
-        }
-        if (resultAction.payload.user.subCategory) {
-          sessionStorage.setItem(
-            "subCategory",
-            resultAction.payload.user.subCategory
-          );
-        }
-
-        handleNavigation(
-          resultAction.payload.user.step,
-          resultAction.payload.user.plan || "free" // Pass "free" if plan is undefined
-        );
       }
     } catch (error) {
       console.error("Google Sign-In Error:", error);
@@ -227,20 +379,12 @@ const handleNavigation = (step, plan) => {
   };
 
   const handleGoogleFailure = (error) => {
-    console.error("Google Sign-In Failed:", error);
+    console.error("Google Login Failed:", error);
     showToast("Google Sign-In Failed. Please try again.", "error");
   };
 
-  const loginWithGoogle = useGoogleLogin({
-    onSuccess: handleGoogleSuccess,
-    onError: handleGoogleFailure,
-    flow: "implicit",
-    scope: "profile email",
-  });
-
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
-      
       {/* Background decorative stars */}
       <div className="absolute top-[40%] left-[-50px] w-32 h-32 md:w-48 md:h-48">
         <svg
@@ -273,7 +417,7 @@ const handleNavigation = (step, plan) => {
       <div className="w-full gap-8 lg:gap-12 flex flex-col lg:flex-row items-center mx-auto">
         {/* Left Content Section */}
         <div className="w-full lg:w-2/3 px-4 py-8 md:py-12 lg:py-16 mx-auto">
-        <div className="flex items-center gap-2 top-0 left-0 ml-4 sm:ml-8 md:ml-16 lg:ml-28 mb-8">
+          <div className="flex items-center gap-2 top-0 left-0 ml-4 sm:ml-8 md:ml-16 lg:ml-28 mb-8">
             <RouterLink to="/">
               <img
                 src={Logo}
@@ -282,7 +426,7 @@ const handleNavigation = (step, plan) => {
               />
             </RouterLink>
           </div>
-          
+
           <div className="relative z-10 space-y-6 md:space-y-8 lg:space-y-10 mx-auto px-4 py-8 md:py-12 lg:py-16 items-center justify-center flex flex-col">
             <div className="w-full max-w-sm ">
               {/* Main Heading */}
@@ -300,14 +444,62 @@ const handleNavigation = (step, plan) => {
               {/* Login Form */}
               <div className="space-y-4 w-full">
                 {/* Google Login Button */}
-                {/* <button
-                  type="button"
-                  onClick={loginWithGoogle}
-                  className="w-full h-12 font-bold rounded-lg border-2 border-gray-200 p-2 flex items-center justify-center mb-4 hover:border-purple-300 hover:shadow-lg transition-all duration-300 group"
-                >
-                  <GoogleLogo />
-                  Continue with Google
-                </button>
+                <div className="w-full">
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleFailure}
+                    useOneTap={false}
+                    shape="rectangular"
+                    size="large"
+                    width="100%"
+                    text="signin_with"
+                    theme="outline"
+                    logo_alignment="center"
+                    locale="en"
+                    context="signin"
+                    ux_mode="popup"
+                    render={(renderProps) => (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          console.log("Google button clicked");
+                          renderProps.onClick();
+                        }}
+                        disabled={renderProps.disabled || isLoading}
+                        className="w-full h-12 font-bold rounded-lg border-2 border-gray-400 p-2 flex items-center justify-center mb-4 hover:border-purple-300 hover:shadow-lg transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isLoading ? (
+                          <div className="flex items-center">
+                            <svg
+                              className="animate-spin h-4 w-4 mr-2"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v8h8a8 8 0 01-16 0z"
+                              ></path>
+                            </svg>
+                            Processing...
+                          </div>
+                        ) : (
+                          <>
+                            <GoogleLogo />
+                            Continue with Google
+                          </>
+                        )}
+                      </button>
+                    )}
+                  />
+                </div>
 
                 <div className="flex gap-3 w-full items-center my-4">
                   <hr className="flex-1 bg-[#E5E5E5]" />
@@ -315,9 +507,14 @@ const handleNavigation = (step, plan) => {
                   <hr className="flex-1 bg-[#E5E5E5]" />
                 </div>
 
-                <p className="text-gray-500 mb-2 text-center">Please enter your details</p> */}
+                <p className="text-gray-500 mb-2 text-center">
+                  Please enter your details
+                </p>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="space-y-4 w-full"
+                >
                   <div className="w-full">
                     <label htmlFor="email" className="text-black mb-1 block">
                       Email *

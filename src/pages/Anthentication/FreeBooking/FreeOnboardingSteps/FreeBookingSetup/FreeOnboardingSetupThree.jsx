@@ -298,8 +298,10 @@ const FreeOnboardingSetupThree = () => {
 
         <ButtonLongPurple
           onClick={handleNext}
+          width="w-full"
           disabled={!isFormValid()}
-          className="w-full mt-8 h-14"
+          className="bg-purple-600 mt-10 h-14 text-lg font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all"
+         
         >
           Next: Review Details
         </ButtonLongPurple>

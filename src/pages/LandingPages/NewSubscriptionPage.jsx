@@ -148,12 +148,12 @@ const BillingToggle = ({ billingCycle, setBillingCycle }) => {
 const PricingPlans = ({ billingCycle, activePlan, setActivePlan }) => {
   const plans = [
     {
-      id: "lite",
-      name: "Lite Plan",
+      id: "Free",
+      name: "Free Plan",
       tagline: "For solopreneurs and small businesses",
       icon: <Sparkles className="w-6 h-6" />,
       price: billingCycle === "annual" ? "Free" : "Free",
-      billing: "Forever free",
+      billing: "",
       description:
         "Perfect for solopreneurs who want to show services and get booked",
       features: [
@@ -175,8 +175,8 @@ const PricingPlans = ({ billingCycle, activePlan, setActivePlan }) => {
       color: "from-blue-500 to-cyan-400",
     },
     {
-      id: "plus",
-      name: "Plus Plan",
+      id: "Lite",
+      name: "Lite Plan",
       tagline: "For growing businesses with physical stores",
       icon: <Store className="w-6 h-6" />,
       price: billingCycle === "annual" ? "₦45,000" : "₦4,500",
@@ -185,7 +185,7 @@ const PricingPlans = ({ billingCycle, activePlan, setActivePlan }) => {
       description: "For businesses with physical stores and multiple staff",
       features: [
         {
-          text: "Everything in Lite Plan +",
+          text: "Everything in Free Plan +",
           icon: <Check className="w-4 h-4" />,
         },
         {
@@ -216,52 +216,52 @@ const PricingPlans = ({ billingCycle, activePlan, setActivePlan }) => {
       popular: true,
       color: "from-purple-500 to-pink-500",
     },
-    {
-      id: "pro",
-      name: "Pro Plan",
-      tagline: "For multi-location businesses & teams",
-      icon: <Building className="w-6 h-6" />,
-      price: billingCycle === "annual" ? "₦67,500" : "₦6,750",
-      billing:
-        billingCycle === "annual" ? "per year (save ₦13,500)" : "per month",
-      description:
-        "Track your business across multiple physical stores and teams",
-      features: [
-        {
-          text: "Everything in Plus Plan +",
-          icon: <Check className="w-4 h-4" />,
-        },
-        {
-          text: "VIP booking prioritization",
-          icon: <Check className="w-4 h-4" />,
-        },
-        {
-          text: "Unlimited staff accounts",
-          icon: <Check className="w-4 h-4" />,
-        },
-        { text: "Multi-location support", icon: <Check className="w-4 h-4" /> },
-        { text: "Membership programs", icon: <Check className="w-4 h-4" /> },
-        {
-          text: "Dedicated account manager",
-          icon: <Check className="w-4 h-4" />,
-        },
-        { text: "Inventory management", icon: <Check className="w-4 h-4" /> },
-        {
-          text: "Advanced analytics dashboard",
-          icon: <Check className="w-4 h-4" />,
-        },
-      ],
-      cta: "Get Started",
-      link: "/auth/personal-Information", // Plus and Pro plan link
-      popular: false,
-      color: "from-indigo-500 to-blue-500",
-    },
+    // {
+    //   id: "pro",
+    //   name: "Pro Plan",
+    //   tagline: "For multi-location businesses & teams",
+    //   icon: <Building className="w-6 h-6" />,
+    //   price: billingCycle === "annual" ? "₦67,500" : "₦6,750",
+    //   billing:
+    //     billingCycle === "annual" ? "per year (save ₦13,500)" : "per month",
+    //   description:
+    //     "Track your business across multiple physical stores and teams",
+    //   features: [
+    //     {
+    //       text: "Everything in Plus Plan +",
+    //       icon: <Check className="w-4 h-4" />,
+    //     },
+    //     {
+    //       text: "VIP booking prioritization",
+    //       icon: <Check className="w-4 h-4" />,
+    //     },
+    //     {
+    //       text: "Unlimited staff accounts",
+    //       icon: <Check className="w-4 h-4" />,
+    //     },
+    //     { text: "Multi-location support", icon: <Check className="w-4 h-4" /> },
+    //     { text: "Membership programs", icon: <Check className="w-4 h-4" /> },
+    //     {
+    //       text: "Dedicated account manager",
+    //       icon: <Check className="w-4 h-4" />,
+    //     },
+    //     { text: "Inventory management", icon: <Check className="w-4 h-4" /> },
+    //     {
+    //       text: "Advanced analytics dashboard",
+    //       icon: <Check className="w-4 h-4" />,
+    //     },
+    //   ],
+    //   cta: "Get Started",
+    //   link: "/auth/personal-Information", // Plus and Pro plan link
+    //   popular: false,
+    //   color: "from-indigo-500 to-blue-500",
+    // },
   ];
 
   return (
     <section className="py-12 px-6 lg:px-20">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {plans.map((plan) => (
             <motion.div
               key={plan.id}
@@ -423,16 +423,16 @@ const FeatureComparison = () => {
         { name: "Multi-location Support", lite: false, plus: false, pro: true },
       ],
     },
-    {
-      category: "Growth Features",
-      items: [
-        { name: "VIP Booking", lite: false, plus: false, pro: true },
-        { name: "Membership Programs", lite: false, plus: false, pro: true },
-        { name: "Inventory Management", lite: false, plus: false, pro: true },
-        { name: "Advanced Analytics", lite: false, plus: false, pro: true },
-        { name: "Dedicated Support", lite: false, plus: false, pro: true },
-      ],
-    },
+    // {
+    //   category: "Growth Features",
+    //   items: [
+    //     { name: "VIP Booking", lite: false, plus: false, pro: true },
+    //     { name: "Membership Programs", lite: false, plus: false, pro: true },
+    //     { name: "Inventory Management", lite: false, plus: false, pro: true },
+    //     { name: "Advanced Analytics", lite: false, plus: false, pro: true },
+    //     { name: "Dedicated Support", lite: false, plus: false, pro: true },
+    //   ],
+    // },
   ];
 
   return (
@@ -452,9 +452,9 @@ const FeatureComparison = () => {
             <thead>
               <tr className="bg-gradient-to-r from-[#9810FA] to-purple-600 text-white">
                 <th className="p-6 text-left rounded-tl-2xl">Feature</th>
-                <th className="p-6 text-center">Lite</th>
-                <th className="p-6 text-center bg-purple-700">Plus</th>
-                <th className="p-6 text-center rounded-tr-2xl">Pro</th>
+                <th className="p-6 text-center">Free</th>
+                <th className="p-6 text-center bg-purple-700">Lite</th>
+                {/* <th className="p-6 text-center rounded-tr-2xl">Pro</th> */}
               </tr>
             </thead>
             <tbody>
@@ -495,7 +495,7 @@ const FeatureComparison = () => {
                           </span>
                         )}
                       </td>
-                      <td className="p-4 text-center">
+                      {/* <td className="p-4 text-center">
                         {item.pro === true ? (
                           <Check className="w-5 h-5 text-green-600 mx-auto" />
                         ) : item.pro === false ? (
@@ -505,7 +505,7 @@ const FeatureComparison = () => {
                             {item.pro}
                           </span>
                         )}
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
                 </React.Fragment>

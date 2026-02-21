@@ -17,7 +17,7 @@ const PaidOnboardingLayout = ({
   const handleBack = () => (onBack ? onBack() : navigate(-1));
 
   // STATIC STEP LABELS – no props
-  const STEP_LABELS = ["Basic Info", "Verify", "Setup", "Review",  "Subscription", "Select website",];
+  const STEP_LABELS = ["Basic Info", "Verify", "Setup", "Review",  "Subscription", "Template",];
   const totalSteps = STEP_LABELS.length;
   const steps = Array.from({ length: totalSteps }, (_, i) => i + 1);
 

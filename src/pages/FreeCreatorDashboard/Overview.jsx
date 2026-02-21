@@ -28,16 +28,32 @@ const FreeOverview = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [creatorProfile, setCreatorProfile] = useState(null);
 
   const userRole = useSelector((state) => state.auth.user?.role);
   const creatorId = useSelector((state) => state.auth.user?.creatorId);
-  const name = useSelector((state) => state.auth.user);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const ecosystemDomain = useSelector((state) => state.ecosystemDomain.domain);
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const profileUrl = `https://dimpified.com/${ecosystemDomain}`;
+
+  // Fetch creator profile
+  const getCreatorProfile = async () => {
+    try {
+      const response = await api.creatorProfile({
+        creatorId,
+        accessToken,
+        refreshToken,
+        dispatch,
+        navigate,
+      });
+      setCreatorProfile(response.data);
+    } catch (error) {
+      console.error("Could not get creator profile:", error);
+    }
+  };
 
   // Copy URL to clipboard
   const handleCopyUrl = async () => {
@@ -117,11 +133,15 @@ const FreeOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await Promise.all([getMonthlyBooking(), getCreatorStats()]);
+      await Promise.all([
+        getMonthlyBooking(), 
+        getCreatorStats(),
+        getCreatorProfile()
+      ]);
       setLoading(false);
     };
     fetchData();
-  }, [ecosystemDomain, accessToken, refreshToken, dispatch, navigate]);
+  }, [ecosystemDomain, accessToken, refreshToken, dispatch, navigate, creatorId]);
 
   // Use real bookings data
   const allBookings = monthlyBooking?.allBookings || [];
@@ -183,37 +203,58 @@ const FreeOverview = () => {
           {/* Welcome Card */}
           <div className="bg-gradient-to-r from-[#9F68FE] to-[#FFFFFF] rounded-2xl p-8 mb-6 text-white">
             <h3 className="text-2xl font-bold mb-4">
-              {" "}
-              Welcome Back {name?.fullName || "unknown User"}!
+              Welcome Back {creatorProfile?.profile?.fullname || ""}!
             </h3>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               <div className="flex items-center gap-2 bg-white bg-opacity-20 rounded-full px-4 py-2">
                 <span className="text-base whitespace-nowrap">
                   {profileUrl}
                 </span>
               </div>
-              <button
-                onClick={handleCopyUrl}
-                className="p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all"
-                title="Copy URL"
-              >
-                <Copy className="w-4 h-4" />
-              </button>
-              <button
-                onClick={handleShareUrl}
-                className="p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all"
-                title="Share URL"
-              >
-                <Share2 className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCopyUrl}
+                  className="p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all"
+                  title="Copy URL"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={handleShareUrl}
+                  className="p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all"
+                  title="Share URL"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+              </div>
               <ButtonSmallPurple
                 bg="[#9F68FE]"
-                className="ml-auto text-[#fff] px-6 py-1 font-semibold flex items-center gap-2 transition-all rounded-xl whitespace-nowrap"
+                className="lg:ml-auto text-[#fff] px-6 py-1 font-semibold flex items-center gap-2 transition-all rounded-xl whitespace-nowrap"
               >
                 <ArrowUpCircle className="w-5 h-5" />
                 Upgrade plan
               </ButtonSmallPurple>
             </div>
+            
+            {/* Display Ecosystem Name */}
+            {creatorProfile?.ecosystemDetails && (
+              <div className="mt-4 flex flex-wrap items-center gap-4">
+                <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                  <span className="text-sm opacity-90">Ecosystem:</span>
+                  <span className="ml-2 font-semibold">
+                    {creatorProfile.ecosystemDetails.ecosystemName || ecosystemDomain}
+                  </span>
+                </div>
+                {creatorProfile.ecosystemDetails.ecosystemIndustry && (
+                  <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                    <span className="text-sm opacity-90">Industry:</span>
+                    <span className="ml-2 font-semibold">
+                      {creatorProfile.ecosystemDetails.ecosystemIndustry}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Stats Cards */}

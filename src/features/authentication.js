@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api/authApis";
 import api2 from "../api/DashboardApi";
-import axios from "axios";
 
 // Initial state for authentication
 const initialState = {
@@ -18,20 +17,38 @@ export const creatorLogin = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await api.creatorLogin({ email, password });
-      return response.data; // Ensure this returns { message, accessToken, refreshToken, user }
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
+      return rejectWithValue(error.message || "Login failed");
     }
   }
 );
+
 export const creatorLoginWithGoogle = createAsyncThunk(
   "auth/creatorLoginWithGoogle",
-  async ({ token }, { rejectWithValue }) => {
+  async ({ token, refcode = null }, { rejectWithValue }) => {
     try {
-      const response = await api.GoogleSignUp({ token });
+      console.log("Dispatching Google auth with token:", token ? "Token present" : "No token");
+      console.log("Refcode:", refcode);
+      
+      const response = await api.GoogleSignUp({ token, refcode });
+      
+      console.log("API Response data:", response.data);
+      
+      if (!response.data) {
+        throw new Error("No data received from server");
+      }
+      
+      // Store access token in localStorage for API calls
+      if (response.data.accessToken) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        console.log("Access token stored for API calls");
+      }
+      
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
+      console.error("Google auth thunk error:", error);
+      return rejectWithValue(error.message || "Google authentication failed");
     }
   }
 );
@@ -84,6 +101,7 @@ export const creatorRegister = createAsyncThunk(
     }
   }
 );
+
 export const newCreatorRegister = createAsyncThunk(
   "auth/newCreatorRegister",
   async (
@@ -117,11 +135,10 @@ export const newCreatorRegister = createAsyncThunk(
   }
 );
 
-//affliate login
+//affiliate login
 export const affiliateLogin = createAsyncThunk(
   "afiliate/login",
   async ({ email, password }, { rejectWithValue }) => {
-    // Make an API request to login the user with Axios
     try {
       const response = await api.affiliateLogin({
         email,
@@ -129,6 +146,10 @@ export const affiliateLogin = createAsyncThunk(
       });
       if (response.status === 200) {
         const user = response.data;
+        // Store access token
+        if (user.accessToken) {
+          localStorage.setItem('accessToken', user.accessToken);
+        }
         return user;
       }
     } catch (error) {
@@ -142,6 +163,13 @@ export const creatorSignupWithGoogle = createAsyncThunk(
   async ({ token }, { rejectWithValue }) => {
     try {
       const response = await api.GoogleSignUp({ token });
+      
+      // Store access token for API calls
+      if (response.data.accessToken) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        console.log("Access token stored for API calls");
+      }
+      
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -158,6 +186,10 @@ export const emailLogin = createAsyncThunk(
       });
 
       if (response.status === 200) {
+        // Store access token
+        if (response.data.accessToken) {
+          localStorage.setItem('accessToken', response.data.accessToken);
+        }
         return response.data;
       }
     } catch (error) {
@@ -179,14 +211,26 @@ const authSlice = createSlice({
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
+      // Clear tokens from localStorage
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('jwtToken');
     },
     setAuthData: (state, action) => {
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.user = action.payload.user;
+      // Store in localStorage for API calls
+      if (action.payload.accessToken) {
+        localStorage.setItem('accessToken', action.payload.accessToken);
+      }
+      if (action.payload.refreshToken) {
+        localStorage.setItem('refreshToken', action.payload.refreshToken);
+      }
     },
     updateAccessToken: (state, action) => {
       state.accessToken = action.payload;
+      localStorage.setItem('accessToken', action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -201,6 +245,10 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.error = null;
+        // Store in localStorage
+        if (action.payload.accessToken) {
+          localStorage.setItem('accessToken', action.payload.accessToken);
+        }
       })
       .addCase(creatorLogin.rejected, (state, action) => {
         state.isLoading = false;
@@ -217,6 +265,10 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.error = null;
+        // Store in localStorage
+        if (action.payload.accessToken) {
+          localStorage.setItem('accessToken', action.payload.accessToken);
+        }
       })
       .addCase(emailLogin.rejected, (state, action) => {
         state.isLoading = false;
@@ -233,6 +285,10 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.error = null;
+        // Store in localStorage
+        if (action.payload.accessToken) {
+          localStorage.setItem('accessToken', action.payload.accessToken);
+        }
       })
       .addCase(newCreatorRegister.rejected, (state, action) => {
         state.isLoading = false;
@@ -249,13 +305,17 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.error = null;
+        // Store in localStorage
+        if (action.payload.accessToken) {
+          localStorage.setItem('accessToken', action.payload.accessToken);
+        }
       })
       .addCase(creatorRegister.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
 
-      // handle afiliate login
+      // handle affiliate login
       .addCase(affiliateLogin.pending, (state) => {
         state.isLoading = true;
       })
@@ -265,6 +325,10 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.error = null;
+        // Store in localStorage
+        if (action.payload.accessToken) {
+          localStorage.setItem('accessToken', action.payload.accessToken);
+        }
       })
       .addCase(affiliateLogin.rejected, (state, action) => {
         state.isLoading = false;
@@ -282,6 +346,10 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.error = null;
+        // Store in localStorage
+        if (action.payload.accessToken) {
+          localStorage.setItem('accessToken', action.payload.accessToken);
+        }
       })
       .addCase(editProfileAutoLogin.rejected, (state, action) => {
         state.isLoading = false;
@@ -298,6 +366,10 @@ const authSlice = createSlice({
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
         state.error = null;
+        // Store in localStorage
+        if (action.payload.accessToken) {
+          localStorage.setItem('accessToken', action.payload.accessToken);
+        }
       })
       .addCase(creatorLoginWithGoogle.rejected, (state, action) => {
         state.isLoading = false;

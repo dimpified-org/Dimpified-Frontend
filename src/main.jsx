@@ -10,9 +10,10 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import "flowbite";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { registerPWA } from "./pwa";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_KEY;
-
+registerPWA();
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={clientId}>
@@ -25,5 +26,5 @@ createRoot(document.getElementById("root")).render(
         </PersistGate>
       </Provider>
     </GoogleOAuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );

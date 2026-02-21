@@ -4,12 +4,20 @@ import banner from "../../../../src/assets/affliate-img/isp-agreement.png";
 export const AgreementModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
+  const handleUnderstand = () => {
+    onClose(true); // User clicked "I Understand"
+  };
+
+  const handleClose = () => {
+    onClose(false); // User closed without agreeing
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white w-11/12 max-w-3xl rounded-lg shadow-lg relative overflow-hidden">
         {/* --- Close Button --- */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl font-semibold"
         >
           ×
@@ -22,9 +30,6 @@ export const AgreementModal = ({ isOpen, onClose }) => {
             alt="Dimpified"
             className="h-8 w-auto object-contain place-self-start"
           />
-          {/* <div className="font-semibold text-lg">
-            DIMPIFIED INDEPENDENT SALES PARTNER AGREEMENT
-          </div> */}
           <img
             src={banner}
             alt="Isp agreement banner"
@@ -79,7 +84,6 @@ export const AgreementModal = ({ isOpen, onClose }) => {
                 Maintain professional behavior when engaging with prospects or
                 customers.
               </li>
-
               <li>
                 Refrain from making commitments or claims on behalf of
                 Dimpified.
@@ -136,7 +140,7 @@ export const AgreementModal = ({ isOpen, onClose }) => {
                 customer status.
               </li>
               <li>
-                It is the ISP’s responsibility to ensure referrals are correctly
+                It is the ISP's responsibility to ensure referrals are correctly
                 attributed using their provided tools.
               </li>
             </ul>
@@ -153,7 +157,7 @@ export const AgreementModal = ({ isOpen, onClose }) => {
               </li>
               <li>
                 Inactive ISPs may lose access to dashboards and recurring
-                commissions unless reactivated at the Company’s discretion.
+                commissions unless reactivated at the Company's discretion.
               </li>
             </ul>
           </section>
@@ -163,7 +167,7 @@ export const AgreementModal = ({ isOpen, onClose }) => {
               8. Confidentiality
             </h3>
             <p>
-              The ISP agrees to keep all information regarding Dimpified’s
+              The ISP agrees to keep all information regarding Dimpified's
               systems, pricing, operations, customers, and internal processes
               confidential, both during and after the term of this Agreement.
             </p>
@@ -176,7 +180,7 @@ export const AgreementModal = ({ isOpen, onClose }) => {
             <ul className="list-disc list-inside space-y-1">
               <li>
                 This Agreement is effective as of the Effective Date and shall
-                continue until terminated by either party with seven (7) days’
+                continue until terminated by either party with seven (7) days'
                 written notice.
               </li>
               <li>
@@ -237,9 +241,15 @@ export const AgreementModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* --- Footer --- */}
-        <div className="border-t p-4 flex justify-end">
+        <div className="border-t p-4 flex justify-end space-x-3">
           <button
-            onClick={onClose}
+            onClick={handleClose}
+            className="px-5 py-2 text-sm font-medium border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-all"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleUnderstand}
             className="px-5 py-2 text-sm font-medium bg-primary3 text-white rounded hover:bg-primary4 transition-all"
           >
             I Understand

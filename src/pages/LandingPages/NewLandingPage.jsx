@@ -25,7 +25,7 @@ export default function LandingPage() {
       <StatsBar />
       <AboutSection />
       <WhyChoose />
-      <TemplateSection />
+      {/* <TemplateSection /> */}
       <GrowBusiness />
       <TestimonialsSection />
       <SubscriptionSection />
@@ -98,9 +98,10 @@ const Hero = () => {
         </p>
 
         <h1 className="text-3xl leading-snug font-extrabold text-gray-900 lg:text-6xl lg:leading-tight">
-          Get Booked Faster, <br /> <span className="bg-gradient-to-r from-[#9810FA] via-purple-600 to-pink-500 bg-clip-text text-transparent animate-gradient">
-                Manage Time Smarter
-              </span>
+          Get Booked Faster, <br />{" "}
+          <span className="bg-gradient-to-r from-[#9810FA] via-purple-600 to-pink-500 bg-clip-text text-transparent animate-gradient">
+            Manage Time Smarter
+          </span>
         </h1>
 
         <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-base lg:text-lg">
@@ -109,7 +110,7 @@ const Hero = () => {
         </p>
 
         <Link to="/auth/landing">
-          <button className="mt-6 lg:mt-8 px-8 py-3 bg-[#9810FA] hover:bg-[#3F0994]   text-white rounded-full text-lg font-semibold Get Started Now-lg">
+          <button className="mt-6 lg:mt-8 px-8 py-3 bg-[#9810FA] hover:bg-purple-600   text-white rounded-full text-lg font-semibold Get Started Now-lg">
             Get Started Now
           </button>
         </Link>
@@ -149,7 +150,7 @@ const Hero = () => {
       </div>
 
       <div className="flex justify-center mt-12 lg:mt-20 px-4">
-        <div className="relative max-w-4xl w-full group">
+        <div className="relative max-w-5xl w-full group">
           {/* Main video container with gradient border */}
           <div className="relative rounded-3xl overflow-hidden Get Started Now-2xl bg-gradient-to-br from-[#F3E8FF]0/20 via-transparent to-pink-400/10 p-1 lg:p-1.5">
             {/* Glow effect */}
@@ -203,7 +204,7 @@ const StatsBar = () => {
   return (
     <div className="w-full relative overflow-hidden">
       {/* Background with vertical gradient and pattern */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#9810FA] via-purple-700 to-purple-900"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#9810FA] via-purple-500 to-purple-600"></div>
 
       {/* Glow effects */}
       <div className="absolute -top-20 left-1/4 w-64 h-64 bg-[#F3E8FF]0/20 rounded-full blur-3xl" />
@@ -320,7 +321,7 @@ const AboutSection = () => {
 
         <Link to="/about-dimpified">
           {" "}
-          <button className="mt-8 px-7 py-3 bg-[#9810FA] hover:bg-[#3F0994]   text-white rounded-full text-lg font-semibold Get Started Now hover:bg-[#7e0dcf] transition-all">
+          <button className="mt-8 px-7 py-3 bg-[#9810FA] hover:bg-purple-600   text-white rounded-full text-lg font-semibold Get Started Now hover:bg-[#7e0dcf] transition-all">
             Learn More
           </button>
         </Link>
@@ -380,7 +381,7 @@ const WhyChoose = () => {
       <div className="mt-16 text-center">
         <Link to="/auth/landing">
           {" "}
-          <button className="px-8 py-3 bg-[#9810FA] hover:bg-[#3F0994]   text-white rounded-full text-lg font-semibold Get Started Now hover:bg-[#9810FA] hover:bg-[#3F0994]  ">
+          <button className="px-8 py-3 bg-[#9810FA] hover:bg-purple-600   text-white rounded-full text-lg font-semibold Get Started Now hover:bg-[#9810FA] hover:bg-purple-600  ">
             Get Started Now
           </button>
         </Link>
@@ -464,7 +465,7 @@ const WhyChoose = () => {
 //             className={`px-5 py-2 rounded-full border text-sm font-medium transition-all duration-200
 //               ${
 //                 activeTab === cat
-//                   ? "bg-[#9810FA] hover:bg-[#3F0994]   text-white border-[#9810FA] Get Started Now"
+//                   ? "bg-[#9810FA] hover:bg-purple-600   text-white border-[#9810FA] Get Started Now"
 //                   : "border-gray-300 text-gray-700 hover:bg-gray-100"
 //               }`}
 //           >
@@ -674,7 +675,7 @@ const GrowBusiness = () => {
   ];
 
   return (
-    <section className="py-24 bg-[#FBF1FF] px-6 md:px-20 lg:px-40 text-center">
+    <section className="py-24 px-6 md:px-20 lg:px-40 text-center">
       <h4 className="text-[#9810FA] font-semibold mb-3">PROVEN RESULTS</h4>
       <h2 className="text-4xl font-extrabold text-gray-900 mb-10">
         Grow your business
@@ -687,7 +688,7 @@ const GrowBusiness = () => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mx-auto">
         {stats.map((s, i) => (
-          <div key={i} className="bg-white p-8 rounded-2xl text-center">
+          <div key={i} className="bg-[#FBF1FF]  p-8 rounded-2xl text-center">
             <div className="inline-flex items-center justify-center bg-[#F3E8FF] p-3 rounded-full mb-4">
               <img
                 src={s.icon}
@@ -847,16 +848,16 @@ const SubscriptionSection = () => {
 
   const pricingPlans = {
     lite: {
-      monthly: { price: "Free (N 0)", description: "Per Month" },
+      monthly: { price: "Free (NGN 0)", description: "Per Month" },
       annual: { price: "Free (N 0)", description: "Per Year" },
     },
     plus: {
-      monthly: { price: "N 4,500", description: "Per Month" },
+      monthly: { price: "NGN 4,500", description: "Per Month" },
       annual: { price: "N 45,000", description: "Per Year" }, // Assuming 10% discount
     },
     pro: {
-      monthly: { price: "N 6,750", description: "Per Month" },
-      annual: { price: "N 67,500", description: "Per Year" }, // Assuming 10% discount
+      monthly: { price: "NGN 6,750", description: "Per Month" },
+      annual: { price: "NGN 67,500", description: "Per Year" }, // Assuming 10% discount
     },
   };
 
@@ -879,43 +880,19 @@ const SubscriptionSection = () => {
         Compare and choose your preferred plan
       </p>
 
-      {/* Toggle Buttons */}
-      <div className="flex gap-4 mt-8 bg-white p-2 rounded-full shadow-sm">
-        <button
-          onClick={() => handleToggle(false)}
-          className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-            !isAnnual
-              ? "bg-[#9D4EDD] text-white"
-              : "bg-white text-black hover:bg-gray-50"
-          }`}
-        >
-          Monthly
-        </button>
-
-        <button
-          onClick={() => handleToggle(true)}
-          className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-            isAnnual
-              ? "bg-[#9D4EDD] text-white"
-              : "bg-white text-black hover:bg-gray-50"
-          }`}
-        >
-          Annual
-          {pricingPlans.plus.annual.price !== "N 45,000" && (
-            <span className="ml-1 text-xs text-green-600">(Save 10%)</span>
-          )}
-        </button>
-      </div>
+      {/* Toggle Buttons ... omitted for brevity */}
 
       {/* Subscription Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-14 w-full max-w-6xl items-start">
+      {/* CHANGE 1: Changed items-start to items-stretch */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-14 w-full max-w-6xl items-stretch">
         {/* Lite Plan */}
-        <div className="bg-white rounded-2xl shadow-md">
+        {/* CHANGE 2: Added flex flex-col h-full */}
+        <div className="bg-white rounded-2xl shadow-md flex flex-col h-full">
           <div
             className="p-8 rounded-t-2xl"
             style={{ backgroundColor: "#61089C26" }}
           >
-            <h3 className="text-xl font-semibold">Lite Plan</h3>
+            <h3 className="text-xl font-semibold">Free Plan</h3>
             <p className="text-gray-600 text-sm mt-2">
               Solopreneur (Small business/service professionals) who just wants
               to show their services and get booked.
@@ -932,9 +909,10 @@ const SubscriptionSection = () => {
             </p>
           </div>
 
-          <div className="p-8">
+          {/* CHANGE 3: Added flex-grow and flex flex-col to this wrapper */}
+          <div className="p-8 flex-grow flex flex-col">
             <Link to="/free/auth/pre-signup">
-              <button className="bg-[#9810FA] hover:bg-[#3F0994] text-white py-3 rounded-full font-medium w-full transition-colors duration-200">
+              <button className="bg-[#9810FA] hover:bg-purple-600 text-white py-3 rounded-full font-medium w-full transition-colors duration-200">
                 Get Started Now
               </button>
             </Link>
@@ -948,26 +926,21 @@ const SubscriptionSection = () => {
                 <li>
                   ✓ Booking link: Share on socials to get bookings, not DMs.
                 </li>
-                <li>
-                  ✓ Calendar sync: Sync with your google calendar to stay
-                  organized.
-                </li>
-                <li>
-                  ✓ Auto Booking Reminder: Customers get auto reminders about
-                  appointment.
-                </li>
+                <li>✓ Calendar sync: Sync with your google calendar.</li>
+                <li>✓ Auto Booking Reminder: Customers get auto reminders.</li>
               </ul>
             </div>
           </div>
         </div>
 
         {/* Plus Plan */}
-        <div className="bg-white rounded-2xl shadow-md">
+        {/* CHANGE 2: Added flex flex-col h-full */}
+        <div className="bg-white rounded-2xl shadow-md flex flex-col h-full">
           <div
             className="p-8 rounded-t-2xl"
             style={{ backgroundColor: "#61089C26" }}
           >
-            <h3 className="text-xl font-semibold">Plus Plan</h3>
+            <h3 className="text-xl font-semibold">Lite Plan</h3>
             <p className="text-gray-600 text-sm mt-2">
               Solopreneur with physical store and multiple staffs.
             </p>
@@ -988,9 +961,10 @@ const SubscriptionSection = () => {
             )}
           </div>
 
-          <div className="p-8">
+          {/* CHANGE 3: Added flex-grow and flex flex-col */}
+          <div className="p-8 flex-grow flex flex-col">
             <Link to="/auth/personal-Information">
-              <button className="bg-[#9810FA] hover:bg-[#3F0994] text-white py-3 rounded-full font-medium w-full transition-colors duration-200">
+              <button className="bg-[#9810FA] hover:bg-purple-600 text-white py-3 rounded-full font-medium w-full transition-colors duration-200">
                 Get Started Now
               </button>
             </Link>
@@ -998,85 +972,14 @@ const SubscriptionSection = () => {
             <div className="mt-8">
               <h4 className="font-semibold mb-3">What you get:</h4>
               <ul className="space-y-3 text-m text-gray-600">
-                <li>
-                  ✓ Website Landing Page: Show your brand, let customers book,
-                  view your hours and location.
-                </li>
-                <li>
-                  ✓ Booking link: Share on socials to get bookings, not DMs.
-                </li>
-                <li>
-                  ✓ Calendar sync: Sync with your google calendar to stay
-                  organized.
-                </li>
-                <li>
-                  ✓ Unlimited Auto Booking Reminder: Customers get auto
-                  reminders about appointment.
-                </li>
-                <li>
-                  ✓ Recurring appointments: Customers can set recurring booking
-                  appointments.
-                </li>
-                <li>
-                  ✓ Staff onboarding: Allow customers to select who cares for
-                  them.
-                </li>
-                <li>
-                  ✓ Group Appointment: Schedule services for friends, family, or
-                  staff in one booking.
-                </li>
+                <li>✓ Website Landing Page: Show your brand.</li>
+                <li>✓ Booking link: Share on socials.</li>
+                <li>✓ Calendar sync: Sync with your google calendar.</li>
+                <li>✓ Unlimited Auto Booking Reminder.</li>
+                <li>✓ Recurring appointments.</li>
+                <li>✓ Staff onboarding.</li>
+                <li>✓ Group Appointment.</li>
                 <li>✓ And more feature to come.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Pro Plan */}
-        <div className="bg-white rounded-2xl shadow-md">
-          <div
-            className="p-8 rounded-t-2xl"
-            style={{ backgroundColor: "#61089C26" }}
-          >
-            <h3 className="text-xl font-semibold">Pro Plan</h3>
-            <p className="text-gray-600 text-sm mt-2">
-              Let's you track your business across multiple physical stores and
-              teams.
-            </p>
-            <p className="text-3xl font-bold mt-5">
-              {isAnnual
-                ? pricingPlans.pro.annual.price
-                : pricingPlans.pro.monthly.price}{" "}
-              <span className="text-sm font-normal">
-                {isAnnual
-                  ? pricingPlans.pro.annual.description
-                  : pricingPlans.pro.monthly.description}
-              </span>
-            </p>
-            {isAnnual && (
-              <p className="text-green-600 text-sm font-medium mt-2">
-                Save 10% with annual billing
-              </p>
-            )}
-          </div>
-
-          <div className="p-8">
-            <Link to="/auth/personal-Information">
-              <button className="bg-[#9810FA] hover:bg-[#3F0994] text-white py-3 rounded-full font-medium w-full transition-colors duration-200">
-                Get Started Now
-              </button>
-            </Link>
-
-            <div className="mt-8">
-              <h4 className="font-semibold mb-3">What you get:</h4>
-              <ul className="space-y-3 text-m text-gray-600">
-                <li>✓ Everything in plus plan +</li>
-                <li>✓ VIP booking prioritization</li>
-                <li>✓ Unlimited staff accounts</li>
-                <li>✓ Multi-location support</li>
-                <li>✓ Membership programs</li>
-                <li>✓ Dedicated account manager</li>
-                <li>✓ Automated invoicing</li>
-                <li>✓ Inventory management</li>
               </ul>
             </div>
           </div>
@@ -1172,7 +1075,7 @@ const Discover = () => {
         </ul>
 
         <Link to="/about-dimpified">
-          <button className="mt-8 bg-[#9810FA] hover:bg-[#3F0994] text-white px-6 py-3 rounded-full transition-colors duration-200">
+          <button className="mt-8 bg-[#9810FA] hover:bg-purple-600 text-white px-6 py-3 rounded-full transition-colors duration-200">
             Learn More
           </button>
         </Link>

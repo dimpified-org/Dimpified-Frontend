@@ -37,6 +37,13 @@ const Navbar = () => {
           <ul className="hidden lg:flex items-center gap-10 text-gray-700 font-medium">
             <li>
               <Link
+                to="/"
+                className="hover:text-[#9810FA] font-semibold cursor-pointer"
+              >
+              Home
+              </Link>
+            </li><li>
+              <Link
                 to="/features"
                 className="hover:text-[#9810FA] font-semibold cursor-pointer"
               >
