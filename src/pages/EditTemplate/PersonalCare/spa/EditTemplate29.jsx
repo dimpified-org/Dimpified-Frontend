@@ -32,7 +32,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 import { WhiteContactForm } from "../../../../features/ContactForm/ContactForm";
 import { getCurrencySymbol } from "../../../../helper/getCurrencySymbol";
@@ -74,12 +74,12 @@ const SecondSpa = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   const handleContentChange = (section, field, event, index = null) => {
     const value = event.target.value;
@@ -199,11 +199,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
           {/* Logo */}
           <a href="#" className="flex items-center text-gray-800">
             <div className="relative">
-              <img
-                src={details && details.navbar.logo}
-                alt="logo"
-                className="w-10 h-10 mr-2"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               <div
                 style={{
                   width: "250px",
@@ -214,21 +210,21 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       width="50"
                       onClick={() => handleEditImageClick("navbar", "logo")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Logo"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["navbar-logo"] = ref)}
                   onChange={(e) => handleImageChange(e, "navbar", "logo")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <span className="text-xs leading-tight">
@@ -360,22 +356,22 @@ const SecondSpa = ({ userDetails, subdomain }) => {
           }}
         >
           <div>
-            {userPlan && userPermissions.canEditImage ? (
+            {/* userPlan && userPermissions.canEditImage ? (
               <ButtonSmallPurple
                 onClick={() => handleEditImageClick("hero", "backgroundImage1")}
               >
                 {loadingImage ? <LoadingSmall /> : "Edit Image"}
               </ButtonSmallPurple>
-            ) : null}
+            ) : null*/}
           </div>
-          <input
+          {/* <input
             type="file"
             ref={(ref) =>
               (fileInputRefs.current["hero-backgroundImage1"] = ref)
             }
             onChange={(e) => handleImageChange(e, "hero", "backgroundImage1")}
             style={{ display: "none" }}
-          />
+          /> */}
         </div>
       </div>
       <div className="mb-16 px-4  lg:px- ">
@@ -487,7 +483,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                   alt="Spa Treatment"
                   className="rounded-md w-full h-auto"
                 />
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2">
                     <ButtonSmallPurple
                       width="50"
@@ -496,13 +492,13 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
                   </div>
-                )}
-                <input
+                )*/}
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["aboutUs-image2"] = ref)}
                   onChange={(e) => handleImageChange(e, "aboutUs", "image2")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
               <div className="relative">
                 <img
@@ -510,7 +506,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                   alt="Luxury Spa Bath"
                   className="rounded-md w-full h-auto"
                 />
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2">
                     <ButtonSmallPurple
                       width="50"
@@ -519,13 +515,13 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
                   </div>
-                )}
-                <input
+                )*/}
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["aboutUs-image3"] = ref)}
                   onChange={(e) => handleImageChange(e, "aboutUs", "image3")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             {/* Booking Info */}
@@ -582,7 +578,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                     alt="Co-Founder"
                     className="w-14 h-14 rounded-full"
                   />
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         width="50"
@@ -593,15 +589,15 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image4"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image4")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
                 <div>
                   {/* <img
@@ -834,11 +830,11 @@ const SecondSpa = ({ userDetails, subdomain }) => {
               <div key={index} className="overflow-hidden group relative">
                 {/* Image */}
                 <div className="relative">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-100 rounded-md object-cover"
-                  />
+                  /> */}
                   {/* Icons (Hidden initially) */}
                   <ul className="absolute inset-0 flex justify-center items-center space-x-4 opacity-0 group-hover:opacity-100 bg-black bg-opacity-30 transition">
                     <li>
@@ -976,7 +972,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                         alt={testimonial.name}
                         className="w-16 h-16 rounded-full border-2 border-gold"
                       />
-                      {userPlan && userPermissions.canEditImage && (
+                      {/* userPlan && userPermissions.canEditImage && (
                         <div className="absolute top-2 left-2">
                           <ButtonSmallPurple
                             width="50"
@@ -990,7 +986,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
                         </div>
-                      )}
+                      )*/}
                       <input
                         type="file"
                         ref={(ref) =>
@@ -1124,7 +1120,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
               alt="Spa Massage"
               className="rounded-md shadow-lg w-full max-w-md lg:max-w-lg"
             />
-            {userPlan && userPermissions.canEditImage && (
+            {/* userPlan && userPermissions.canEditImage && (
               <div className="absolute top-2 left-2">
                 <ButtonSmallPurple
                   width="50"
@@ -1133,13 +1129,13 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
               </div>
-            )}
-            <input
+            )*/}
+            {/* <input
               type="file"
               ref={(ref) => (fileInputRefs.current["Blog-image4"] = ref)}
               onChange={(e) => handleImageChange(e, "Blog", "image4")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
         </div>
       </section>
@@ -1271,7 +1267,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                   alt="Teju Spa Instagram"
                   className="rounded-md shadow-md w-full h-[200px] object-cover transition-transform duration-300 hover:scale-105"
                 />
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2">
                     <ButtonSmallPurple
                       width="50"
@@ -1282,8 +1278,8 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
                   </div>
-                )}
-                <input
+                )*/}
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current[`Gallery-image${index + 1}`] = ref)
@@ -1292,7 +1288,7 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                     handleImageChange(e, "Gallery", `image${index + 1}`)
                   }
                   style={{ display: "none" }}
-                />
+                /> */}
               </a>
             ))}
           </div>
@@ -1442,20 +1438,20 @@ const SecondSpa = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("footer", "logo")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["footer-logo"] = ref)}
                   onChange={(e) => handleImageChange(e, "footer", "logo")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
 

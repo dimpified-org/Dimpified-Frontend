@@ -439,11 +439,11 @@ const FirstDentist = ({ userDetails }) => {
               className="bg-white rounded-lg shadow-lg p-6 text-center transition-all duration-300 hover:bg-[#d7e8f2] hover:text-white"
             >
               <div className="flex justify-center">
-                <img
+                {/* <img
                   src={service.serviceImage}
                   alt={service.name}
                   className="w-24 h-24 rounded-full "
-                />
+                /> */}
               </div>
               <h3 className="mt-4 text-lg font-semibold text-gray-900 hover:text-white">
                 {service.name}

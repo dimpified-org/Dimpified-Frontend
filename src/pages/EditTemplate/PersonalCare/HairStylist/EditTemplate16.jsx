@@ -22,7 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 
 // App Component
@@ -90,12 +90,12 @@ const SecondStylist = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -137,11 +137,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
             {/* Logo */}
             <div className="flex items-center relative">
               <a href="index.html" className="inline-block">
-                <img
-                  src={details && details.navbar.logo}
-                  alt="logo"
-                  className="h-10"
-                />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               </a>
               <div
                 style={{
@@ -153,20 +149,20 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("navbar", "logo")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["navbar-logo"] = ref)}
                   onChange={(e) => handleImageChange(e, "navbar", "logo")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
 
@@ -310,7 +306,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() =>
                       handleEditImageClick("hero", "backgroundImage1")
@@ -318,9 +314,9 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) =>
                   (fileInputRefs.current["hero-backgroundImage1"] = ref)
@@ -329,7 +325,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                   handleImageChange(e, "hero", "backgroundImage1")
                 }
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -392,20 +388,20 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("aboutUs", "image1")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["aboutUs-image1"] = ref)}
                   onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <h4 className="absolute font-bold -left-12 top-1/2 transform -rotate-90 text-brown-700 text-xl tracking-wider">
@@ -515,11 +511,11 @@ const SecondStylist = ({ userDetails, subdomain }) => {
               >
                 {/* Product Image */}
                 <div className="relative">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-100 object-cover"
-                  />
+                  /> */}
                   {service.name && (
                     <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs rounded">
                       {service.name}
@@ -929,7 +925,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() =>
                         handleEditImageClick("Vision", "impactsummary")
@@ -937,9 +933,9 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["Vision-impactsummary"] = ref)
@@ -948,7 +944,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                     handleImageChange(e, "Vision", "impactsummary")
                   }
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
               {/* After Image with slider */}
               <div
@@ -1039,11 +1035,11 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                 <div key={index} className="overflow-hidden group relative">
                   {/* Image */}
                   <div className="relative">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="w-full h-100 object-cover"
-                    />
+                    /> */}
                     {/* Icons (Hidden initially) */}
                     <ul className="absolute inset-0 flex justify-center items-center space-x-4 opacity-0 group-hover:opacity-100 bg-black bg-opacity-30 transition">
                       <li>
@@ -1096,20 +1092,20 @@ const SecondStylist = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("LargeCta", "image1")}
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => (fileInputRefs.current["LargeCta-image1"] = ref)}
                 onChange={(e) => handleImageChange(e, "LargeCta", "image1")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
 
@@ -1203,7 +1199,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                       }}
                     >
                       <div>
-                        {userPlan && userPermissions.canEditImage ? (
+                        {/* userPlan && userPermissions.canEditImage ? (
                           <ButtonSmallPurple
                             onClick={() =>
                               handleEditImageClick("Reviews", "image1")
@@ -1211,9 +1207,9 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                           >
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
-                        ) : null}
+                        ) : null*/}
                       </div>
-                      <input
+                      {/* <input
                         type="file"
                         ref={(ref) =>
                           (fileInputRefs.current["Reviews-image1"] = ref)
@@ -1222,7 +1218,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                           handleImageChange(e, "Reviews", "image1")
                         }
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -1307,7 +1303,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                       }}
                     >
                       <div>
-                        {userPlan && userPermissions.canEditImage ? (
+                        {/* userPlan && userPermissions.canEditImage ? (
                           <ButtonSmallPurple
                             onClick={() =>
                               handleEditImageClick("Reviews", "image2")
@@ -1315,9 +1311,9 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                           >
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
-                        ) : null}
+                        ) : null*/}
                       </div>
-                      <input
+                      {/* <input
                         type="file"
                         ref={(ref) =>
                           (fileInputRefs.current["Reviews-image2"] = ref)
@@ -1326,7 +1322,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                           handleImageChange(e, "Reviews", "image2")
                         }
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -1411,7 +1407,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                       }}
                     >
                       <div>
-                        {userPlan && userPermissions.canEditImage ? (
+                        {/* userPlan && userPermissions.canEditImage ? (
                           <ButtonSmallPurple
                             onClick={() =>
                               handleEditImageClick("Reviews", "image3")
@@ -1419,9 +1415,9 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                           >
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
-                        ) : null}
+                        ) : null*/}
                       </div>
-                      <input
+                      {/* <input
                         type="file"
                         ref={(ref) =>
                           (fileInputRefs.current["Reviews-image3"] = ref)
@@ -1430,7 +1426,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                           handleImageChange(e, "Reviews", "image3")
                         }
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -1538,7 +1534,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                       }}
                     >
                       <div>
-                        {userPlan && userPermissions.canEditImage ? (
+                        {/* userPlan && userPermissions.canEditImage ? (
                           <ButtonSmallPurple
                             onClick={() =>
                               handleEditImageClick(
@@ -1549,9 +1545,9 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                           >
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
-                        ) : null}
+                        ) : null*/}
                       </div>
-                      <input
+                      {/* <input
                         type="file"
                         ref={(ref) =>
                           (fileInputRefs.current[`Gallery-image${index + 1}`] =
@@ -1561,7 +1557,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                           handleImageChange(e, "Gallery", `image${index + 1}`)
                         }
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </a>
@@ -1598,20 +1594,20 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("footer", "logo")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["footer-logo"] = ref)}
                   onChange={(e) => handleImageChange(e, "footer", "logo")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <p className="text-lg">
@@ -1700,7 +1696,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                     alt={`Portfolio ${index + 1}`}
                     className="w-full h-16 object-cover"
                   />
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-0 left-0 z-10">
                       <ButtonSmallPurple
                         width="40px"
@@ -1714,8 +1710,8 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`contactUs-heading${index + 1}`] =
@@ -1725,7 +1721,7 @@ const SecondStylist = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "contactUs", `heading${index + 1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               ))}
             </div>

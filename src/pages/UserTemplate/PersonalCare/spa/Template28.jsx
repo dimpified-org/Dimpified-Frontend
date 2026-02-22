@@ -168,11 +168,7 @@ const [currency, setCurrency] = useState([]);
           <div className="bg-[#f8f6f2] py-3 md:px-24 px-4 flex justify-between items-center border-b border-gray-300">
             {/* Logo */}
             <a href="#" className="flex items-center text-gray-800">
-              <img
-                src={details && details.navbar.logo}
-                alt="logo"
-                className="w-10 h-10 mr-2"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               <span className="text-xs leading-tight">
                 {userDetails?.ecosystemName} <br />
                 <span className="text-yellow-600">Beauty and Spa</span>
@@ -495,11 +491,11 @@ const [currency, setCurrency] = useState([]);
                 {/* Image Section */}
                 <div className="relative w-40 h-40 mx-auto mb-6">
                   <div className="w-full h-full rounded-full border-4 border-[#C8A97E] overflow-hidden">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="w-full h-full object-cover"
-                    />
+                    /> */}
                   </div>
                   {/* Service Icon */}
                   {/* <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#b19153] w-16 h-16 rounded-full flex items-center justify-center shadow-lg">

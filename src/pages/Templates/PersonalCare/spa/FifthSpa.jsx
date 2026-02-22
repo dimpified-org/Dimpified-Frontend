@@ -300,11 +300,11 @@ const FifthSpa = () => {
               >
                
                 <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-full object-cover"
-                  />
+                  /> */}
                 </div>
 
                 
@@ -405,11 +405,11 @@ const FifthSpa = () => {
                hover:bg-gradient-to-r from-purple-400 to-pink-300 text-white"
               >
                 <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white ">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-full object-cover"
-                  />
+                  /> */}
                 </div>
                 <h3 className="mt-6 text-xl font-semibold transition-colors duration-300  text-black group-hover:text-white">
                   {service.name}

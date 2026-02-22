@@ -91,11 +91,7 @@ const MakeupTemplate = ({ userDetails }) => {
         <div className="py-4 px-4 lg:px-24 flex justify-between items-center">
           {/* Logo */}
           <a href="#home" className="flex items-center">
-            <img
-              src="https://gfa-tech.com/dimp-template-images/images/demo-spa-salon-logo-white.png"
-              alt="Logo"
-              className="h-10"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
           </a>
 
           {/* Desktop Links */}

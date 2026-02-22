@@ -307,7 +307,7 @@ const BarberFourth = ({ details, subdomain, userDetails }) => {
               className="flex flex-col items-center bg-white mt-4 shadow-sm py-6 lg:w-72 w-96 "
             >
               <button onClick={handleModalOpen}>
-                <img src={service.serviceImage} className="rounded-lg" />
+                {/* <img src={service.serviceImage} className="rounded-lg" /> */}
               </button>
               <button onClick={handleModalOpen}>
                 <h4 className="text-xl px-4 font-bold mt-4 items-start">
@@ -345,13 +345,13 @@ const BarberFourth = ({ details, subdomain, userDetails }) => {
                 } shadow`}
               >
                 {/* Service Image */}
-                {service.serviceImage && (
+                {/* service.serviceImage && (
                   <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-20 h-20 object-cover rounded-full mr-4"
                   />
-                )}
+                ) */}
                 {/* Service Details */}
                 <div className="flex-1">
                   <h5 className="text-lg font-semibold text-gray-800">

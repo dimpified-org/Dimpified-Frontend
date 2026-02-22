@@ -36,7 +36,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 
 const ThirdDentist = ({ userDetails, subdomain }) => {
@@ -75,12 +75,12 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   const handleContentChange = (section, field, event, index = null) => {
     const value = event.target.value;
@@ -413,7 +413,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
               />
 
               {/* Edit Image Button */}
-              {userPlan && userPermissions?.canEditImage && (
+              {/* userPlan && userPermissions?.canEditImage && (
                 <div className="absolute top-4 right-4 z-50">
                   <ButtonSmallPurple
                     onClick={() =>
@@ -434,7 +434,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
 
               {/* Floating Icon with Text */}
               <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg">
@@ -597,20 +597,20 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
               zIndex: 1000,
             }}
           >
-            {userPlan && userPermissions.canEditImage ? (
+            {/* userPlan && userPermissions.canEditImage ? (
               <ButtonSmallPurple
                 onClick={() => handleEditImageClick("aboutUs", "image1")}
               >
                 {loadingImage ? <LoadingSmall /> : "Edit Image"}
               </ButtonSmallPurple>
-            ) : null}
+            ) : null*/}
 
-            <input
+            {/* <input
               type="file"
               ref={(ref) => (fileInputRefs.current[`aboutUs-image1`] = ref)}
               onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
 
           <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-white p-4 rounded-xl shadow-md w-3/4">
@@ -820,11 +820,11 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                   key={index}
                   className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition"
                 >
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-12 h-12 mb-4"
-                  />
+                  /> */}
 
                   <h3 className="text-[#031B4E] text-xl font-semibold mb-2">
                     {service.name}
@@ -883,7 +883,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                     className="w-full h-full object-cover rounded-lg"
                   />
 
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         width="110"
@@ -894,8 +894,8 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Gallery-image${idx}`] = ref)
@@ -904,7 +904,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Gallery", `image${idx}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             ))}
@@ -1019,7 +1019,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() =>
                       handleEditImageClick("Statistics", "section1icon")
@@ -1027,9 +1027,9 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) =>
                   (fileInputRefs.current["Statistics-section1icon"] = ref)
@@ -1038,7 +1038,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                   handleImageChange(e, "Statistics", "section1icon")
                 }
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -1066,7 +1066,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                     className="w-full h-full object-cover rounded-full"
                   />
 
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         width="110"
@@ -1077,8 +1077,8 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Team-image${idx + 1}`] = ref)
@@ -1087,7 +1087,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Team", `image${idx +1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
                 <div className="p-4 transition-all duration-300 group-hover:text-white">
                   <h3 className="text-lg font-bold">{doctor.name}</h3>
@@ -1139,7 +1139,7 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
               alt="Doctor"
               className="rounded-2xl max-w-sm w-full h-auto object-cover"
             />
-            {userPlan && userPermissions.canEditImage && (
+            {/* userPlan && userPermissions.canEditImage && (
               <div className="absolute top-2 left-2">
                 <ButtonSmallPurple
                   width="110"
@@ -1148,13 +1148,13 @@ const ThirdDentist = ({ userDetails, subdomain }) => {
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
               </div>
-            )}
-            <input
+            )*/}
+            {/* <input
               type="file"
               ref={(ref) => (fileInputRefs.current["Reviews-image1"] = ref)}
               onChange={(e) => handleImageChange(e, "Reviews", "image1")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
 
           {/* Testimonial Content */}

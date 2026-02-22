@@ -169,7 +169,7 @@ const MakeupTemplate = ({ details, subdomain, userDetails }) => {
         <div className="py-4 px-4 lg:px-24 flex justify-between items-center">
           {/* Logo */}
           <a href="#home" className="flex items-center">
-            <img src={details.navbar.logo} alt="Logo" className="h-10" />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
           </a>
 
           {/* Desktop Links */}
@@ -483,11 +483,11 @@ const MakeupTemplate = ({ details, subdomain, userDetails }) => {
                   className="w-full md:w-1/2 lg:w-1/2 p-4 transform transition-transform duration-300 hover:scale-105"
                 >
                   <div className="flex items-center rounded-lg shadow-lg p-6 hover:bg-opacity-50">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt=""
                       className="w-32 h-32 rounded-full object-cover"
-                    />
+                    /> */}
                     <div className="ml-6 flex-grow">
                       <div className="flex items-center text-lg font-semibold">
                         <span className="text-gray-800">{service.name}</span>

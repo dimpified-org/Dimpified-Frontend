@@ -74,11 +74,7 @@ const BarberMordern = ({ userDetails }) => {
       <nav className="font-sen bg-white px-4 py-4 lg:px-10  w-full z-50">
         <div className="container mx-auto flex items-center justify-between">
           <a href="#home" className="font-bold flex items-center">
-            <img
-              src="https://gfa-tech.com/dimp-template-images/images/demo-barber-logo-black.png"
-              alt="Logo"
-              className="h-10"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
           </a>
           <button
             onClick={toggleMenu}
@@ -789,11 +785,7 @@ const BarberMordern = ({ userDetails }) => {
                 href="demo-barber.html"
                 className="relative z-10 inline-block mb-4"
               >
-                <img
-                  src="https://gfa-tech.com/dimp-template-images/images/demo-barber-logo-black.png"
-                  alt="font-sen Logo"
-                  className="mx-auto"
-                />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               </a>
               <span className="block font-limelight  text-gray-50 opacity-40 mt-[10px] mb-8 text-2xl xs:text-xl tracking-normal xs:tracking-normaler">
                 Award winning barber studio

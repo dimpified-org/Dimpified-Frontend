@@ -361,11 +361,11 @@ const SeventhNail = () => {
                       >
                         <div className="w-1/4 pr-4">
                           <div className="relative overflow-hidden rounded-lg">
-                            <img
+                            {/* <img
                               src={service.serviceImage}
                               alt="pricing-image"
                               className="w-full h-auto"
-                            />
+                            /> */}
                             <div className="absolute inset-0 bg-black opacity-0 hover:opacity-20 transition duration-300"></div>
                           </div>
                         </div>
@@ -400,11 +400,11 @@ const SeventhNail = () => {
                       >
                         <div className="w-1/4 pr-4">
                           <div className="relative overflow-hidden rounded-lg">
-                            <img
+                            {/* <img
                               src={service.serviceImage}
                               alt="pricing-image"
                               className="w-full h-auto"
-                            />
+                            /> */}
                             <div className="absolute inset-0 bg-black opacity-0 hover:opacity-20 transition duration-300"></div>
                           </div>
                         </div>

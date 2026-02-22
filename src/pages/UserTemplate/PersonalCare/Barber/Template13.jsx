@@ -107,7 +107,7 @@ const Template13 = ({ details, subdomain, userDetails }) => {
             {/* Left-aligned container for logo and menu */}
             <div className="flex items-center space-x-8 lg:space-x-12 mr-auto">
               <Link to="#home" className="flex items-center">
-                <img src={details.navbar.logo} alt="Icon" className="h-12" />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               </Link>
 
               {/* Desktop Menu  */}
@@ -363,11 +363,11 @@ const Template13 = ({ details, subdomain, userDetails }) => {
                 className="text-center px-3 lg:px-8 py-10 border-gray-200"
               >
                 <div className="relative mb-6 ">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     className="rounded-md"
                     alt={service.name}
-                  />
+                  /> */}
                 </div>
                 <span className="text-lg font-semibold text-gray-800 block mb-2">
                   {service.name}

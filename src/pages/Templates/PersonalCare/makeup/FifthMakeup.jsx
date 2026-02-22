@@ -384,11 +384,7 @@ const FifthMakeup = () => {
           </h2>
 
           {/* Icon */}
-          <img
-            src="https://gfa-tech.com/dimp-template-images/make-up/about-logo.png"
-            alt="Makeup Icon"
-            className="w-24 h-24 mb-6"
-          />
+          <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
 
           {/* Description */}
           <p className="text-gray-600 leading-relaxed mb-6 max-w-md">
@@ -455,10 +451,10 @@ const FifthMakeup = () => {
               className="bg-white p-6 rounded-md shadow-md hover:shadow-lg transition duration-300"
             >
               <div className="flex items-center justify-center">
-                <img
+                {/* <img
                   src={service.serviceImage}
                   className="w-32 rounded-full  mb-6 h-32"
-                />
+                /> */}
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 {service.name}

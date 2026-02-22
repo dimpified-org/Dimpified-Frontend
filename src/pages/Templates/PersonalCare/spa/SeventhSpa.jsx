@@ -268,11 +268,11 @@ const SeventhSpa = () => {
                   className="bg-white rounded-lg shadow-md text-center"
                 >
                   <div className="relative">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="w-full h-48  object-cover relative rounded-xl"
-                    />
+                    /> */}
                     <span className="bg-white/10 backdrop-blur-md text-md px-2 py-1 rounded-full text-white absolute right-1 bottom-1 shadow-lg">
                       {getFormattedPrice(service.price, countryCode)}
                     </span>{" "}

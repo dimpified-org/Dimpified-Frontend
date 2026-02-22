@@ -436,15 +436,15 @@ import FreeAllBookings from "../pages/FreeCreatorDashboard/FreeBookings";
 import FreeCreatorProfile from "../pages/FreeCreatorDashboard/FreeCreatorProfile";
 import ManageServices from "../pages/FreeCreatorDashboard/FreeManageService";
 import PaidOnboardingPreSignup from "../pages/Anthentication/PaidBooking/PaidOnboardingPreSignup";
-import PaidOnboardingPersonalInfo from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidOnboardingPersonalInfo";
-import PaidOnboardingEmailVerification from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidOnboardingEmailVerification";
-import PaidOnboardingSetupOne from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidBookingSetup/PaidOnboardingSetupOne";
-import PaidOnboardingSetupTwo from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidBookingSetup/PaidOnboardingSetupTwo";
-import PaidOnboardingSetupThree from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidBookingSetup/PaidOnboardingSetupThree";
-import PaidOnboardingReview from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidOnboardingReview";
-import PaidSelectTemplate from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidSelectTemplate";
-import PaidPreviewTemplate from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidPreviewTemplate";
-import PaidSubscription from "../pages/Anthentication/PaidBooking/FreeOnboardingSteps/PaidSubcription";
+import PaidOnboardingPersonalInfo from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidOnboardingPersonalInfo";
+import PaidOnboardingEmailVerification from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidOnboardingEmailVerification";
+import PaidOnboardingSetupOne from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidBookingSetup/PaidOnboardingSetupOne";
+import PaidOnboardingSetupTwo from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidBookingSetup/PaidOnboardingSetupTwo";
+import PaidOnboardingSetupThree from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidBookingSetup/PaidOnboardingSetupThree";
+import PaidOnboardingReview from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidOnboardingReview";
+import PaidSelectTemplate from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidSelectTemplate";
+import PaidPreviewTemplate from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidPreviewTemplate";
+import PaidSubscription from "../pages/Anthentication/PaidBooking/PaidOnboardingSteps/PaidSubcription";
 
 const TrackPageView = () => {
   const location = useLocation();

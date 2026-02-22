@@ -497,7 +497,7 @@ const GymTemplate = ({ details, subdomain, userDetails }) => {
                 </button>
                 <div
                   className="absolute top-0 right-0 h-full w-16 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${service.serviceImage})` }}
+                  /* style={{ backgroundImage: `url(${service.serviceImage})` }} */
                 />
               </div>
             ))}

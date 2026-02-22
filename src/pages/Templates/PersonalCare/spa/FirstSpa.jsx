@@ -290,11 +290,11 @@ const FirstSpa = ({ userDetails }) => {
                 className="bg-white shadow-lg rounded-lg overflow-hidden h-full flex flex-col transform transition-transform duration-300 hover:scale-105"
               >
                 <div className="p-6 flex-grow flex flex-col items-center text-center">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt="Service Icon"
                     className="w-36 mb-4 rounded-full"
-                  />
+                  /> */}
                   <h3 className="text-xl font-semibold">{service.name}</h3>
                   <p className="text-gray-600 mt-2">{service.shortDescription}</p>
                 </div>
@@ -441,11 +441,11 @@ const FirstSpa = ({ userDetails }) => {
               <button onClick={handleModalOpen}>
                 {" "}
                 <div className="w-48 h-48 rounded-full border border-gray-300 overflow-hidden">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-full object-cover"
-                  />
+                  /> */}
                 </div>
               </button>
              

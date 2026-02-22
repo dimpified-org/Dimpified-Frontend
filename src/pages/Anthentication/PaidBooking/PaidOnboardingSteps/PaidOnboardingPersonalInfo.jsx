@@ -86,7 +86,7 @@ const PaidOnboardingPersonalInfo = () => {
   useEffect(() => {
     const ref = searchParams.get("ref");
     if (ref) {
-      localStorage.setItem("referralCode", ref);
+      sessionStorage.setItem("referralCode", ref);
       setValue("referralId", ref);
     }
   }, [searchParams, setValue]);
@@ -94,7 +94,7 @@ const PaidOnboardingPersonalInfo = () => {
   const onSubmit = async (data) => {
     // Save referral code if entered
     if (data.referralId) {
-      localStorage.setItem("referralCode", data.referralId);
+      sessionStorage.setItem("referralCode", data.referralId);
     }
 
     // Mixpanel tracking (optional)
@@ -117,7 +117,7 @@ const PaidOnboardingPersonalInfo = () => {
           acceptMarketing: data.receiveMarketing,
           refCode:
             data.referralId ||
-            localStorage.getItem("referralCode") ||
+            sessionStorage.getItem("referralCode") ||
             null,
         })
       );

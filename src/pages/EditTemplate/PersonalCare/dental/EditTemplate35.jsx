@@ -35,7 +35,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 
 const FourthDentist = ({ userDetails, subdomain }) => {
@@ -73,12 +73,12 @@ const FourthDentist = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   const handleContentChange = (section, field, event, index = null) => {
     const value = event.target.value;
@@ -335,7 +335,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
             backgroundImage: `url(${details && details.hero.backgroundImage1})`,
           }}
         >
-          {userPlan && userPermissions?.canEditImage && (
+          {/* userPlan && userPermissions?.canEditImage && (
             <div className="absolute top-4 left-4 z-50">
               <ButtonSmallPurple
                 onClick={() => handleEditImageClick("hero", "backgroundImage1")}
@@ -354,7 +354,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                 style={{ display: "none" }}
               />
             </div>
-          )}
+          )*/}
         </div>
 
         <div className="relative text-gray-800 z-10 flex flex-col md:flex-row items-center md:items-start max-w-6xl mx-auto">
@@ -434,20 +434,20 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                 zIndex: 1000,
               }}
             >
-              {userPlan && userPermissions.canEditImage ? (
+              {/* userPlan && userPermissions.canEditImage ? (
                 <ButtonSmallPurple
                   onClick={() => handleEditImageClick("aboutUs", "image2")}
                 >
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
-              ) : null}
+              ) : null*/}
 
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => (fileInputRefs.current[`aboutUs-image2`] = ref)}
                 onChange={(e) => handleImageChange(e, "aboutUs", "image2")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
 
@@ -558,11 +558,11 @@ const FourthDentist = ({ userDetails, subdomain }) => {
 
                   <div className="flex justify-center mb-4 mt-7">
                     <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                      <img
+                      {/* <img
                         src={service.serviceImage}
                         alt={service.name}
                         className="w-12 h-12 "
-                      />
+                      /> */}
                     </div>
                   </div>
                   <h3 className="text-xl font-semibold">{service.name}</h3>
@@ -662,7 +662,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                       alt={`Doctor ${idx + 1}`}
                       className="w-full h-full object-cover"
                     />
-                    {userPlan && userPermissions?.canEditImage && (
+                    {/* userPlan && userPermissions?.canEditImage && (
                       <div className="absolute top-2 left-2">
                         <ButtonSmallPurple
                           onClick={() =>
@@ -685,7 +685,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                           style={{ display: "none" }}
                         />
                       </div>
-                    )}
+                    )*/}
                   </div>
 
                   {/* Text Section */}
@@ -755,7 +755,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                                   alt={item.key}
                                   className="w-16 h-16 object-cover rounded"
                                 />
-                                {userPermissions?.canEditImage && (
+                                {/* userPermissions?.canEditImage && (
                                   <>
                                     <ButtonSmallPurple
                                       onClick={() =>
@@ -779,7 +779,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                                       style={{ display: "none" }}
                                     />
                                   </>
-                                )}
+                                )*/}
                               </div>
                             ) : (
                               <EditTemplateLongInput
@@ -823,7 +823,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                     alt={specialist.name}
                     className="w-full rounded-b-xl object-cover"
                   />
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         width="110"
@@ -836,8 +836,8 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Team-image${index + 1}`] = ref)
@@ -846,7 +846,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Team", `image${index + 1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
                 <div className="relative">
                   <div className="absolute left-1/2 transform -translate-x-1/2 -top-6 bg-[#0CB8B6] text-white w-12 h-12 flex items-center justify-center rounded-full border-4 border-white shadow-sm">
@@ -936,7 +936,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                         alt={testimonial.name}
                         className="w-14 h-14 rounded-full border-2 border-gray-200"
                       />
-                      {userPlan && userPermissions.canEditImage && (
+                      {/* userPlan && userPermissions.canEditImage && (
                         <div className="absolute top-2 left-2">
                           <ButtonSmallPurple
                             width="110"
@@ -949,7 +949,7 @@ const FourthDentist = ({ userDetails, subdomain }) => {
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
                         </div>
-                      )}
+                      )*/}
                       <input
                         type="file"
                         ref={(ref) =>

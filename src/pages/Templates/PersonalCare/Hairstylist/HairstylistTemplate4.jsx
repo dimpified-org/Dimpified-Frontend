@@ -110,11 +110,7 @@ export default function HomePage() {
       {/* Navbar */}
       <header className="w-full bg-white shadow-md z-50">
         <div className="flex items-center justify-between px-6 py-4">
-          <img
-            src="https://gfa-tech.com/dimp-template-images/make-up/newlogo.png"
-            alt="Dimpified Logo"
-            className="h-10 w-auto object-contain"
-          />
+          <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
           <nav className="hidden md:flex space-x-6 text-gray-700">
             <a href="#" className="hover:text-indigo-600">
               Home Page
@@ -592,11 +588,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto grid gap-10 md:grid-cols-4">
           {/* Logo */}
           <div className="md:col-span-1">
-            <img
-              src="https://gfa-tech.com/dimp-template-images/make-up/newlogo.png"
-              alt="Dimpified Logo"
-              className="h-10 w-auto object-contain mb-5"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
             <p className="text-sm mb-4">
               Subscribe to our newsletter for the latest updates on exclusive
               beauty launches and promotions.
