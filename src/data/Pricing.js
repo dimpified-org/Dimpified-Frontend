@@ -11,8 +11,8 @@ export const subscriptionData = {
 
 export const subscriptionPlans = {
   Monthly: {
-    Lite: { code: 225828, amount: 100.00 },
-    //Lite: { code: 145789, amount: 4500.00 },
+    //Lite: { code: 225828, amount: 100.00 },
+    Lite: { code: 145789, amount: 4500.00 },
     Plus: { code: 145793, amount: 6750.00 },
     Pro: { code: 145797, amount: 10125.00 },
     Extra: { code: 145801, amount: 15888.00 },
