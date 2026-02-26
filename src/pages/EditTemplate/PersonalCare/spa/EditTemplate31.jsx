@@ -30,7 +30,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 
 // SpaBeautyTemplate Component
@@ -73,12 +73,12 @@ const FourthSpa = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   const handleContentChange = (section, field, event, index = null) => {
     const value = event.target.value;
@@ -181,11 +181,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
             {/* Center Logo */}
             <div className="flex justify-center">
               <div  className="w-40 relative">
-                <img
-                  src={details && details.navbar.logo}
-                  alt="Logo"
-                  className="w-full"
-                />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
                 <div
                   style={{
                     width: "250px",
@@ -196,21 +192,21 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         width="50"
                         onClick={() => handleEditImageClick("navbar", "logo")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Logo"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["navbar-logo"] = ref)}
                     onChange={(e) => handleImageChange(e, "navbar", "logo")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -318,22 +314,22 @@ const FourthSpa = ({ userDetails, subdomain }) => {
           }}
         >
           <div>
-            {userPlan && userPermissions.canEditImage ? (
+            {/* userPlan && userPermissions.canEditImage ? (
               <ButtonSmallPurple
                 onClick={() => handleEditImageClick("hero", "backgroundImage1")}
               >
                 {loadingImage ? <LoadingSmall /> : "Edit Image"}
               </ButtonSmallPurple>
-            ) : null}
+            ) : null*/}
           </div>
-          <input
+          {/* <input
             type="file"
             ref={(ref) =>
               (fileInputRefs.current["hero-backgroundImage1"] = ref)
             }
             onChange={(e) => handleImageChange(e, "hero", "backgroundImage1")}
             style={{ display: "none" }}
-          />
+          /> */}
         </div>
       </div>
       <div>
@@ -446,7 +442,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                           index + 1
                         } - Massage, facial, or wellness treatment`}
                       />
-                      {userPlan && userPermissions.canEditImage && (
+                      {/* userPlan && userPermissions.canEditImage && (
                         <div className="absolute top-2 left-2">
                           <ButtonSmallPurple
                             width="50"
@@ -460,7 +456,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
                         </div>
-                      )}
+                      )*/}
                       <input
                         type="file"
                         ref={(ref) =>
@@ -606,7 +602,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                       className="w-full h-full object-cover"
                       alt={`${item.title} service at our spa`}
                     />
-                    {userPlan && userPermissions.canEditImage && (
+                    {/* userPlan && userPermissions.canEditImage && (
                       <div className="absolute top-2 left-2">
                         <ButtonSmallPurple
                           width="50"
@@ -620,7 +616,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
                       </div>
-                    )}
+                    )*/}
                     <input
                       type="file"
                       ref={(ref) =>
@@ -721,11 +717,11 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                 className="relative text-center p-6 border border-gray-200 bg-white hover:shadow-2xl hover:scale-105 transform duration-300"
               >
                 <div className="w-32 h-32 mx-auto flex items-center justify-center">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-full object-contain rounded-full "
-                  />
+                  /> */}
                 </div>
                 <h3 className="text-xl font-bold mt-4">{service.name}</h3>
                 <p className="text-gray-500 mt-2">{service.shortDescription}</p>
@@ -824,7 +820,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                 alt={`Gallery image ${num}`}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
-              {userPlan && userPermissions.canEditImage && (
+              {/* userPlan && userPermissions.canEditImage && (
                 <div className="absolute top-2 left-2">
                   <ButtonSmallPurple
                     width="50"
@@ -835,8 +831,8 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
                 </div>
-              )}
-              <input
+              )*/}
+              {/* <input
                 type="file"
                 ref={(ref) =>
                   (fileInputRefs.current[`Gallery-image${index + 1}`] = ref)
@@ -845,7 +841,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                   handleImageChange(e, "Gallery", `image${index + 1}`)
                 }
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           ))}
         </div>
@@ -875,7 +871,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                     alt={member.name}
                     className="rounded-full shadow-md border-[10px] border-white w-full"
                   />
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         width="50"
@@ -886,8 +882,8 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Team-image${index + 1}`] = ref)
@@ -896,7 +892,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Team", `image${index + 1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
                 {/* Name */}
                 <h3 className="text-[#FF5EA5] uppercase text-lg font-bold mt-2">
@@ -961,7 +957,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                     alt={testimonial.name}
                     className="w-full h-full object-cover"
                   />
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         width="50"
@@ -975,7 +971,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
+                  )*/}
                   <input
                     type="file"
                     ref={(ref) =>
@@ -1069,7 +1065,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                   alt={item.title}
                   className="rounded-lg w-full h-full object-cover"
                 />
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2">
                     <ButtonSmallPurple
                       width="50"
@@ -1080,7 +1076,7 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
                   </div>
-                )}
+                )*/}
                 <input
                   type="file"
                   ref={(ref) =>
@@ -1120,20 +1116,20 @@ const FourthSpa = ({ userDetails, subdomain }) => {
                                 }}
                               >
                                 <div>
-                                  {userPlan && userPermissions.canEditImage ? (
+                                  {/* userPlan && userPermissions.canEditImage ? (
                                     <ButtonSmallPurple
                                       onClick={() => handleEditImageClick("footer", "logo")}
                                     >
                                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                                     </ButtonSmallPurple>
-                                  ) : null}
+                                  ) : null*/}
                                 </div>
-                                <input
+                                {/* <input
                                   type="file"
                                   ref={(ref) => (fileInputRefs.current["footer-logo"] = ref)}
                                   onChange={(e) => handleImageChange(e, "footer", "logo")}
                                   style={{ display: "none" }}
-                                />
+                                /> */}
                               </div>
               </a>
             </div>

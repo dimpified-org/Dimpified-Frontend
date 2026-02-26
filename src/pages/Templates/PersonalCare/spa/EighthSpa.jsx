@@ -359,11 +359,11 @@ export default function EightSpa() {
               <button onClick={handleModalOpen}>
                 {" "}
                 <div className="mb-4 text-white flex justify-center">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-32 h-32 object-contain rounded-full "
-                  />
+                  /> */}
                 </div>
               </button>
               <h3 className="text-lg font-semibold mb-2">{service.name}</h3>

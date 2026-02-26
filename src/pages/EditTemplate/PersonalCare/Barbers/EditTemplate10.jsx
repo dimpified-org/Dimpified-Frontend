@@ -19,7 +19,7 @@ import {
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import api from "../../../../api/Template";
 import { showToast } from "../../../../component/ShowToast";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
@@ -90,12 +90,12 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -110,11 +110,7 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
       <nav className="font-sen bg-white px-4 py-4 lg:px-10 mt-10 w-full z-50">
         <div className="relative container mx-auto flex items-center justify-between">
           <a href="#home" className="font-bold flex items-center">
-            <img
-              src={details && details.navbar.logo}
-              alt="Logo"
-              className="h-10"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
           </a>
           <div
             style={{
@@ -126,20 +122,20 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
             }}
           >
             <div>
-              {userPlan && userPermissions.canEditImage ? (
+              {/* userPlan && userPermissions.canEditImage ? (
                 <ButtonSmallPurple
                   onClick={() => handleEditImageClick("navbar", "logo")}
                 >
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
-              ) : null}
+              ) : null*/}
             </div>
-            <input
+            {/* <input
               type="file"
               ref={(ref) => (fileInputRefs.current["navbar-logo"] = ref)}
               onChange={(e) => handleImageChange(e, "navbar", "logo")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
           <button
             onClick={toggleMenu}
@@ -296,7 +292,7 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
             }}
           >
             <div>
-              {userPlan && userPermissions.canEditImage ? (
+              {/* userPlan && userPermissions.canEditImage ? (
                 <ButtonSmallPurple
                   onClick={() =>
                     handleEditImageClick("hero", "backgroundImage1")
@@ -304,16 +300,16 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                 >
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
-              ) : null}
+              ) : null*/}
             </div>
-            <input
+            {/* <input
               type="file"
               ref={(ref) =>
                 (fileInputRefs.current["hero-backgroundImage1"] = ref)
               }
               onChange={(e) => handleImageChange(e, "hero", "backgroundImage1")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
         </div>
       </section>
@@ -386,7 +382,7 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("aboutUs", "image1")
@@ -394,16 +390,16 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image1"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="absolute right-4 -bottom-16 w-8/12 lg:w-7/12 overflow-hidden rounded-lg shadow-xl">
@@ -422,7 +418,7 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("aboutUs", "image2")
@@ -430,16 +426,16 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image2"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image2")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -510,11 +506,11 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                   className="text-center px-12 lg:px-8 py-10 border-gray-200"
                 >
                   <div className="relative mb-6 ">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       className="rounded-md"
                       alt={service.name}
-                    />
+                    /> */}
                   </div>
                   <span className="text-lg font-semibold text-gray-800 block mb-2">
                     {service.name}
@@ -650,7 +646,7 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                       }}
                     >
                       <div>
-                        {userPlan && userPermissions.canEditImage ? (
+                        {/* userPlan && userPermissions.canEditImage ? (
                           <ButtonSmallPurple
                             onClick={() =>
                               handleEditImageClick("Gallery", `image${idx + 1}`)
@@ -658,9 +654,9 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                           >
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
-                        ) : null}
+                        ) : null*/}
                       </div>
-                      <input
+                      {/* <input
                         type="file"
                         ref={(ref) =>
                           (fileInputRefs.current[`Gallery-image${idx + 1}`] =
@@ -670,7 +666,7 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                           handleImageChange(e, "Gallery", `image${idx + 1}`)
                         }
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -1210,11 +1206,7 @@ const EditTemplate10 = ({ userDetails, subdomain }) => {
                 href="demo-barber.html"
                 className="relative z-10 inline-block mb-4"
               >
-                <img
-                  src={details && details.navbar.logo}
-                  alt="font-sen Logo"
-                  className="mx-auto h-20"
-                />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               </a>
 
               <span className="block font-limelight  text-gray-50 opacity-40 mt-[10px] mb-8 text-2xl xs:text-xl tracking-normal xs:tracking-normaler">

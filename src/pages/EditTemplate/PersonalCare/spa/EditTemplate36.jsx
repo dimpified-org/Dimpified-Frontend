@@ -23,7 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 
 // App Component
@@ -65,12 +65,12 @@ const SixthSpa = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   const handleContentChange = (section, field, event, index = null) => {
     const value = event.target.value;
@@ -258,7 +258,7 @@ const SixthSpa = ({ userDetails, subdomain }) => {
               alt="Spa woman"
               className="z-10 max-w-[500px]"
             />
-            {userPlan && userPermissions?.canEditImage && (
+            {/* userPlan && userPermissions?.canEditImage && (
               <div className="absolute top-4 left-4 z-50">
                 <ButtonSmallPurple
                   onClick={() =>
@@ -279,7 +279,7 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                   style={{ display: "none" }}
                 />
               </div>
-            )}
+            )*/}
             {/* Discount Circle */}
             <div className="absolute top-6 right-6 bg-[#0f172a] text-white rounded-full w-[90px] h-[90px] flex flex-col justify-center items-center text-[10px] font-bold shadow-lg z-20">
               <span className="text-lg text-[#ff735c] px-4 items-center justify-center">
@@ -510,20 +510,20 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                   zIndex: 1000,
                 }}
               >
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("aboutUs", "image1")}
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
 
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current[`aboutUs-image1`] = ref)}
                   onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -660,11 +660,11 @@ const SixthSpa = ({ userDetails, subdomain }) => {
             {/* Item 1 */}
             {eServices.map((service, index) => (
               <div className="flex flex-col items-center">
-                <img
+                {/* <img
                   src={service.serviceImage}
                   alt={service.name}
                   className="w-[250px] h-auto rounded-[60%_40%_60%_40%/40%_60%_40%_60%] object-cover"
-                />
+                /> */}
                 <h3 className="text-2xl font-bold text-[#1c1c1c] mt-6">
                   {service.name}
                 </h3>
@@ -751,7 +751,7 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                 zIndex: 1000,
               }}
             >
-              {userPlan && userPermissions.canEditImage ? (
+              {/* userPlan && userPermissions.canEditImage ? (
                 <ButtonSmallPurple
                   onClick={() =>
                     handleEditImageClick("Statistics", "section2icon")
@@ -759,9 +759,9 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                 >
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
-              ) : null}
+              ) : null*/}
 
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) =>
                   (fileInputRefs.current[`Statistics-section2icon`] = ref)
@@ -770,7 +770,7 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                   handleImageChange(e, "Statistics", "section2icon")
                 }
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -888,7 +888,7 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                   className="w-full h-[280px] object-cover"
                 />
 
-                {userPlan && userPermissions?.canEditImage && (
+                {/* userPlan && userPermissions?.canEditImage && (
                   <div className="absolute top-4 left-4 z-50">
                     <ButtonSmallPurple
                       onClick={() =>
@@ -908,7 +908,7 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
                 {sanitizeContent(details?.Blog?.[work.categoryKey])}
                 <div className="py-5 px-4">
                   <EditTemplateLongInput
@@ -1069,7 +1069,7 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                     alt={author.name || "Author"}
                     className="w-12 h-12 rounded-full mx-auto border-2 border-white"
                   />
-                  {userPlan && userPermissions?.canEditImage && (
+                  {/* userPlan && userPermissions?.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         onClick={() =>
@@ -1092,7 +1092,7 @@ const SixthSpa = ({ userDetails, subdomain }) => {
                         style={{ display: "none" }}
                       />
                     </div>
-                  )}
+                  )*/}
                 </div>
 
                 <p className="mt-2 text-sm font-bold text-[#161616]">

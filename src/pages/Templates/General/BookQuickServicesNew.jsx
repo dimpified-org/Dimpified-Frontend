@@ -198,11 +198,11 @@ const BookQuickServicesNew = ({ userDetails, serviceData }) => {
                       onClick={handleModalOpen}
                       className="relative flex border-2 rounded-lg cursor-pointer transition-all duration-300 border-gray-300 hover:border-purple-500 hover:shadow-lg bg-white"
                     >
-                      <img
+                      {/* <img
                         src={service.serviceImage}
                         alt={service.name}
                         className="h-auto w-24 lg:h-auto lg:w-28 object-cover rounded-l-lg flex-shrink-0"
-                      />
+                      /> */}
                       <div className="flex-1 p-3 lg:p-4">
                         <h4 className="text-sm lg:text-md font-semibold text-gray-800 mb-1">
                           {service.name}

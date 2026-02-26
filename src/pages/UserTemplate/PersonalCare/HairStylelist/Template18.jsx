@@ -569,11 +569,11 @@ const [currency, setCurrency] = useState([]);
 
                 {/* Image */}
                 <div className="w-full md:w-1/2">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-full object-cover"
-                  />
+                  /> */}
                 </div>
               </div>
             ))}

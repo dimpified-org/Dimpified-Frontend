@@ -446,11 +446,11 @@ const [currency, setCurrency] = useState([]);
               <div key={index} className="relative bg-white shadow-lg group">
                 <div className="relative overflow-hidden bg-gradient-to-b rounded-md from-black via-transparent to-black">
                   <button onClick={handleModalOpen}>
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-300"
-                    />
+                    /> */}
                   </button>
                   <div className="absolute bottom-0 left-0 w-full px-6 py-2 bg-gradient-to-r from-black/60 to-[#cb54d1]/60 backdrop-blur-lg border border-white/20 shadow-xl">
                     <button onClick={handleModalOpen}>
@@ -515,13 +515,13 @@ const [currency, setCurrency] = useState([]);
                   } shadow`}
                 >
                   {/* Service Image */}
-                  {service.serviceImage && (
+                  {/* service.serviceImage && (
                     <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="w-20 h-20 object-cover rounded-full mr-4"
                     />
-                  )}
+                  ) */}
                   {/* Service Details */}
                   <div className="flex-1">
                     <h5 className="text-lg font-semibold text-gray-800">

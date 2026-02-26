@@ -485,11 +485,11 @@ const ThirdSpa = ({ userDetails }) => {
                 
                 <div className="relative w-40 h-40 mx-auto mb-6">
                   <div className="w-full h-full rounded-full border-4 border-[#C8A97E] overflow-hidden">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="w-full h-full object-cover"
-                    />
+                    /> */}
                   </div>
                  
                 </div>

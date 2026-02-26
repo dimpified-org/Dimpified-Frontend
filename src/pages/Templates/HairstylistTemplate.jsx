@@ -84,11 +84,7 @@ const HairstylistTemplate = ({ userDetails }) => {
             href="#home"
             className="font-Marcellus font-bold text-white flex items-center"
           >
-            <img
-              src="https://gfa-tech.com/dimp-template-images/images/demo-beauty-salon-logo-white.png"
-              alt="HairLogo"
-              // className="w-[146px] h-[42px] ml-12"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
           </a>
 
           {/* Hamburger Icon for mobile view */}
@@ -157,11 +153,7 @@ const HairstylistTemplate = ({ userDetails }) => {
               href="#home"
               className="font-Marcellus font-bold text-black flex items-center"
             >
-              <img
-                src="https://gfa-tech.com/dimp-template-images/images/demo-beauty-salon-logo-white.png"
-                alt="HairLogo"
-                className="w-[146px] h-[42px]"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
             </a>
 
             {/* Close Button */}
@@ -497,11 +489,11 @@ const HairstylistTemplate = ({ userDetails }) => {
                 <div className="absolute hidden lg:block left-20 top-0 bottom-0 border-r border-gray-300 group-hover:border-gray-300"></div>
 
                 <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-start">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-16 h-16 object-contain"
-                  />
+                  /> */}
                   <div className="pl-0 lg:pl-8 mt-4 lg:mt-0">
                     <h4 className="text-lg font-Marcellus font-semibold text-gray-700">
                       {service.name}
@@ -632,11 +624,7 @@ const HairstylistTemplate = ({ userDetails }) => {
 
             {/* Right Section - Info */}
             <div className="lg:w-1/2 md:w-5/12 flex flex-col justify-start px-6 pt-24 pb-12 lg:p-8 text-left items-center lg:items-start">
-              <img
-                src="https://gfa-tech.com/dimp-template-images/images/demo-beauty-salon-logo-black.png"
-                className="mb-5 w-[70px] lg:w-[150px]"
-                alt="Company Logo"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               <h6 className="font-Marcellus alt-font text-3xl text-dark-gray font-bold leading-tight mb-4 text-center lg:text-left">
                 We ensure outstanding results.
               </h6>
@@ -814,13 +802,7 @@ const HairstylistTemplate = ({ userDetails }) => {
           {/* Footer Logo */}
           <div className="lg:w-1/4 md:w-1/2 sm:w-full mb-6">
             <a href="#home" className="footer-logo inline-block mb-4">
-              <img
-                src="https://gfa-tech.com/dimp-template-images/images/demo-beauty-salon-logo-white.png"
-                alt="Logo"
-                width="146"
-                height="42"
-                className="mx-auto lg:mx-0"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
             </a>
           </div>
 

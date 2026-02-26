@@ -429,11 +429,11 @@ const Template48 = ({ details, subdomain, userDetails }) => {
               className="relative p-6 text-center border rounded shadow bg-white"
             >
               <div className="relative w-28 h-28 mx-auto mb-4">
-                <img
+                {/* <img
                   src={service.serviceImage}
                   alt={service.name}
                   className="w-full h-full object-cover rounded-full border-4 border-white shadow"
-                />
+                /> */}
                 <div className="absolute -top-2 -right-2 bg-white hover:bg-[#D6B981] transition rounded-full shadow-md p-2">
                   <FaCut className="text-[#D6B981] hover:text-white transition" />
                 </div>

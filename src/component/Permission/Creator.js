@@ -6,7 +6,7 @@ export const PERMISSIONS = {
     canViewContent: true,
     canCreateCommunity: false,
     canEditContent: true,
-    canEditImage: true,
+    canEditImage: false,
     canRemoveDimpBrand: false
   },
   Plus: {

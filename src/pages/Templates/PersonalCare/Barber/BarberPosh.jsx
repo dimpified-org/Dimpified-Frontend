@@ -81,11 +81,7 @@ const BarberPosh = ({ userDetails }) => {
           <nav className="max-w-7xl mx-auto px-6 lg:px-16 py-4 flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center space-x-4">
-              <img
-                src="https://gfa-tech.com/dimp-template-images/images/demo-barber-logo-black.png" // Replace with actual logo path
-                alt="Logo"
-                className="h-10"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               <span className="text-xl font-bold">Perukar Barber Shop</span>
             </div>
 

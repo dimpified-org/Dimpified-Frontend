@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import PaidOnboardingLayout from "./PaidOnboardingLayout";
-import { ButtonSmallPurple, ButtonSmallWhite } from "../../../../component/Buttons";
+import { ButtonSmallPurple } from "../../../../component/Buttons";
 import { Heading, Text } from "../../../../component/Text";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setTemplate } from "../../../../features/Template/mainTemplate";
-import api from "../../../../api/creatorApis";
 import api2 from "../../../../api/Template";
 import { showToast } from "../../../../component/ShowToast";
 import { LoadingMany } from "../../../../component/LoadingSpinner";
+import { FaCheckCircle } from "react-icons/fa";
 
-import { barber, HairSalon, MakeUp, Nail, gym, spa, dental } from "../../../../data/Services";
-
-/* ==========================
-   TEMPLATE IMPORTS
-========================== */
 import BarberMordern from "../../../Templates/PersonalCare/Barber/BarberModern";
 import HairstylistTemplate from "../../../Templates/HairstylistTemplate";
 import ThirdStylist from "../../../Templates/PersonalCare/Hairstylist/ThirdStylist";
@@ -53,6 +48,34 @@ import BarberPosh from "../../../Templates/PersonalCare/Barber/BarberPosh";
 import GeneralTemplate from "../../../../pages/Templates/General/BookQuickServicesNew";
 import mixpanel from "../../../../analytics/mixpanel";
 
+import { barber, HairSalon, MakeUp, Nail, gym, spa, dental } from "../../../../data/Services";
+
+// ----------------------- Success Modal -----------------------
+const SuccessModal = ({ isOpen, onProceed }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-8 w-full max-w-sm text-center shadow-xl">
+        <div className="flex justify-center mb-6">
+          <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
+            <FaCheckCircle className="text-purple-600 text-3xl" />
+          </div>
+        </div>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          Congratulation, your booking website has been setup
+        </h2>
+        <button
+          className="w-full bg-purple-600 text-white py-3 rounded-xl font-semibold hover:bg-purple-700 transition-all"
+          onClick={onProceed}
+        >
+          Proceed to dashboard
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const PaidPreviewTemplate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -63,13 +86,14 @@ const PaidPreviewTemplate = () => {
   const [loading, setLoading] = useState(false);
   const [templateId, setTemplateId] = useState(null);
   const [subCategory, setSubCategory] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const creatorId = useSelector((state) => state.auth.user?.creatorId);
   const content = useSelector((state) => state.mainTemplate.currentTemplate);
 
   useEffect(() => {
-    setSubCategory(sessionStorage.getItem("subCategory"));
+    setSubCategory(sessionStorage.getItem("subCategory") || sessionStorage.getItem("selectedCategory"));
   }, []);
 
   useEffect(() => {
@@ -113,8 +137,6 @@ const PaidPreviewTemplate = () => {
     }
   };
 
-  const onBack = () => navigate("/auth/select-template");
-
   const handleSubmit = async () => {
     if (!accessToken || !refreshToken) return showToast("Auth tokens missing");
 
@@ -144,9 +166,10 @@ const PaidPreviewTemplate = () => {
     };
     try {
       await api2.createTemplate(payload);
-      showToast("Business site submitted successfully", "success");
+      return true;
     } catch {
       showToast("Error submitting template");
+      return false;
     }
   };
 
@@ -167,139 +190,15 @@ const PaidPreviewTemplate = () => {
 
     setLoading(true);
 
-    // Services mapping
-    const serviceTypes = {
-      barber: {
-        subCategory: "Barber Shop",
-        prefix: "I will",
-        header: "give a stylish haircut of your choice",
-        description: "Professional barber services for a sharp and modern look",
-        templateIds: [10, 13, 14, 15, 21, 22],
-        serviceData: barber,
-      },
-      hairSalon: {
-        subCategory: "Hair Salon",
-        prefix: "I will",
-        header: "style your hair to perfection",
-        description: "Expert hairstyling and care tailored to your preferences",
-        templateIds: [11, 16, 18, 39, 47, 48],
-        serviceData: HairSalon,
-      },
-      makeup: {
-        subCategory: "Makeup Services",
-        prefix: "I will",
-        header: "create a stunning makeup look",
-        description: "Professional makeup services for any occasion",
-        templateIds: [12, 17, 38],
-        serviceData: MakeUp,
-      },
-      nail: {
-        subCategory: "Nail Salon",
-        prefix: "I will",
-        header: "provide beautiful nail designs",
-        description: "High-quality nail care and artistic designs",
-        templateIds: [19, 20, 40, 41, 42],
-        serviceData: Nail,
-      },
-      gym: {
-        subCategory: "Gym Services",
-        prefix: "I will",
-        header: "help you achieve your fitness goals",
-        description: "Personalized fitness training for all levels",
-        templateIds: [23, 24, 27, 32, 33],
-        serviceData: gym,
-      },
-      spa: {
-        subCategory: "Spa Services",
-        prefix: "I will",
-        header: "offer a relaxing spa experience",
-        description: "Luxurious spa treatments for relaxation and rejuvenation",
-        templateIds: [25, 28, 29, 31, 36],
-        serviceData: spa,
-      },
-      dental: {
-        subCategory: "Dental Services",
-        prefix: "I will",
-        header: "provide expert dental care",
-        description: "Comprehensive dental services for a healthy smile",
-        templateIds: [26, 30, 34, 35, 37],
-        serviceData: dental,
-      },
-      general: {
-        subCategory: subCategory || "General",
-        prefix: "I will",
-        header: "provide professional services",
-        description: "Customized services tailored to your needs",
-        templateIds: [51],
-        serviceData: null,
-      },
-    };
-
-    const selectedService = Object.values(serviceTypes).find((service) =>
-      service.templateIds.includes(templateId)
-    );
-
-    if (!selectedService) {
-      showToast("Invalid template ID");
-      setLoading(false);
-      return;
-    }
-
-    const subCategoryToServiceMap = {
-      "Barber Shop": barber,
-      "Hair Salon": HairSalon,
-      "Makeup Services": MakeUp,
-      "Nail Salon": Nail,
-      "Gym Services": gym,
-      "Spa Services": spa,
-      "Dental Hygiene Services": dental,
-    };
-
-    const selectedServiceData =
-      templateId === 51
-        ? subCategoryToServiceMap[subCategory] || barber
-        : selectedService.serviceData || barber;
-
-    const countryCode = localStorage.getItem("countryCode") || "NG";
-
-    const formatServices = (services, countryCode) => {
-      return services.map((service) => {
-        const priceInfo =
-          service.price.find((p) => p.countryCode === countryCode) ||
-          service.price.find((p) => p.countryCode === "NG");
-        return {
-          ...service,
-          currency: priceInfo.currency,
-          price: priceInfo.value,
-        };
-      });
-    };
-
     try {
-      const formattedServices = formatServices(selectedServiceData, countryCode);
-      const servicePayload = {
-        creatorId,
-        ecosystemDomain: userDetails.ecosystemDomain,
-        category: "Personal Care Service",
-        subCategory: selectedService.subCategory,
-        prefix: selectedService.prefix,
-        header: selectedService.header,
-        description: selectedService.description,
-        format: "Onsite",
-        currency: formattedServices[0]?.currency || "NGN",
-        services: formattedServices,
-        accessToken,
-        refreshToken,
-        dispatch,
-        navigate,
-      };
-      await api.createServices(servicePayload);
-      await handleSubmit();
+      const success = await handleSubmit();
       setLoading(false);
-      navigate("/auth/subscriptions");
+      if (success) {
+        setShowSuccessModal(true);
+      }
     } catch {
       setLoading(false);
-      showToast("Error creating service");
+      showToast("Error creating template");
     }
   };
 
@@ -375,7 +274,7 @@ const PaidPreviewTemplate = () => {
         return <SeventhStylist userDetails={userDetails} />;
       case 48:
         return <EightStylist userDetails={userDetails} />;
-      case 51:
+      case 51: {
         const serviceMap = {
           "Barber Shop": barber,
           "Hair Salon": HairSalon,
@@ -385,7 +284,13 @@ const PaidPreviewTemplate = () => {
           "Spa Services": spa,
           "Dental Hygiene Services": dental,
         };
-        return <GeneralTemplate userDetails={userDetails} serviceData={serviceMap[subCategory] || barber} />;
+        return (
+          <GeneralTemplate
+            userDetails={userDetails}
+            serviceData={serviceMap[subCategory] || barber}
+          />
+        );
+      }
       default:
         return <div>Invalid template</div>;
     }
@@ -393,9 +298,12 @@ const PaidPreviewTemplate = () => {
 
   return (
     <PaidOnboardingLayout currentStep={6} rightImage={null}>
-
-
-      <Heading level={3} size="3xl" weight="600" className="text-center mt-10 text-[#2d1c4d]">
+      <Heading
+        level={3}
+        size="3xl"
+        weight="600"
+        className="text-center mt-10 text-[#2d1c4d]"
+      >
         Preview The Selected Template
       </Heading>
 
@@ -411,9 +319,15 @@ const PaidPreviewTemplate = () => {
 
       <div className="flex justify-center mt-10 mb-10">
         <ButtonSmallPurple onClick={handleContinue} disabled={loading}>
-          {loading ? "Processing" : "Continue and Choose Plan"}
+          {loading ? "Processing..." : "Continue"}
         </ButtonSmallPurple>
       </div>
+
+      {/* Success Modal */}
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onProceed={() => navigate("/creator/dashboard/overview")}
+      />
     </PaidOnboardingLayout>
   );
 };

@@ -44,7 +44,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 
 const FifthDentist = ({ userDetails, subdomain }) => {
@@ -88,12 +88,12 @@ const FifthDentist = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   const handleContentChange = (section, field, event, index = null) => {
     const value = event.target.value;
@@ -309,7 +309,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                 alt="Dental Team"
                 className="w-[90vw] max-w-5xl rounded-xl"
               />
-              {userPlan && userPermissions?.canEditImage && (
+              {/* userPlan && userPermissions?.canEditImage && (
                 <div className="absolute top-4 left-4 z-50">
                   <ButtonSmallPurple
                     onClick={() =>
@@ -330,7 +330,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
             </div>
           </div>
         </div>
@@ -655,20 +655,20 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                   zIndex: 1000,
                 }}
               >
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("aboutUs", "image1")}
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
 
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current[`aboutUs-image1`] = ref)}
                   onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <div>
@@ -804,7 +804,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                         alt={step.title}
                         className="w-full h-full object-cover"
                       />
-                      {userPlan && userPermissions?.canEditImage && (
+                      {/* userPlan && userPermissions?.canEditImage && (
                         <div className="absolute top-4 left-4 z-50">
                           <ButtonSmallPurple
                             onClick={() =>
@@ -832,7 +832,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                             style={{ display: "none" }}
                           />
                         </div>
-                      )}
+                      )*/}
                     </div>
                   </div>
                   <EditTemplateLongInput
@@ -900,11 +900,11 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                       </p>
                     </div>
                     <div className="text-4xl opacity-70 group-hover:opacity-100">
-                      <img
+                      {/* <img
                         src={service.serviceImage}
                         alt={service.name}
                         className="w-12 h-12 "
-                      />
+                      /> */}
                     </div>
 
                     <button
@@ -960,7 +960,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                     alt={`dental-case-${index}`}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   />{" "}
-                  {userPlan && userPermissions?.canEditImage && (
+                  {/* userPlan && userPermissions?.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         onClick={() =>
@@ -983,7 +983,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                         style={{ display: "none" }}
                       />
                     </div>
-                  )}
+                  )*/}
                 </div>
               ))}{" "}
             </div>
@@ -1033,7 +1033,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                   alt="Dental Consultation"
                   className="w-full h-auto object-cover"
                 />
-                {userPlan && userPermissions?.canEditImage && (
+                {/* userPlan && userPermissions?.canEditImage && (
                   <div className="absolute top-4 left-4 z-50">
                     <ButtonSmallPurple
                       onClick={() =>
@@ -1053,7 +1053,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
             </div>
 
@@ -1084,7 +1084,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                         alt={doc.name}
                         className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-md"
                       />
-                      {userPlan && userPermissions?.canEditImage && (
+                      {/* userPlan && userPermissions?.canEditImage && (
                         <div className="absolute top-4 left-4 z-50">
                           <ButtonSmallPurple
                             onClick={() =>
@@ -1107,7 +1107,7 @@ const FifthDentist = ({ userDetails, subdomain }) => {
                             style={{ display: "none" }}
                           />
                         </div>
-                      )}
+                      )*/}
                     </div>
 
                     <div className="flex-1">

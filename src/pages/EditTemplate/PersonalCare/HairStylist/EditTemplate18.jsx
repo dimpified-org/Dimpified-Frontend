@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 
 const ThirdStylist = ({ userDetails, subdomain }) => {
@@ -61,12 +61,12 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -293,7 +293,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("hero", "backgroundImage1")
@@ -301,9 +301,9 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["hero-backgroundImage1"] = ref)
@@ -312,7 +312,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "hero", "backgroundImage1")
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -420,7 +420,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("aboutUs", "image1")
@@ -428,16 +428,16 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image1"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="col-span-1 flex flex-col items-center justify-between ">
@@ -470,7 +470,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           onClick={() =>
                             handleEditImageClick("aboutUs", "image2")
@@ -478,9 +478,9 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
-                    <input
+                    {/* <input
                       type="file"
                       ref={(ref) =>
                         (fileInputRefs.current["aboutUs-image2"] = ref)
@@ -489,7 +489,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         handleImageChange(e, "aboutUs", "image2")
                       }
                       style={{ display: "none" }}
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>
@@ -636,7 +636,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           onClick={() =>
                             handleEditImageClick(
@@ -647,7 +647,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Icon"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
                     <input
                       type="file"
@@ -797,7 +797,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         width="40"
                         onClick={() =>
@@ -806,9 +806,9 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["Statistics-section1icon"] = ref)
@@ -817,7 +817,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Statistics", "section1icon")
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -1080,11 +1080,11 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
 
                 {/* Image */}
                 <div className="w-full md:w-1/2">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-full object-cover"
-                  />
+                  /> */}
                 </div>
               </div>
             ))}
@@ -1186,7 +1186,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         zIndex: 1000,
                       }}
                     >
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -1198,7 +1198,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                       <input
                         type="file"
                         ref={(ref) =>
@@ -1263,7 +1263,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         zIndex: 1000,
                       }}
                     >
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -1272,7 +1272,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                       <input
                         type="file"
                         ref={(ref) =>
@@ -1353,7 +1353,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         zIndex: 1000,
                       }}
                     >
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -1365,7 +1365,7 @@ const ThirdStylist = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                       <input
                         type="file"
                         ref={(ref) =>

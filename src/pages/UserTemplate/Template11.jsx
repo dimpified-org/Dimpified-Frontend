@@ -120,11 +120,7 @@ const Template11 = ({ details, subdomain, userDetails }) => {
             href="#home"
             className="font-Marcellus font-bold text-white flex items-center"
           >
-            <img
-              src={details.navbar.logo}
-              alt="HairLogo"
-              className="w-[146px] h-[42px] ml-12"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
           </a>
 
           {/* Hamburger Icon for mobile view */}
@@ -193,11 +189,7 @@ const Template11 = ({ details, subdomain, userDetails }) => {
               href="#home"
               className="font-Marcellus font-bold text-black flex items-center"
             >
-              <img
-                src="https://gfa-tech.com/dimp-template-images/images/demo-beauty-salon-logo-white.png"
-                alt="HairLogo"
-                className="w-[146px] h-[42px]"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
             </a>
 
             {/* Close Button */}
@@ -551,11 +543,11 @@ const Template11 = ({ details, subdomain, userDetails }) => {
                 <div className="absolute hidden lg:block left-20 top-0 bottom-0 border-r border-gray-300 group-hover:border-gray-300"></div>
 
                 <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-start">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-16 h-16 object-contain"
-                  />
+                  /> */}
                   <div className="pl-0 lg:pl-8 mt-4 lg:mt-0">
                     <h4 className="text-lg font-Marcellus font-semibold text-gray-700">
                       {service.name}

@@ -169,11 +169,7 @@ const [currency, setCurrency] = useState([]);
         <div className="container mx-auto px-8 lg:px-12 py-4 flex justify-between items-center">
           {/* Logo */}
           <a href="#" className="flex items-center text-gray-800">
-            <img
-              src={details && details.navbar.logo}
-              alt="logo"
-              className="w-10 h-10 mr-2"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
             <span className="text-xs leading-tight">
               {userDetails?.ecosystemName} <br />
               <span className="text-yellow-600">Beauty and Spa</span>
@@ -530,11 +526,11 @@ const [currency, setCurrency] = useState([]);
               <div key={index} className="overflow-hidden group relative">
                 {/* Image */}
                 <div className="relative">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-100 rounded-md object-cover"
-                  />
+                  /> */}
                   {/* Icons (Hidden initially) */}
                   <ul className="absolute inset-0 flex justify-center items-center space-x-4 opacity-0 group-hover:opacity-100 bg-black bg-opacity-30 transition">
                     <li>

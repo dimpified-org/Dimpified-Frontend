@@ -85,11 +85,7 @@ const BarberGents = () => {
             {/* Left-aligned container for logo and menu */}
             <div className="flex items-center space-x-8 lg:space-x-12 mr-auto">
               <Link to="#home" className="flex items-center">
-                <img
-                  src="https://gfa-tech.com/dimp-template-images/images/demo-barber-logo-black.png"
-                  alt="Icon"
-                  className="h-12"
-                />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               </Link>
 
               {/* Desktop Menu  */}

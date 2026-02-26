@@ -31,7 +31,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 import { getCurrencySymbol } from "../../../../helper/getCurrencySymbol";
 
@@ -89,12 +89,12 @@ const FifthGym = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   const handleContentChange = (section, field, event, index = null) => {
     const value = event.target.value;
@@ -306,7 +306,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() =>
                         handleEditImageClick("hero", "backgroundImage1")
@@ -314,9 +314,9 @@ const FifthGym = ({ userDetails, subdomain }) => {
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["hero-backgroundImage1"] = ref)
@@ -325,7 +325,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                     handleImageChange(e, "hero", "backgroundImage1")
                   }
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
 
@@ -477,20 +477,20 @@ const FifthGym = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("aboutUs", "image1")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["aboutUs-image1"] = ref)}
                   onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
 
@@ -512,7 +512,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("aboutUs", "image2")
@@ -520,16 +520,16 @@ const FifthGym = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image2"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image2")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
                 {/* <div className="absolute -bottom-5 left-0 bg-pink-600 text-white px-6 py-4 text-center rounded shadow-md w-full">
                   <h3 className="text-2xl font-bold">20</h3>
@@ -838,7 +838,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
               alt="Workout 1"
               className="w-full h-[300px] object-cover rounded-lg"
             />
-            {userPlan && userPermissions?.canEditImage && (
+            {/* userPlan && userPermissions?.canEditImage && (
               <div className="absolute top-2 left-2">
                 <ButtonSmallPurple
                   width="50"
@@ -847,9 +847,9 @@ const FifthGym = ({ userDetails, subdomain }) => {
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
               </div>
-            )}
+            )*/}
 
-            <input
+            {/* <input
               type="file"
               ref={(ref) => {
                 if (fileInputRefs?.current) {
@@ -858,7 +858,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
               }}
               onChange={(e) => handleImageChange(e, "Gallery", "image3")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
           <div className="relative md:w-1/2">
             <img
@@ -866,7 +866,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
               alt="Workout 2"
               className="w-full h-[300px] object-cover rounded-lg"
             />
-            {userPlan && userPermissions?.canEditImage && (
+            {/* userPlan && userPermissions?.canEditImage && (
               <div className="absolute top-2 left-2">
                 <ButtonSmallPurple
                   width="50"
@@ -875,9 +875,9 @@ const FifthGym = ({ userDetails, subdomain }) => {
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
               </div>
-            )}
+            )*/}
 
-            <input
+            {/* <input
               type="file"
               ref={(ref) => {
                 if (fileInputRefs?.current) {
@@ -886,7 +886,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
               }}
               onChange={(e) => handleImageChange(e, "Gallery", "image4")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
         </div>
         <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -913,7 +913,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                 alt="Cycling"
                 className=" h-[300px] object-cover rounded-lg"
               />
-              {userPlan && userPermissions?.canEditImage && (
+              {/* userPlan && userPermissions?.canEditImage && (
                 <div className="absolute top-2 left-2">
                   <ButtonSmallPurple
                     width="50"
@@ -922,9 +922,9 @@ const FifthGym = ({ userDetails, subdomain }) => {
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
                 </div>
-              )}
+              )*/}
 
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => {
                   if (fileInputRefs?.current) {
@@ -933,7 +933,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                 }}
                 onChange={(e) => handleImageChange(e, "Gallery", "image1")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
             <div className="relative w-1/2">
               <img
@@ -941,7 +941,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                 alt="Smiling Gym Lady"
                 className=" h-[300px] object-cover rounded-lg"
               />
-              {userPlan && userPermissions?.canEditImage && (
+              {/* userPlan && userPermissions?.canEditImage && (
                 <div className="absolute top-2 left-2">
                   <ButtonSmallPurple
                     width="50"
@@ -950,9 +950,9 @@ const FifthGym = ({ userDetails, subdomain }) => {
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
                 </div>
-              )}
+              )*/}
 
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => {
                   if (fileInputRefs?.current) {
@@ -961,7 +961,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                 }}
                 onChange={(e) => handleImageChange(e, "Gallery", "image1")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -1067,7 +1067,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
               alt="Boxing Workout"
               className="w-full h-[300px] object-cover rounded-lg"
             />
-            {userPlan && userPermissions?.canEditImage && (
+            {/* userPlan && userPermissions?.canEditImage && (
               <div className="absolute top-2 left-2">
                 <ButtonSmallPurple
                   width="50"
@@ -1078,7 +1078,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
               </div>
-            )}
+            )*/}
 
             <input
               type="file"
@@ -1154,7 +1154,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                     className="w-full h-full object-cover"
                   />
 
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-20">
                       <ButtonSmallPurple
                         width="50"
@@ -1165,8 +1165,8 @@ const FifthGym = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Reviews-image${index + 1}`] = ref)
@@ -1175,7 +1175,7 @@ const FifthGym = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Reviews", `image${index + 1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
 
                 {/* Text */}

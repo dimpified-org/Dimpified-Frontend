@@ -241,11 +241,11 @@ export default function SeventhGym() {
           {/* Card 1 */}
           {gym.map((service, index) => (
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <img
+              {/* <img
                 src={service.serviceImage}
                 alt={service.name}
                 className="w-full h-48 object-cover"
-              />
+              /> */}
               <div className="p-6">
                 <h3 className="text-lg font-bold text-gray-900 hover:text-purple-700 mb-2">
                   <button onClick={handleModalOpen}>{service.name}</button>

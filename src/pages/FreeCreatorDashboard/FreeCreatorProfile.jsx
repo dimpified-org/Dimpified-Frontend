@@ -215,7 +215,7 @@ const FreeCreatorProfile = () => {
                       <input
                         type="text"
                         {...register("fullname")}
-                        disabled={!isEditing}
+                        disabled
                         className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-50 disabled:cursor-not-allowed"
                       />
                       {errors.fullname && (
@@ -264,7 +264,7 @@ const FreeCreatorProfile = () => {
                       <input
                         type="text"
                         {...register("businessName")}
-                        disabled={!isEditing}
+                        disabled
                         className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-50 disabled:cursor-not-allowed"
                       />
                       {errors.businessName && (
@@ -319,7 +319,7 @@ const FreeCreatorProfile = () => {
                       placeholder="Tell us about your business..."
                     ></textarea>
                     {errors.description && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <p className="text-red-500 text-sm mt-1"> 
                         {errors.description.message}
                       </p>
                     )}

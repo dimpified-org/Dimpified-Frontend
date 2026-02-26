@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 import { getCurrencySymbol } from "../../../../helper/getCurrencySymbol";
 // App Component
@@ -52,12 +52,12 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -238,7 +238,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
             }}
           >
             <div>
-              {userPlan && userPermissions.canEditImage ? (
+              {/* userPlan && userPermissions.canEditImage ? (
                 <ButtonSmallPurple
                   onClick={() =>
                     handleEditImageClick("hero", "backgroundImage1")
@@ -246,16 +246,16 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                 >
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
-              ) : null}
+              ) : null*/}
             </div>
-            <input
+            {/* <input
               type="file"
               ref={(ref) =>
                 (fileInputRefs.current["hero-backgroundImage1"] = ref)
               }
               onChange={(e) => handleImageChange(e, "hero", "backgroundImage1")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
         </div>
       </>
@@ -322,20 +322,20 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("aboutUs", "image1")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["aboutUs-image1"] = ref)}
                   onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -453,7 +453,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -462,9 +462,9 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
-                    <input
+                    {/* <input
                       type="file"
                       ref={(ref) =>
                         (fileInputRefs.current["Events-sectionImage1"] = ref)
@@ -473,7 +473,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         handleImageChange(e, "Events", "sectionImage1")
                       }
                       style={{ display: "none" }}
-                    />
+                    /> */}
                   </div>
                 </div>
                 <p className="text-gray-800 font-medium">
@@ -508,7 +508,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -517,9 +517,9 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
-                    <input
+                    {/* <input
                       type="file"
                       ref={(ref) =>
                         (fileInputRefs.current["Events-sectionImage2"] = ref)
@@ -528,7 +528,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         handleImageChange(e, "Events", "sectionImage2")
                       }
                       style={{ display: "none" }}
-                    />
+                    /> */}
                   </div>
                 </div>
                 <p className="text-gray-800 font-medium">
@@ -563,7 +563,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -572,9 +572,9 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
-                    <input
+                    {/* <input
                       type="file"
                       ref={(ref) =>
                         (fileInputRefs.current["Events-sectionImage3"] = ref)
@@ -583,7 +583,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         handleImageChange(e, "Events", "sectionImage3")
                       }
                       style={{ display: "none" }}
-                    />
+                    /> */}
                   </div>
                 </div>
                 <p className="text-gray-800 font-medium">
@@ -619,7 +619,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -628,9 +628,9 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
-                    <input
+                    {/* <input
                       type="file"
                       ref={(ref) =>
                         (fileInputRefs.current["Events-sectionImage4"] = ref)
@@ -639,7 +639,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         handleImageChange(e, "Events", "sectionImage4")
                       }
                       style={{ display: "none" }}
-                    />
+                    /> */}
                   </div>
                 </div>
                 <p className="text-gray-800 font-medium">
@@ -674,7 +674,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -683,7 +683,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
                     <input
                       type="file"
@@ -729,7 +729,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           width="40"
                           onClick={() =>
@@ -738,7 +738,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
                     <input
                       type="file"
@@ -902,7 +902,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                 className="w-full h-auto object-cover"
               />
               {/* Edit Button and File Input */}
-              {userPlan && userPermissions.canEditImage && (
+              {/* userPlan && userPermissions.canEditImage && (
                 <div className="absolute top-2 left-2 z-10">
                   <ButtonSmallPurple
                     width="60"
@@ -919,7 +919,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
             </div>
 
             {/* Column 2 */}
@@ -930,7 +930,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                 className="w-full h-auto object-cover"
               />
               {/* Edit Button and File Input */}
-              {userPlan && userPermissions.canEditImage && (
+              {/* userPlan && userPermissions.canEditImage && (
                 <div className="absolute top-2 left-2 z-10">
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("Gallery", "image2")}
@@ -946,7 +946,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
             </div>
 
             {/* Column 3 */}
@@ -958,7 +958,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   className="w-full h-auto object-cover"
                 />
                 {/* Edit Button and File Input */}
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2 z-10">
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Gallery", "image3")}
@@ -976,7 +976,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
               <div className="relative group">
                 <img
@@ -985,7 +985,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   className="w-full h-auto object-cover"
                 />
                 {/* Edit Button and File Input */}
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2 z-10">
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Gallery", "image4")}
@@ -1003,7 +1003,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
             </div>
 
@@ -1016,7 +1016,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   className="w-full h-auto object-cover"
                 />
                 {/* Edit Button and File Input */}
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2 z-10">
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Gallery", "image5")}
@@ -1034,7 +1034,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
               <div className="relative group">
                 <img
@@ -1043,7 +1043,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   className="w-full h-auto object-cover"
                 />
                 {/* Edit Button and File Input */}
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2 z-10">
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Gallery", "image6")}
@@ -1061,7 +1061,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
             </div>
           </div>
@@ -1087,7 +1087,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() =>
                       handleEditImageClick("Statistics", "section1icon")
@@ -1095,9 +1095,9 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) =>
                   (fileInputRefs.current["Statistics-section1icon"] = ref)
@@ -1106,7 +1106,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   handleImageChange(e, "Statistics", "section1icon")
                 }
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
 
@@ -1526,22 +1526,22 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("LargeCta", "image1")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["LargeCta-image1"] = ref)
                   }
                   onChange={(e) => handleImageChange(e, "LargeCta", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
 
@@ -1585,7 +1585,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("LargeCta", "image2")
@@ -1593,16 +1593,16 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["LargeCta-image2"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "LargeCta", "image2")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -1625,7 +1625,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() =>
                         handleEditImageClick("LargeCta", "buttonText1")
@@ -1633,9 +1633,9 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["LargeCta-buttonText1"] = ref)
@@ -1644,7 +1644,7 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                     handleImageChange(e, "LargeCta", "buttonText1")
                   }
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -1683,20 +1683,20 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Blog", "image1")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["Blog-image1"] = ref)}
                     onChange={(e) => handleImageChange(e, "Blog", "image1")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <h3 className="text-lg font-bold">
@@ -1764,20 +1764,20 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Blog", "image2")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["Blog-image2"] = ref)}
                     onChange={(e) => handleImageChange(e, "Blog", "image2")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <h3 className="text-lg font-bold">
@@ -1845,20 +1845,20 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Blog", "image3")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["Blog-image3"] = ref)}
                     onChange={(e) => handleImageChange(e, "Blog", "image3")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <h3 className="text-lg font-bold">
@@ -1926,20 +1926,20 @@ const SecondMakeup = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Blog", "image4")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["Blog-image4"] = ref)}
                     onChange={(e) => handleImageChange(e, "Blog", "image4")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <h3 className="text-lg font-bold">

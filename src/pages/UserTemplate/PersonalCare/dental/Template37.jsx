@@ -520,11 +520,11 @@ const FifthDentist = ({ details, subdomain, userDetails }) => {
                       </p>
                     </div>
                     <div className="text-4xl opacity-70 group-hover:opacity-100">
-                      <img
+                      {/* <img
                         src={service.serviceImage}
                         alt={service.name}
                         className="w-12 h-12 "
-                      />
+                      /> */}
                     </div>
 
                     <button

@@ -596,11 +596,11 @@ const Template47 = ({ details, subdomain, userDetails }) => {
                 rel="noopener noreferrer"
                 className="group border-b border-r border-gray-300 p-6 flex flex-col items-start gap-4 transition-all duration-300 hover:border-2 hover:border-gray-500"
               >
-                <img
+                {/* <img
                   src={service.serviceImage}
                   alt={service.name}
                   className="w-12 h-12 object-cover rounded mb-2"
-                />
+                /> */}
                 <h4 className="text-[16px] font-bold uppercase text-gray-800">
                   {service.name}
                 </h4>

@@ -410,11 +410,11 @@ const FourthStylist = ({ details, subdomain, userDetails }) => {
                 key={index}
                 className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition"
               >
-                <img
+                {/* <img
                   src={service.serviceImage}
                   alt={service.name}
                   className="w-full h-48 object-cover rounded-lg mb-4"
-                />
+                /> */}
                 <h3 className="text-xl font-semibold mb-2 text-gray-800">
                   {service.name}
                 </h3>

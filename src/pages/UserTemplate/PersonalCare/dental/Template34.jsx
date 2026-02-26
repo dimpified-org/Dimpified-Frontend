@@ -517,11 +517,11 @@ const ThirdDentist = ({ details, subdomain, userDetails }) => {
                   key={index}
                   className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition"
                 >
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-12 h-12 mb-4"
-                  />
+                  /> */}
 
                   <h3 className="text-[#031B4E] text-xl font-semibold mb-2">
                     {service.name}
