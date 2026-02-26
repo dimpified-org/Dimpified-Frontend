@@ -87,7 +87,7 @@ export default function FreeOnboardingLanding() {
                   </Route>
 
                   {/* Option 2 - Stunning Website */}
-                  <Route to="/paid/auth/pre-signup" className="block">
+                  {/* <Route to="/paid/auth/pre-signup" className="block">
                     <div className="bg-white border-2 border-gray-200 rounded-2xl p-4 md:p-6 hover:border-purple-300 hover:shadow-lg transition-all duration-300 cursor-pointer group">
                       <div className=" items-center justify-center flex flex-col">
                         <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-purple-200 transition-colors mb-3">
@@ -103,7 +103,7 @@ export default function FreeOnboardingLanding() {
                         </p>
                       </div>
                     </div>
-                  </Route>
+                  </Route> */}
                 </div>
               </div>
             </div>

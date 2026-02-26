@@ -12,8 +12,8 @@ const getCachedProfile = () => {
     const cached = localStorage.getItem('creatorProfile');
     if (cached) {
       const { data, timestamp } = JSON.parse(cached);
-      // Cache for 5 minutes (300000 ms)
-      if (Date.now() - timestamp < 5 * 60 * 1000) {
+      // Cache for 30 secs (50000 ms)
+      if (Date.now() - timestamp < 0.5 * 60 * 1000) {
         return data;
       }
     }

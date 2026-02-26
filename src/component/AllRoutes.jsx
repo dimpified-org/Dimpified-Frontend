@@ -39,6 +39,10 @@ const DentistOnboarding = lazy(
   () => import("../pages/LandingPages/DentistOnboarding"),
 );
 
+const PaidTemplateOne = lazy(
+  () => import("../features/Booking/LatestBookingModal"),
+);
+
 //REDIRECT PAGES
 const BarbersRedirect = lazy(
   () => import("../pages/Onboarding/BarbersRedirect"),
@@ -502,6 +506,7 @@ const AllRoutes = () => {
             )}
             <Route path="/merchants" element={<DimpLanding />} />
             <Route path="/invest" element={<InvestorLanding />} />
+          
             <Route path="/:subdomain" element={<FreeBookingPage />} />
             <Route
               path="/merchants/banner"
