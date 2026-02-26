@@ -23,7 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import api from "../../../../api/Template";
 import { showToast } from "../../../../component/ShowToast";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
@@ -69,12 +69,12 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -119,11 +119,7 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
           {/* Logo */}
           <a href="#home" className="flex items-center">
             <div className="relative ">
-              <img
-                src={details && details.navbar.logo}
-                alt="Logo"
-                className="h-10"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               <div
                 style={{
                   width: "250px",
@@ -134,20 +130,20 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("navbar", "logo")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["navbar-logo"] = ref)}
                   onChange={(e) => handleImageChange(e, "navbar", "logo")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
           </a>
@@ -265,22 +261,22 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
           }}
         >
           <div>
-            {userPlan && userPermissions.canEditImage ? (
+            {/* userPlan && userPermissions.canEditImage ? (
               <ButtonSmallPurple
                 onClick={() => handleEditImageClick("hero", "backgroundImage1")}
               >
                 {loadingImage ? <LoadingSmall /> : "Edit Image"}
               </ButtonSmallPurple>
-            ) : null}
+            ) : null*/}
           </div>
-          <input
+          {/* <input
             type="file"
             ref={(ref) =>
               (fileInputRefs.current["hero-backgroundImage1"] = ref)
             }
             onChange={(e) => handleImageChange(e, "hero", "backgroundImage1")}
             style={{ display: "none" }}
-          />
+          /> */}
         </div>
       </section>
       {/* edit hero section */}
@@ -374,7 +370,7 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                       }}
                     >
                       <div>
-                        {userPlan && userPermissions.canEditImage ? (
+                        {/* userPlan && userPermissions.canEditImage ? (
                           <ButtonSmallPurple
                             onClick={() =>
                               handleEditImageClick("aboutUs", "image2")
@@ -382,9 +378,9 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                           >
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
-                        ) : null}
+                        ) : null*/}
                       </div>
-                      <input
+                      {/* <input
                         type="file"
                         ref={(ref) =>
                           (fileInputRefs.current["aboutUs-image2"] = ref)
@@ -393,7 +389,7 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                           handleImageChange(e, "aboutUs", "image2")
                         }
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -414,7 +410,7 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                       }}
                     >
                       <div>
-                        {userPlan && userPermissions.canEditImage ? (
+                        {/* userPlan && userPermissions.canEditImage ? (
                           <ButtonSmallPurple
                             onClick={() =>
                               handleEditImageClick("aboutUs", "image2")
@@ -422,9 +418,9 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                           >
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
-                        ) : null}
+                        ) : null*/}
                       </div>
-                      <input
+                      {/* <input
                         type="file"
                         ref={(ref) =>
                           (fileInputRefs.current["aboutUs-image2"] = ref)
@@ -433,7 +429,7 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                           handleImageChange(e, "aboutUs", "image2")
                         }
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -814,11 +810,11 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                   className="w-full md:w-1/2 lg:w-1/2 p-4 transform transition-transform duration-300 hover:scale-105"
                 >
                   <div className="flex items-center rounded-lg shadow-lg p-6 hover:bg-opacity-50">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt=""
                       className="w-32 h-32 rounded-full object-cover"
-                    />
+                    /> */}
                     <div className="ml-6 flex-grow">
                       <div className="flex items-center text-lg font-semibold">
                         <span className="text-gray-800">{service.name}</span>
@@ -866,22 +862,22 @@ const MakeupTemplate = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           onClick={() => handleEditImageClick("Blog", "image2")}
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
-                    <input
+                    {/* <input
                       type="file"
                       ref={(ref) =>
                         (fileInputRefs.current["Blog-image2"] = ref)
                       }
                       onChange={(e) => handleImageChange(e, "Blog", "image2")}
                       style={{ display: "none" }}
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>

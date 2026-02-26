@@ -1,16 +1,12 @@
-// PaidSubscription.tsx
+// PaidSubscription.jsx
 import React, { useState, useEffect } from "react";
 import PaidOnboardingLayout from "./PaidOnboardingLayout";
-import { Text, Heading } from "../../../../component/Text";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { showToast } from "../../../../component/ShowToast";
 import {
   subscriptionPlans,
-  paidPlanFeatures,
-  paidPlanSubTitle,
-  paidPlanDescriptions,
   oneTimePaymentPlan,
 } from "../../../../data/Pricing";
 import { setEcosystemDomain } from "../../../../features/ecosystemDomain";
@@ -20,6 +16,41 @@ import Lottie from "lottie-react";
 import LoadingAnimation from "../../../../assets/affliate-img/LoadingAnimation.json";
 import { motion } from "framer-motion";
 import api2 from "../../../../api/Template";
+import { FaCheck } from "react-icons/fa";
+
+// Lite plan features
+const litePlanFeatures = [
+  {
+    title: "Website Landing Page",
+    description:
+      "Show your brand, let customers book, view your hours and location",
+  },
+  {
+    title: "Booking link",
+    description: "Share on socials to get bookings, not DMs.",
+  },
+  {
+    title: "Calendar sync",
+    description: "Sync with your google calendar to stay organized.",
+  },
+  {
+    title: "Unlimited Auto Booking Reminder",
+    description: "Customers get auto reminders about appointment.",
+  },
+  {
+    title: "Recurring appointments",
+    description: "Customers can set recurring booking appointments.",
+  },
+  {
+    title: "Staff onboarding",
+    description: "Allow customers to select who cares for them.",
+  },
+  {
+    title: "Group Appointment",
+    description:
+      "Schedule services for friends, family, or staff in one booking.",
+  },
+];
 
 // ----------------------- Loading Component -----------------------
 const LoadingPage = ({ message }) => (
@@ -61,12 +92,15 @@ const SubscriptionModal = ({ isOpen, onClose, onConfirm }) => {
           <h2 className="text-xl font-semibold text-gray-900">
             Choose your subscription mode
           </h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
             ✕
           </button>
         </div>
-        <div className="mb-4">
-          <label className="flex items-center mb-2">
+        <div className="mb-4 space-y-2">
+          <label className="flex items-center">
             <input
               type="radio"
               name="subscriptionMode"
@@ -88,7 +122,7 @@ const SubscriptionModal = ({ isOpen, onClose, onConfirm }) => {
           </label>
         </div>
         <button
-          className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
           onClick={() => onConfirm(selectedMode)}
           disabled={!selectedMode}
         >
@@ -99,19 +133,23 @@ const SubscriptionModal = ({ isOpen, onClose, onConfirm }) => {
   );
 };
 
-// ----------------------- Card Component -----------------------
-const Card = ({ plan, selectedInterval, price, isPopular = false }) => {
-  const userDetails = useSelector((state) => state.auth.user || {});
-  const { accessToken, refreshToken } = useSelector((state) => state.auth);
+// ----------------------- Paid Subscription Page -----------------------
+const PaidSubscription = () => {
+  const [selectedInterval, setSelectedInterval] = useState("Monthly");
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState(
     "🔍 Verifying your payment... Just a sec! 😊"
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userDetailEco, setUserDetailEco] = useState(null);
+
+  const userDetails = useSelector((state) => state.auth.user || {});
+  const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const referralCode = localStorage.getItem("referralCode");
+  const referralCode = sessionStorage.getItem("referralCode");
+
+  const intervals = ["Monthly", "Quarterly", "Biannually", "Yearly"];
 
   const loadingMessages = [
     "🔍 Verifying your payment... Just a sec! 😊",
@@ -121,44 +159,64 @@ const Card = ({ plan, selectedInterval, price, isPopular = false }) => {
     "🎯 Finalizing your subscription... You're nearly set! ✨",
   ];
 
-  const getReferralOneTimeAmount = () => {
-    const baseAmount = subscriptionPlans[selectedInterval]?.[plan]?.amount || price;
-    const referralDiscounts = { "2R0873": 0.925, "6LS937": 0.85 };
-    return Math.round(baseAmount * (referralDiscounts[referralCode] || 1));
-  };
-  const referralOneTimeAmount = getReferralOneTimeAmount();
+  const price =
+    subscriptionPlans[selectedInterval]?.["Lite"]?.amount || 4500;
 
+  const getReferralAmount = () => {
+    const referralDiscounts = { "2R0873": 0.925, "6LS937": 0.85 };
+    return Math.round(price * (referralDiscounts[referralCode] || 1));
+  };
+  const referralAmount = getReferralAmount();
+
+  // Flutterwave config for recurring payment
   const handleFlutterwavePaymentRecurring = useFlutterwave({
     public_key: import.meta.env.VITE_FLW_PUBLIC_KEY,
     tx_ref: `tx-${Date.now()}-${userDetails?.creatorId}`,
     amount: price,
     currency: "NGN",
     payment_options: "card,mobilemoney,ussd",
-    customer: { email: userDetails?.email, name: userDetails?.fullName },
-    customizations: {
-      title: `${plan} Subscription`,
-      description: `${selectedInterval} ${plan} plan subscription`,
+    customer: {
+      email: userDetails?.email,
+      name: userDetails?.fullName,
     },
-    payment_plan: subscriptionPlans[selectedInterval]?.[plan]?.code,
+    customizations: {
+      title: "Lite Subscription",
+      description: `${selectedInterval} Lite plan subscription`,
+    },
+    payment_plan:
+      subscriptionPlans[selectedInterval]?.["Lite"]?.code,
   });
 
+  // One-time payment amount
+  // Map subscription intervals to oneTimePaymentPlan keys
+  const oneTimeIntervalMap = {
+    Monthly: "Quarterly",
+    Quarterly: "Quarterly",
+    Biannually: "Half-Yearly",
+    Yearly: "Annually",
+  };
   const getOneTimeAmount = () => {
-    if (selectedInterval === "Monthly")
-      return oneTimePaymentPlan["Quarterly"]?.[plan]?.amount || price * 3;
-    return oneTimePaymentPlan[selectedInterval]?.[plan]?.amount || price * 3;
+    const mappedInterval = oneTimeIntervalMap[selectedInterval] || "Quarterly";
+    return (
+      oneTimePaymentPlan[mappedInterval]?.["Lite"]?.amount || price * 3
+    );
   };
   const oneTimeAmount = getOneTimeAmount();
+
   const handleFlutterwavePaymentOneTime = useFlutterwave({
     public_key: import.meta.env.VITE_FLW_PUBLIC_KEY,
     tx_ref: `tx-${Date.now()}-${userDetails?.creatorId}`,
     amount: oneTimeAmount,
     currency: "NGN",
     payment_options: "banktransfer,card,mobilemoney,ussd",
-    customer: { email: userDetails?.email, fullName: userDetails?.fullName },
+    customer: {
+      email: userDetails?.email,
+      fullName: userDetails?.fullName,
+    },
     customizations: {
-      title: `${plan} One-Time Subscription`,
-      description: `One-time ${plan} plan subscription for ${
-        selectedInterval === "Monthly" ? "Quarterly" : selectedInterval
+      title: "Lite One-Time Subscription",
+      description: `One-time Lite plan subscription for ${
+        oneTimeIntervalMap[selectedInterval] || "Quarterly"
       }`,
     },
   });
@@ -166,18 +224,22 @@ const Card = ({ plan, selectedInterval, price, isPopular = false }) => {
   const handleFlutterwavePaymentReferral = useFlutterwave({
     public_key: import.meta.env.VITE_FLW_PUBLIC_KEY,
     tx_ref: `tx-ref-${Date.now()}-${userDetails?.creatorId}`,
-    amount: referralOneTimeAmount,
+    amount: referralAmount,
     currency: "NGN",
     payment_options: "card",
-    customer: { email: userDetails?.email, fullName: userDetails?.fullName },
+    customer: {
+      email: userDetails?.email,
+      fullName: userDetails?.fullName,
+    },
     customizations: {
-      title: `${plan} Referral One-Time Subscription`,
-      description: `One-time ${plan} plan subscription with referral discount`,
+      title: "Lite Referral One-Time Subscription",
+      description:
+        "One-time Lite plan subscription with referral discount",
     },
     meta: {
       discount: true,
       creatorId: userDetails?.creatorId,
-      planType: plan,
+      planType: "Lite",
       interval: selectedInterval,
       ecosystemDomain: userDetailEco?.ecosystemDomain || "UNKNOWN",
     },
@@ -185,7 +247,9 @@ const Card = ({ plan, selectedInterval, price, isPopular = false }) => {
 
   const initiatePayment = (mode) => {
     const handler =
-      mode === "recurring" ? handleFlutterwavePaymentRecurring : handleFlutterwavePaymentOneTime;
+      mode === "recurring"
+        ? handleFlutterwavePaymentRecurring
+        : handleFlutterwavePaymentOneTime;
     handler({
       callback: (res) => {
         setLoading(true);
@@ -212,26 +276,34 @@ const Card = ({ plan, selectedInterval, price, isPopular = false }) => {
     const maxAttempts = 5;
     const intervalId = setInterval(async () => {
       attempts++;
-      setLoadingMessage(loadingMessages[attempts - 1] || "Verifying...");
+      setLoadingMessage(
+        loadingMessages[attempts - 1] || "Verifying..."
+      );
       const authFetch = AxiosInterceptor(accessToken, refreshToken);
       try {
         const result = await authFetch.get(
           `${import.meta.env.VITE_API_URL}/check-subscription-status/${userDetails?.email}`
         );
-        if (result.status === 201 && result.data.message === "Subscription verified successfully") {
+        if (
+          result.status === 201 &&
+          result.data.message === "Subscription verified successfully"
+        ) {
           clearInterval(intervalId);
           showToast(result.data.message);
-          if (result.data.ecosystemDomain) dispatch(setEcosystemDomain(result.data.ecosystemDomain));
-          if (result.data.planType) dispatch(setEcosystemPlan(result.data.planType));
+          if (result.data.ecosystemDomain)
+            dispatch(setEcosystemDomain(result.data.ecosystemDomain));
+          if (result.data.planType)
+            dispatch(setEcosystemPlan(result.data.planType));
           setLoading(false);
-          navigate("/creator/dashboard/overview");
+          navigate("/paid/auth/select-template");
         }
       } catch (error) {
         if (attempts >= maxAttempts) {
           clearInterval(intervalId);
-          showToast("Subscription verification timed out. Please try again.");
+          showToast(
+            "Subscription verification timed out. Please try again."
+          );
           setLoading(false);
-          navigate("/auth/subscriptions");
         }
       }
     }, 10000);
@@ -242,27 +314,35 @@ const Card = ({ plan, selectedInterval, price, isPopular = false }) => {
     const maxAttempts = 5;
     const intervalId = setInterval(async () => {
       attempts++;
-      setLoadingMessage(loadingMessages[attempts - 1] || "Verifying...");
+      setLoadingMessage(
+        loadingMessages[attempts - 1] || "Verifying..."
+      );
       const authFetch = AxiosInterceptor(accessToken, refreshToken);
       try {
         const result = await authFetch.get(
           `${import.meta.env.VITE_API_URL}/check-subscription-status/${userDetails?.email}`
         );
-        if (result.status === 201 && result.data.message === "Subscription verified successfully") {
+        if (
+          result.status === 201 &&
+          result.data.message === "Subscription verified successfully"
+        ) {
           clearInterval(intervalId);
           showToast(result.data.message);
-          if (result.data.ecosystemDomain) dispatch(setEcosystemDomain(result.data.ecosystemDomain));
-          if (result.data.planType) dispatch(setEcosystemPlan(result.data.planType));
-          localStorage.removeItem("referralCode");
+          if (result.data.ecosystemDomain)
+            dispatch(setEcosystemDomain(result.data.ecosystemDomain));
+          if (result.data.planType)
+            dispatch(setEcosystemPlan(result.data.planType));
+          sessionStorage.removeItem("referralCode");
           setLoading(false);
-          navigate("/creator/dashboard/overview");
+          navigate("/paid/auth/select-template");
         }
       } catch (error) {
         if (attempts >= maxAttempts) {
           clearInterval(intervalId);
-          showToast("Subscription verification timed out. Please try again.");
+          showToast(
+            "Subscription verification timed out. Please try again."
+          );
           setLoading(false);
-          navigate("/auth/subscriptions");
         }
       }
     }, 10000);
@@ -285,85 +365,27 @@ const Card = ({ plan, selectedInterval, price, isPopular = false }) => {
     getEcosystem();
   }, []);
 
-  const handleSignUp = () => {
-    if (!userDetailEco?.ecosystemDomain) return showToast("Ecosystem details missing.");
-    referralCode ? initiateReferralPayment() : setIsModalOpen(true);
+  const handleGetStarted = () => {
+    if (!userDetailEco?.ecosystemDomain)
+      return showToast("Ecosystem details missing.");
+    setIsModalOpen(true);
   };
 
   if (loading) return <LoadingPage message={loadingMessage} />;
 
   return (
-    <div
-      className={`bg-[#f9f9f9] rounded-lg overflow-hidden flex flex-col ${
-        isPopular ? "bg-[#9f68fe]/10 border border-gray-200" : "border border-gray-200"
-      }`}
-    >
-      {isPopular && (
-        <div className="flex justify-end">
-          <div className="bg-[#9f68fe] text-white w-1/2 text-xs py-2 font-semibold text-center rounded-bl-3xl rounded-tr-3xl">
-            Recommended
-          </div>
-        </div>
-      )}
-
-      <div className="px-6 py-8 flex flex-col flex-grow">
-        <Heading className="text-xl font-semibold text-[#9f68fe]">{plan} Plan</Heading>
-        <Heading className="text-sm font-semibold text-[#7b7777]">{paidPlanSubTitle[plan]}</Heading>
-        <Text className="mt-2 text-sm text-[#7b7777]">{paidPlanDescriptions[plan]}</Text>
-        <div className="mt-4 border border-[#9f68fe] rounded-xl px-4 py-1">
-          <span className="text-3xl font-bold text-[#9f68fe]">
-            ₦{referralCode ? referralOneTimeAmount.toLocaleString() : price.toLocaleString()}
-          </span>
-          <span className="text-sm text-gray-500">/{selectedInterval.toLowerCase()}</span>
-        </div>
-
-        <Text className="text-sm font-medium text-gray-900 mt-4">Features</Text>
-        <ul className="mt-2 space-y-2 text-xs text-gray-600">
-          {paidPlanFeatures[plan].map((feature, idx) => (
-            <li key={idx} className="flex items-start">
-              <span>✔</span>
-              <span className="ml-2">{feature}</span>
-            </li>
-          ))}
-        </ul>
-
-        <button
-          className="mt-6 w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
-          onClick={handleSignUp}
-        >
-          Select Plan
-        </button>
-      </div>
-
-      <SubscriptionModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={(mode) => {
-          setIsModalOpen(false);
-          initiatePayment(mode);
-        }}
-      />
-    </div>
-  );
-};
-
-// ----------------------- Paid Subscription Page -----------------------
-const PaidSubscription = () => {
-  const [selectedInterval, setSelectedInterval] = useState("Monthly");
-
-  return (
     <PaidOnboardingLayout currentStep={5} rightImage={null}>
-      <div className="w-full mx-auto px-4 sm:px-6 py-12">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex space-x-2">
-            {["Monthly", "Annual"].map((period) => (
+      <div className="w-full mx-auto px-4 sm:px-6 py-8">
+        {/* Interval Selector */}
+        <div className="flex justify-center mb-8">
+          <div className="flex space-x-2 flex-wrap justify-center gap-y-2">
+            {intervals.map((period) => (
               <label
                 key={period}
-                className={`px-4 py-2 text-sm font-medium rounded-full cursor-pointer border ${
+                className={`px-4 py-2 text-sm font-medium rounded-full cursor-pointer border transition-all ${
                   selectedInterval === period
-                    ? "bg-purple-600 text-white"
-                    : "bg-white border-gray-300"
+                    ? "bg-purple-600 text-white border-purple-600"
+                    : "bg-white border-gray-300 text-gray-600 hover:border-purple-300"
                 }`}
               >
                 <input
@@ -380,18 +402,79 @@ const PaidSubscription = () => {
           </div>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {["Plus", "Pro"].map((plan) => (
-            <Card
-              key={plan}
-              plan={plan}
-              selectedInterval={selectedInterval}
-              price={subscriptionPlans[selectedInterval][plan]?.amount || 0}
-              isPopular={plan === "Pro"}
-            />
-          ))}
+        {/* Single Lite Plan Card */}
+        <div className="max-w-md mx-auto">
+          <div className="bg-white rounded-2xl border-2 border-purple-200 overflow-hidden shadow-lg">
+            {/* Card Header */}
+            <div className="px-6 pt-8 pb-4">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Lite Plan
+              </h2>
+              <p className="text-gray-500 text-sm mt-1">
+                Solopreneur with physical store and multiple staffs.
+              </p>
+
+              {/* Price */}
+              <div className="mt-4 flex items-baseline">
+                <span className="text-3xl font-bold text-gray-900">
+                  N{" "}
+                  {referralCode
+                    ? referralAmount.toLocaleString()
+                    : price.toLocaleString()}
+                </span>
+                <span className="text-gray-500 text-sm ml-2">
+                  Per {selectedInterval === "Monthly" ? "Month" : selectedInterval === "Quarterly" ? "Quarter" : selectedInterval === "Biannually" ? "6 Months" : "Year"}
+                </span>
+              </div>
+            </div>
+
+            {/* Get Started Button */}
+            <div className="px-6 pb-4">
+              <button
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-purple-600 transition-all flex items-center justify-center gap-2"
+                onClick={handleGetStarted}
+              >
+                Get Started
+                <span className="text-lg">→</span>
+              </button>
+            </div>
+
+            {/* Features */}
+            <div className="px-6 pb-8">
+              <p className="font-semibold text-gray-800 text-sm mb-3">
+                What you get:
+              </p>
+              <ul className="space-y-3">
+                {litePlanFeatures.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <FaCheck className="text-gray-500 mt-1 flex-shrink-0 text-xs" />
+                    <span className="text-sm text-gray-700">
+                      <strong>{feature.title}:</strong>{" "}
+                      {feature.description}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-sm text-gray-500 mt-4 ml-6">
+                And more feature to come
+              </p>
+            </div>
+          </div>
         </div>
+
+        {/* Subscription Mode Modal */}
+        <SubscriptionModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={(mode) => {
+            setIsModalOpen(false);
+            if (referralCode) {
+              initiateReferralPayment();
+            } else {
+              initiatePayment(mode);
+            }
+          }}
+        />
       </div>
     </PaidOnboardingLayout>
   );

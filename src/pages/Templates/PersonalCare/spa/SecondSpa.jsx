@@ -476,11 +476,11 @@ const SecondSpa = ({ userDetails }) => {
             {spa.slice(0, 12).map((service, index) => (
               <div key={index} className="overflow-hidden group relative">
                 <div className="relative">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-100 rounded-md object-cover"
-                  />
+                  /> */}
                   <ul className="absolute inset-0 flex justify-center items-center space-x-4 opacity-0 group-hover:opacity-100 bg-black bg-opacity-30 transition">
                     <li>
                       <button

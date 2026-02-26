@@ -101,11 +101,7 @@ const BlankTemplate = ({ details, subdomain, userDetails }) => {
       <nav className="font-jak bg-white px-4 py-4 lg:px-10  w-full z-50">
         <div className="container mx-auto flex items-center justify-between">
           <a href="#home" className="font-bold flex items-center">
-            <img
-              src={details && details.navbar.logo}
-              alt="Logo"
-              className="h-10"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
           </a>
           <button
             onClick={toggleMenu}
@@ -486,10 +482,10 @@ const BlankTemplate = ({ details, subdomain, userDetails }) => {
                 className="text-center px-12 lg:px-8 py-10 border-gray-200"
               >
                 <div className="relative mb-6 ">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     className="rounded-md"
-                  />
+                  /> */}
                 </div>
                 <span className="text-lg font-semibold text-gray-800 block mb-2">
                 {service.name}

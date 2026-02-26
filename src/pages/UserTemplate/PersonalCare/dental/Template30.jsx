@@ -170,11 +170,7 @@ const FirstDentist = ({ details, subdomain, userDetails }) => {
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           {/* Logo */}
           <a href="#" className="flex items-center text-gray-800">
-            <img
-              src={details && details.navbar.logo}
-              alt="logo"
-              className="w-10 h-10 mr-2"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
             <span className="text-md text-[#1E84B5] font-semibold leading-tight">
               {userDetails?.ecosystemName} <br />
             </span>
@@ -461,11 +457,11 @@ const FirstDentist = ({ details, subdomain, userDetails }) => {
               className="bg-white rounded-lg shadow-lg p-6 text-center transition-all duration-300 hover:bg-[#d7e8f2] hover:text-white"
             >
               <div className="flex justify-center">
-                <img
+                {/* <img
                   src={service.serviceImage}
                   alt={service.name}
                   className="w-12 h-12 "
-                />
+                /> */}
               </div>
               <h3 className="mt-4 text-lg font-semibold text-gray-900 hover:text-white">
                 {service.name}

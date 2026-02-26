@@ -26,7 +26,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 import { LoadingSmall } from "../../../../component/LoadingSpinner";
 import { getCurrencySymbol } from "../../../../helper/getCurrencySymbol";
@@ -49,12 +49,12 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
   const { country } = useCountry();
   const countryCode = country || "NG";
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // Fetch services
   useEffect(() => {
@@ -244,7 +244,7 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
                 </button>
               </>
             </div>
-            {userPermissions.canEditImage &&
+            {/* userPermissions.canEditImage &&
               details?.hero?.backgroundImage1 !== "not available" && (
                 <div
                   style={{
@@ -273,7 +273,7 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
           </div>
         </div>
         {isModalOpen && (
@@ -633,7 +633,7 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
               key={index}
               className="relative p-6 text-center border rounded shadow bg-white"
             >
-              {service.serviceImage && (
+              {/* service.serviceImage && (
                 <div className="relative w-28 h-28 mx-auto mb-4">
                   <img
                     src={service.serviceImage}
@@ -644,7 +644,7 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
                     <FaCut className="text-[#D6B981] hover:text-white transition" />
                   </div>
                 </div>
-              )}
+              ) */}
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 {service.name}
               </h3>
@@ -721,7 +721,7 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
                 alt={`Salon Gallery ${index + 1}`}
                 className="w-full h-64 object-cover rounded-lg"
               />
-              {userPermissions.canEditImage && (
+              {/* userPermissions.canEditImage && (
                 <div
                   style={{
                     width: "120px",
@@ -749,7 +749,7 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
             </div>
           ))}
         </div>
@@ -884,7 +884,7 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
                 alt="client"
                 className="w-full h-full object-cover"
               />
-              {userPermissions.canEditImage && (
+              {/* userPermissions.canEditImage && (
                 <div
                   style={{
                     width: "120px",
@@ -908,7 +908,7 @@ const EditTemplate48 = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
             </div>
           )}
         </div>

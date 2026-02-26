@@ -32,7 +32,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 import { WhiteContactForm } from "../../../../features/ContactForm/ContactForm";
 
@@ -81,12 +81,12 @@ const [currency, setCurrency] = useState([]);
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   const handleContentChange = (section, field, event, index = null) => {
     const value = event.target.value;
@@ -252,22 +252,22 @@ const [currency, setCurrency] = useState([]);
           }}
         >
           <div>
-            {userPlan && userPermissions.canEditImage ? (
+            {/* userPlan && userPermissions.canEditImage ? (
               <ButtonSmallPurple
                 onClick={() => handleEditImageClick("hero", "backgroundImage1")}
               >
                 {loadingImage ? <LoadingSmall /> : "Edit Image"}
               </ButtonSmallPurple>
-            ) : null}
+            ) : null*/}
           </div>
-          <input
+          {/* <input
             type="file"
             ref={(ref) =>
               (fileInputRefs.current["hero-backgroundImage1"] = ref)
             }
             onChange={(e) => handleImageChange(e, "hero", "backgroundImage1")}
             style={{ display: "none" }}
-          />
+          /> */}
         </div>
       </div>
       <div className="mb-16 px-4  lg:px- ">
@@ -389,20 +389,20 @@ const [currency, setCurrency] = useState([]);
             }}
           >
             <div>
-              {userPlan && userPermissions.canEditImage ? (
+              {/* userPlan && userPermissions.canEditImage ? (
                 <ButtonSmallPurple
                   onClick={() => handleEditImageClick("aboutUs", "image1")}
                 >
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
-              ) : null}
+              ) : null*/}
             </div>
-            <input
+            {/* <input
               type="file"
               ref={(ref) => (fileInputRefs.current["aboutUs-image1"] = ref)}
               onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
           {/* <div className="absolute bottom-4 left-4 sm:bottom-10 sm:left-10 bg-teal-500 text-white p-4 text-center shadow-md">
             <h2 className="text-2xl sm:text-3xl font-bold">20</h2>
@@ -597,7 +597,7 @@ const [currency, setCurrency] = useState([]);
                   </button>
                   <div
                     className="absolute top-0 right-0 h-full w-16 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${service.serviceImage})` }}
+                    /* style={{ backgroundImage: `url(${service.serviceImage})` }} */
                   />
                 </div>
               ))}
@@ -625,22 +625,22 @@ const [currency, setCurrency] = useState([]);
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("LargeCta", "image1")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["LargeCta-image1"] = ref)
                   }
                   onChange={(e) => handleImageChange(e, "LargeCta", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <div
@@ -660,22 +660,22 @@ const [currency, setCurrency] = useState([]);
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("LargeCta", "image2")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["LargeCta-image2"] = ref)
                   }
                   onChange={(e) => handleImageChange(e, "LargeCta", "image2")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-black text-white flex items-center justify-center rounded-full cursor-pointer border-4 border-white shadow-lg">
@@ -799,7 +799,7 @@ const [currency, setCurrency] = useState([]);
                 className="w-full h-[260px] rounded-md object-cover"
               />
 
-              {userPlan && userPermissions?.canEditImage && (
+              {/* userPlan && userPermissions?.canEditImage && (
                 <div className="absolute top-2 left-2">
                   <ButtonSmallPurple
                     width="50"
@@ -810,7 +810,7 @@ const [currency, setCurrency] = useState([]);
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
                 </div>
-              )}
+              )*/}
 
               <input
                 type="file"
@@ -855,7 +855,7 @@ const [currency, setCurrency] = useState([]);
                       className="rounded-full shadow-lg h-28 w-28 object-cover"
                       loading="lazy"
                     />
-                    {userPlan && userPermissions.canEditImage && (
+                    {/* userPlan && userPermissions.canEditImage && (
                       <div className="absolute top-2 left-2">
                         <ButtonSmallPurple
                           width="50"
@@ -866,7 +866,7 @@ const [currency, setCurrency] = useState([]);
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
                       </div>
-                    )}
+                    )*/}
                     <input
                       type="file"
                       ref={(ref) =>

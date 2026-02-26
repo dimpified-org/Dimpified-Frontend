@@ -440,11 +440,11 @@ const SixthStylist = () => {
 
                       {/* service image with icon */}
                       <div className="relative mt-4">
-                        <img
+                        {/* <img
                           src={service.serviceImage}
                           alt={service.name}
                           className="w-full h-48 object-cover"
-                        />
+                        /> */}
                         {/* <img
                           src={s.icon}
                           alt=""

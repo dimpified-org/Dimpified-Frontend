@@ -25,7 +25,7 @@ import {
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import api from "../../../../api/Template";
 import { showToast } from "../../../../component/ShowToast";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
@@ -155,12 +155,12 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -176,11 +176,7 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
           {/* Logo */}
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <img
-                src={details && details.navbar.logo} // Replace with actual logo path
-                alt="Logo"
-                className="h-10"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               <div
                 style={{
                   width: "250px",
@@ -191,20 +187,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("navbar", "logo")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["navbar-logo"] = ref)}
                   onChange={(e) => handleImageChange(e, "navbar", "logo")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <span className="text-xl font-bold">
@@ -339,7 +335,7 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() =>
                       handleEditImageClick("hero", "backgroundImage1")
@@ -347,9 +343,9 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) =>
                   (fileInputRefs.current["hero-backgroundImage1"] = ref)
@@ -358,7 +354,7 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                   handleImageChange(e, "hero", "backgroundImage1")
                 }
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
           <div className="absolute bottom-10 text-white text-3xl"></div>
@@ -417,7 +413,7 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("aboutUs", "image1")
@@ -425,16 +421,16 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image1"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="absolute right-[-15px] md:right-[15px] bottom-[-50px] w-1/2 md:w-2/5 rounded-lg overflow-hidden">
@@ -453,7 +449,7 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("aboutUs", "image2")
@@ -461,16 +457,16 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image2"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image2")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -760,20 +756,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("Blog", "image1")}
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => (fileInputRefs.current["Blog-image1"] = ref)}
                 onChange={(e) => handleImageChange(e, "Blog", "image1")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
 
@@ -897,12 +893,12 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
               <div key={index} className="text-left relative mb-8 md:mb-0">
                 {/* Background Image */}
                 <div className="relative rounded-md  overflow-hidden ">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     onClick={handleModalOpen}
                     alt="Bridal Makeup"
                     className="w-full h-full object-cover"
-                  />
+                  /> */}
 
                   {/* Overlay Content */}
                   <figcaption className="absolute inset-0 flex flex-col items-start justify-center p-12 sm:p-4 z-10">
@@ -977,20 +973,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Reviews", "image1")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["Reviews-image1"] = ref)}
                   onChange={(e) => handleImageChange(e, "Reviews", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <div>
@@ -1058,20 +1054,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Reviews", "image2")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["Reviews-image2"] = ref)}
                   onChange={(e) => handleImageChange(e, "Reviews", "image2")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <div>
@@ -1139,20 +1135,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Reviews", "image3")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["Reviews-image3"] = ref)}
                   onChange={(e) => handleImageChange(e, "Reviews", "image3")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <div>
@@ -1220,20 +1216,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Blog", "image3")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["Blog-image3"] = ref)}
                   onChange={(e) => handleImageChange(e, "Blog", "image3")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
             <div>
@@ -1402,7 +1398,7 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                       }}
                     >
                       <div>
-                        {userPlan && userPermissions.canEditImage ? (
+                        {/* userPlan && userPermissions.canEditImage ? (
                           <ButtonSmallPurple
                             onClick={() =>
                               handleEditImageClick("Gallery", `image${idx + 1}`)
@@ -1410,9 +1406,9 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                           >
                             {loadingImage ? <LoadingSmall /> : "Edit Image"}
                           </ButtonSmallPurple>
-                        ) : null}
+                        ) : null*/}
                       </div>
-                      <input
+                      {/* <input
                         type="file"
                         ref={(ref) =>
                           (fileInputRefs.current[`Gallery-image${idx + 1}`] =
@@ -1422,7 +1418,7 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                           handleImageChange(e, "Gallery", `image${idx + 1}`)
                         }
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -1482,20 +1478,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Team", "image1")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["Team-image1"] = ref)}
                     onChange={(e) => handleImageChange(e, "Team", "image1")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 flex flex-col justify-center items-center p-10 opacity-0 hover:opacity-100 transition-opacity duration-300">
@@ -1571,20 +1567,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Team", "image2")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["Team-image2"] = ref)}
                     onChange={(e) => handleImageChange(e, "Team", "image2")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 flex flex-col justify-center items-center p-10 opacity-0 hover:opacity-100 transition-opacity duration-300">
@@ -1662,20 +1658,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Team", "image3")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["Team-image3"] = ref)}
                     onChange={(e) => handleImageChange(e, "Team", "image3")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 flex flex-col justify-center items-center p-10 opacity-0 hover:opacity-100 transition-opacity duration-300">
@@ -1752,20 +1748,20 @@ const EditTemplate14 = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Team", "image4")}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) => (fileInputRefs.current["Team-image4"] = ref)}
                     onChange={(e) => handleImageChange(e, "Team", "image4")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 flex flex-col justify-center items-center p-10 opacity-0 hover:opacity-100 transition-opacity duration-300">

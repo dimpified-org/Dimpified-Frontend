@@ -149,11 +149,7 @@ const FourthSpa = ({ details, subdomain, userDetails }) => {
             {/* Center Logo */}
             <div className="flex justify-center">
               <Link to="/" className="w-40">
-                <img
-                  src={details && details.navbar.logo}
-                  alt="Logo"
-                  className="w-full"
-                />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               </Link>
             </div>
 
@@ -404,11 +400,11 @@ const FourthSpa = ({ details, subdomain, userDetails }) => {
                 className="relative text-center p-6 border border-gray-200 bg-white hover:shadow-2xl hover:scale-105 transform duration-300"
               >
                 <div className="w-32 h-32 mx-auto flex items-center justify-center">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-full object-contain rounded-full "
-                  />
+                  /> */}
                 </div>
                 <h3 className="text-xl font-bold mt-4">{service.name}</h3>
                 <p className="text-gray-500 mt-2">{service.shortDescription}</p>

@@ -1,21 +1,247 @@
 import { Mail } from "lucide-react";
 import PaidOnboardingImage from "../../../assets/FreeBooking/FreeAuthImage.png";
 import Logo from "../../../assets/NewAuthImage/NewLogo.png";
-import { Link as Route } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { useDispatch, useSelector } from "react-redux";
+import { creatorLoginWithGoogle } from "../../../features/authentication";
+import { showToast } from "../../../component/ShowToast";
+import { setEcosystemDomain } from "../../../features/ecosystemDomain";
+import { setEcosystemPlan } from "../../../features/ecosystemPlan";
+import { setEcosystemStatus } from "../../../features/ecosystemStatus";
+import axios from "axios";
 
 export default function PaidOnboardingPreSignup() {
-  const googleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log("Google login success:", tokenResponse);
-      // Handle successful login here
-      // You can send the token to your backend for verification
-    },
-    onError: (error) => {
-      console.error("Google login failed:", error);
-      // Handle login error here
-    },
-  });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auth);
+
+  // Helper function to set auth headers
+  const setAuthHeaders = (token) => {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      try {
+        const authApis = require("../../../api/authApis");
+        if (authApis.default && authApis.default.apiClient) {
+          authApis.default.apiClient.defaults.headers.common["Authorization"] =
+            `Bearer ${token}`;
+        }
+      } catch (error) {
+        console.warn("Could not update api client headers:", error);
+      }
+    }
+  };
+
+  // Get refcode from URL if it exists
+  const getRefCodeFromURL = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get("ref") || params.get("refcode") || null;
+  };
+
+  // Navigation function for paid booking flow
+  const handleNavigation = (step, plan) => {
+    const isPaidPlan = plan && plan?.toLowerCase() !== "free";
+    console.log(
+      `handleNavigation called: step=${step}, plan=${plan}, isPaidPlan=${isPaidPlan}`,
+    );
+
+    switch (parseInt(step)) {
+      case 1:
+        navigate("/paid/auth/email-verification");
+        break;
+      case 2:
+        navigate("/paid/auth/business-identity");
+        break;
+      case 3:
+        navigate("/paid/auth/availability");
+        break;
+      case 4:
+        navigate("/paid/auth/service-payment");
+        break;
+      case 5:
+        navigate("/paid/auth/subcription");
+        break;
+      case 6:
+        navigate("/paid/auth/select-template");
+        break;
+      case 7:
+        navigate("/creator/dashboard/overview");
+        break;
+      default:
+        navigate("/paid/auth/personal-Information");
+        break;
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    console.log("=== Google Signup Debug (Paid) ===");
+    console.log("Full Google response:", credentialResponse);
+
+    if (credentialResponse.credential) {
+      console.log("✓ ID Token (credential) received");
+      console.log(
+        "ID Token starts with eyJ:",
+        credentialResponse.credential.startsWith("eyJ"),
+      );
+      console.log(
+        "ID Token segments:",
+        credentialResponse.credential.split(".").length,
+      );
+    }
+
+    const idToken = credentialResponse.credential;
+    const refcode = getRefCodeFromURL();
+
+    // Save referral code to sessionStorage if present
+    if (refcode) {
+      sessionStorage.setItem("referralCode", refcode);
+    }
+
+    if (!idToken) {
+      console.error("No ID token (credential) received from Google");
+      showToast("Google authentication failed: No ID token received", "error");
+      return;
+    }
+
+    console.log("Sending ID token to backend for signup...");
+
+    try {
+      const resultAction = await dispatch(
+        creatorLoginWithGoogle({
+          token: idToken,
+          refcode: refcode,
+        }),
+      );
+
+      if (creatorLoginWithGoogle.rejected.match(resultAction)) {
+        const errorPayload = resultAction.payload;
+        const errorMessage =
+          errorPayload?.message || errorPayload || "Google signup failed";
+
+        console.error("Google signup rejected:", errorMessage);
+
+        if (
+          errorMessage.includes("timeout") ||
+          errorMessage.includes("cannot connect")
+        ) {
+          showToast(
+            "Connection issue. Please try again or use email signup.",
+            "error",
+          );
+          return;
+        }
+
+        if (
+          errorMessage.includes("Wrong number of segments") ||
+          errorMessage.includes("Invalid token") ||
+          errorMessage.includes("JWT")
+        ) {
+          showToast(
+            "Google authentication failed: Invalid token format",
+            "error",
+          );
+          return;
+        }
+
+        if (
+          errorMessage.toLowerCase().includes("already exists") ||
+          errorMessage.toLowerCase().includes("user exists") ||
+          errorMessage.toLowerCase().includes("account exists") ||
+          errorMessage.toLowerCase().includes("not found")
+        ) {
+          showToast("Account already exists. Please login instead.", "error");
+
+          localStorage.setItem("googleCredential", idToken);
+          localStorage.setItem("googleIdToken", idToken);
+          sessionStorage.setItem("googleIdToken", idToken);
+
+          localStorage.setItem(
+            "googleUserData",
+            JSON.stringify({
+              token: idToken,
+              timestamp: new Date().toISOString(),
+            }),
+          );
+
+          if (refcode) {
+            navigate(`/auth/login?refcode=${refcode}&googleAuth=true`);
+          } else {
+            navigate("/auth/login?googleAuth=true");
+          }
+          return;
+        }
+
+        showToast(errorMessage, "error");
+      } else if (creatorLoginWithGoogle.fulfilled.match(resultAction)) {
+        const responseData = resultAction.payload;
+        console.log("✓ Backend Google auth success:", responseData);
+
+        if (!responseData) {
+          showToast("Invalid response from server", "error");
+          return;
+        }
+
+        const accessToken = responseData.accessToken || responseData.token;
+        const refreshToken = responseData.refreshToken;
+
+        if (accessToken) {
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("jwtToken", accessToken);
+          localStorage.setItem("googleIdToken", idToken);
+          localStorage.setItem("googleCredential", idToken);
+          sessionStorage.setItem("googleIdToken", idToken);
+          setAuthHeaders(accessToken);
+        }
+
+        if (refreshToken) {
+          localStorage.setItem("refreshToken", refreshToken);
+        }
+
+        if (responseData.user?.id) {
+          localStorage.setItem("userId", responseData.user.id.toString());
+        }
+
+        const isNewUser =
+          responseData.isNewUser || responseData.isNewUser === true;
+        const userData = responseData.user || responseData;
+        const message =
+          responseData.message ||
+          (isNewUser
+            ? "Welcome! Account created successfully."
+            : "Welcome back!");
+
+        showToast(message, "success");
+
+        if (userData.ecosystemDomain) {
+          dispatch(setEcosystemDomain(userData.ecosystemDomain));
+        }
+
+        const userPlan = userData.plan || "free";
+        dispatch(setEcosystemPlan(userPlan));
+
+        if (userData.status) {
+          dispatch(setEcosystemStatus(userData.status));
+        }
+
+        if (userData.subCategory) {
+          sessionStorage.setItem("subCategory", userData.subCategory);
+        }
+
+        const userStep = userData.step || 1;
+        handleNavigation(userStep, userPlan);
+      }
+    } catch (error) {
+      console.error("Google Sign-Up Error:", error);
+      showToast("An unexpected error occurred during Google signup.", "error");
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error("Google Sign-Up Failed:", error);
+    showToast("Google Sign-Up Failed. Please try again.", "error");
+  };
+
   return (
     <div className="min-h-screen bg-white relative overflow-hidden flex">
       {/* Purple decorative blob - left */}
@@ -62,15 +288,17 @@ export default function PaidOnboardingPreSignup() {
           />
         </svg>
       </div>
+
       <div className="w-full lg:w-2/3 flex flex-col px-6 sm:px-12 md:px-16 lg:px-20 py-8 relative z-10">
         {/* Logo */}
         <div className="mb-12 lg:mb-16">
-         <Route to="/"><img
-            src={Logo}
-            alt="Dimipified Logo"
-            className="h-6  w-auto object-contain"
-          />
-          </Route>
+          <RouterLink to="/">
+            <img
+              src={Logo}
+              alt="Dimipified Logo"
+              className="h-6 w-auto object-contain"
+            />
+          </RouterLink>
         </div>
 
         {/* Main Content - Centered */}
@@ -87,45 +315,119 @@ export default function PaidOnboardingPreSignup() {
 
           {/* Auth Buttons */}
           <div className="space-y-4">
-            {/* Google Sign In */}
-            {/* <button
-              onClick={() => googleLogin()}
-              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 sm:py-4 px-6 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 border border-gray-200"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M19.8 10.2273C19.8 9.51819 19.7364 8.83637 19.6182 8.18182H10.2V12.05H15.6109C15.3764 13.3 14.6582 14.3591 13.5864 15.0682V17.5773H16.8273C18.7091 15.8364 19.8 13.2727 19.8 10.2273Z"
-                  fill="#4285F4"
-                />
-                <path
-                  d="M10.2 20C12.9 20 15.1636 19.1045 16.8273 17.5773L13.5864 15.0682C12.6864 15.6682 11.5455 16.0227 10.2 16.0227C7.59545 16.0227 5.38636 14.2636 4.58636 11.9H1.22727V14.4909C2.88182 17.7591 6.24545 20 10.2 20Z"
-                  fill="#34A853"
-                />
-                <path
-                  d="M4.58636 11.9C4.38636 11.3 4.27273 10.6591 4.27273 10C4.27273 9.34091 4.38636 8.7 4.58636 8.1V5.50909H1.22727C0.545455 6.85909 0.136364 8.38636 0.136364 10C0.136364 11.6136 0.545455 13.1409 1.22727 14.4909L4.58636 11.9Z"
-                  fill="#FBBC05"
-                />
-                <path
-                  d="M10.2 3.97727C11.6636 3.97727 12.9682 4.48182 13.9909 5.44545L16.8818 2.55455C15.1591 0.940909 12.8955 0 10.2 0C6.24545 0 2.88182 2.24091 1.22727 5.50909L4.58636 8.1C5.38636 5.73636 7.59545 3.97727 10.2 3.97727Z"
-                  fill="#EA4335"
-                />
-              </svg>
-              <span className="text-sm sm:text-base">Continue with Google</span>
-            </button> */}
+            {/* Google Sign Up */}
+            <div className="w-full">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleFailure}
+                useOneTap={false}
+                shape="rectangular"
+                size="large"
+                width="100%"
+                text="signup_with"
+                theme="outline"
+                logo_alignment="center"
+                locale="en"
+                context="signup"
+                ux_mode="popup"
+                render={(renderProps) => (
+                  <button
+                    type="button"
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled || isLoading}
+                    className="relative w-full h-14 px-6 bg-white border border-gray-300 rounded-xl flex items-center justify-center gap-3 font-medium text-gray-700 text-sm hover:border-gray-400 hover:shadow-lg hover:text-gray-900 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group overflow-hidden"
+                  >
+                    {/* Background shine effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/0 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
 
-            {/* Email Sign In - Wrapped with Link */}
-            <Route to="/Paid/auth/personal-Information" className="block">
-              <button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-medium py-3 sm:py-4 px-6 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 border border-gray-200">
+                    {/* Google logo */}
+                    <div className="relative z-10">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="transition-transform group-hover:rotate-12 duration-300"
+                      >
+                        <path
+                          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                          fill="#4285F4"
+                        />
+                        <path
+                          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-1.02.68-2.31 1.08-3.71 1.08-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C4 20.28 7.68 23 12 23z"
+                          fill="#34A853"
+                        />
+                        <path
+                          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                          fill="#FBBC05"
+                        />
+                        <path
+                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.68 1 4 3.72 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"
+                          fill="#EA4335"
+                        />
+                      </svg>
+                    </div>
+
+                    {/* Text */}
+                    <span className="relative z-10">
+                      {isLoading
+                        ? "Creating Account..."
+                        : "Continue with Google"}
+                    </span>
+
+                    {/* Hover arrow */}
+                    <svg
+                      className="relative z-10 w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </button>
+                )}
+              />
+            </div>
+
+            {/* Email Sign Up */}
+            <RouterLink to="/paid/auth/personal-Information" className="block">
+              <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 sm:py-4 px-6 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 border border-purple-600 hover:shadow-lg active:scale-[0.98] group">
                 <Mail className="w-5 h-5" />
                 <span className="text-sm sm:text-base">Sign Up with Email</span>
+                <svg
+                  className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
               </button>
-            </Route>
+            </RouterLink>
+          </div>
+
+          {/* Already have an account? */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600">
+              Already have an account?{" "}
+              <RouterLink
+                to="/auth/login"
+                className="text-purple-600 font-medium hover:text-purple-700 hover:underline transition-colors duration-300"
+              >
+                Log in here
+              </RouterLink>
+            </p>
           </div>
         </div>
 

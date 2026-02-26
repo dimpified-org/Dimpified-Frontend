@@ -108,11 +108,7 @@ const SecondStylist = ({ details, subdomain, userDetails }) => {
             {/* Logo */}
             <div className="flex items-center">
               <div className="inline-block">
-                <img
-                  src={details && details.navbar.logo}
-                  alt="logo"
-                  className="h-10"
-                />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               </div>
             </div>
 
@@ -314,11 +310,11 @@ const SecondStylist = ({ details, subdomain, userDetails }) => {
               >
                 {/* Product Image */}
                 <div className="relative">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-100 object-cover"
-                  />
+                  /> */}
                   {service.name && (
                     <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 text-xs rounded">
                       {service.name}
@@ -551,11 +547,11 @@ const SecondStylist = ({ details, subdomain, userDetails }) => {
                 <div key={index} className="overflow-hidden group relative">
                   {/* Image */}
                   <div className="relative">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="w-full h-100 object-cover"
-                    />
+                    /> */}
                     {/* Icons (Hidden initially) */}
                     <ul className="absolute inset-0 flex justify-center items-center space-x-4 opacity-0 group-hover:opacity-100 bg-black bg-opacity-30 transition">
                       <li>
@@ -579,8 +575,8 @@ const SecondStylist = ({ details, subdomain, userDetails }) => {
                         {getCurrencySymbol(currency)}{service.price + service.price * 0.2}
                       </del>
                      <p className="text-gold text-lg font-medium">
-  {getCurrencySymbol(service.price.currency)}
-  {service.price.value.toLocaleString()}
+  {getCurrencySymbol(currency)}
+  {service.price.toLocaleString()}
 </p>
                     </div>
                   </div>

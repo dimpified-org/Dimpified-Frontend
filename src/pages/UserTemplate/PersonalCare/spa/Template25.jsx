@@ -203,11 +203,7 @@ const FirstSpa = ({ details, subdomain, userDetails }) => {
           <div className="container mx-auto px-8 lg:px-12 py-4 flex justify-between items-center">
             {/* Logo */}
             <a href="#" className="flex items-center text-gray-800">
-              <img
-                src={details && details.navbar.logo}
-                alt="logo"
-                className="w-10 h-10 mr-2"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               <span className="text-xs leading-tight">
                 {userDetails && userDetails.ecosystemName} <br />
                 <span className="text-yellow-600">Beauty and Spa</span>
@@ -528,11 +524,11 @@ const FirstSpa = ({ details, subdomain, userDetails }) => {
               <button onClick={handleModalOpen}>
                 {" "}
                 <div className="w-48 h-48 rounded-full border border-gray-300 overflow-hidden">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-full h-full object-cover"
-                  />
+                  /> */}
                 </div>
               </button>
               {/* Service Title & Price */}

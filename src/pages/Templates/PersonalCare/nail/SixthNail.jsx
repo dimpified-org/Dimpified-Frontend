@@ -273,7 +273,7 @@ const SixthNail = () => {
               <div className="w-full md:w-1/3 px-4 mb-8">
                 <div className="overflow-hidden rounded-lg mb-6">
                   <div className="relative overflow-hidden">
-                    <img src={service.serviceImage} className="w-full h-auto" />
+                    {/* <img src={service.serviceImage} className="w-full h-auto" /> */}
                     <div className="absolute inset-0 bg-black opacity-0 hover:opacity-20 transition duration-300"></div>
                   </div>
                 </div>

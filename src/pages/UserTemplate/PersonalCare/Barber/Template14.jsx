@@ -108,11 +108,7 @@ const [currency, setCurrency] = useState([]);
           <nav className="max-w-7xl mx-auto px-6 lg:px-16 py-4 flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center space-x-4">
-              <img
-                src={details.navbar.logo} // Replace with actual logo path
-                alt="Logo"
-                className="h-10"
-              />
+              <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               <span className="text-xl font-bold">
                 {sanitizeContent(details.navbar.link1)}
               </span>
@@ -397,12 +393,12 @@ const [currency, setCurrency] = useState([]);
                 <div key={index} className="text-left relative mb-8 md:mb-0">
                   {/* Background Image */}
                   <div className="relative rounded-md  overflow-hidden ">
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       onClick={handleModalOpen}
                       alt="Bridal Makeup"
                       className="w-full h-full object-cover"
-                    />
+                    /> */}
 
                     {/* Overlay Content */}
                     <figcaption className="absolute inset-0 flex flex-col items-start justify-center p-12 sm:p-4 z-10">

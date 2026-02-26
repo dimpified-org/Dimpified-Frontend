@@ -167,11 +167,7 @@ const SixthMakeup = () => {
                 <div className="w-1/4 lg:w-1/6">
                   <div className="logo">
                     <a href="index.html">
-                      <img
-                        src="https://gfa-tech.com/dimp-template-images/make-up/make6-logo.png"
-                        alt="logo"
-                        className="h-10"
-                      />
+                      <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
                     </a>
                   </div>
                 </div>
@@ -392,11 +388,11 @@ const SixthMakeup = () => {
                     key={index}
                     className="group bg-[#1e1e1e] rounded overflow-hidden transition-all duration-300 hover:bg-[#CC866C] text-center"
                   >
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt="Face Makeup"
                       className="w-full h-72 object-cover"
-                    />
+                    /> */}
                     <div className="p-6">
                       <h3 className="text-white text-xl font-bold mb-3 group-hover:text-white">
                         {service.name}
@@ -567,11 +563,7 @@ const SixthMakeup = () => {
             {/* Logo & Description */}
             <div className="footer-widget">
               <div className="footer-logo mb-6">
-                <img
-                  src="https://gfa-tech.com/dimp-template-images/make-up/make6-logo.png"
-                  alt="logo"
-                  className="h-10"
-                />
+                <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
               </div>
               <p className="text-gray-400">
                 Olivia Makeup Studio is dedicated to enhancing your natural

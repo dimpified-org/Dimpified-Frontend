@@ -22,7 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 import {
   FaFacebookF,
@@ -76,12 +76,12 @@ const SecondGym = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -363,7 +363,7 @@ const SecondGym = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("hero", "backgroundImage1")
@@ -371,9 +371,9 @@ const SecondGym = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["hero-backgroundImage1"] = ref)
@@ -382,7 +382,7 @@ const SecondGym = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "hero", "backgroundImage1")
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </SwiperSlide>
@@ -682,23 +682,23 @@ const SecondGym = ({ userDetails, subdomain }) => {
                       zIndex: 1000,
                     }}
                   >
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() => handleEditImageClick("Gallery", key)}
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
 
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Gallery-${key}`] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "Gallery", key)}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             ))}
@@ -734,7 +734,7 @@ const SecondGym = ({ userDetails, subdomain }) => {
                     alt={coach.name}
                     className="w-full h-full object-cover rounded-lg"
                   />
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         onClick={() =>
@@ -744,8 +744,8 @@ const SecondGym = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Blog-image${index + 1}`] = ref)
@@ -754,7 +754,7 @@ const SecondGym = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Blog", `image${index + 1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
 
                 {/* Editable Name */}
@@ -925,7 +925,7 @@ const SecondGym = ({ userDetails, subdomain }) => {
                     alt={testimonial.name}
                     className="rounded-full w-32 md:w-48 mx-auto"
                   />
-                  {userPlan && userPermissions.canEditImage && (
+                  {/* userPlan && userPermissions.canEditImage && (
                     <div className="absolute top-2 left-2">
                       <ButtonSmallPurple
                         onClick={() =>
@@ -935,8 +935,8 @@ const SecondGym = ({ userDetails, subdomain }) => {
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
                     </div>
-                  )}
-                  <input
+                  )*/}
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Reviews-image${index + 1}`] = ref)
@@ -945,7 +945,7 @@ const SecondGym = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Reviews", `image${index + 1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
                 <div className="w-full md:w-3/4 ps-10">
                   <div className="flex mb-4">

@@ -121,6 +121,7 @@ const PaidOnboardingSetupOne = () => {
     };
 
     sessionStorage.setItem("businessIdentity", JSON.stringify(finalData));
+    sessionStorage.setItem("selectedCategory", finalData.businessType);
     showToast("Business info saved! Proceed to set availability", "success");
     navigate("/Paid/auth/availability");
   };
@@ -151,11 +152,12 @@ const PaidOnboardingSetupOne = () => {
               className="h-14 rounded-2xl bg-gray-50 border-gray-200 text-base"
             />
             <p className="text-xs text-gray-500 mt-2">
-              Your booking link will be: dimpified.com/
+              Your booking link will be:{" "}
               <strong>
                 {formData.pageName.toLowerCase().replace(/[^a-z0-9]/g, "") ||
                   "yourname"}
               </strong>
+              .dimpified.com
             </p>
           </div>
 

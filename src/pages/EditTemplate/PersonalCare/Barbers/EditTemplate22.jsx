@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 import { getCurrencySymbol } from "../../../../helper/getCurrencySymbol";
 const BarberFresh = ({ userDetails, subdomain }) => {
@@ -55,12 +55,12 @@ const BarberFresh = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -285,22 +285,22 @@ const BarberFresh = ({ userDetails, subdomain }) => {
           }}
         >
           <div>
-            {userPlan && userPermissions.canEditImage ? (
+            {/* userPlan && userPermissions.canEditImage ? (
               <ButtonSmallPurple
                 onClick={() => handleEditImageClick("hero", "backgroundImage1")}
               >
                 {loadingImage ? <LoadingSmall /> : "Edit Image"}
               </ButtonSmallPurple>
-            ) : null}
+            ) : null*/}
           </div>
-          <input
+          {/* <input
             type="file"
             ref={(ref) =>
               (fileInputRefs.current["hero-backgroundImage1"] = ref)
             }
             onChange={(e) => handleImageChange(e, "hero", "backgroundImage1")}
             style={{ display: "none" }}
-          />
+          /> */}
         </div>
       </section>
       <div className="mb-16 px-4  lg:px- ">
@@ -360,7 +360,7 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("aboutUs", "image3")
@@ -368,16 +368,16 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image3"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image3")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -626,20 +626,20 @@ const BarberFresh = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("aboutUs", "image1")}
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => (fileInputRefs.current["aboutUs-image3"] = ref)}
                 onChange={(e) => handleImageChange(e, "aboutUs", "image3")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
 
@@ -686,7 +686,7 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("aboutUs", "image1")
@@ -694,16 +694,16 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["aboutUs-image3"] = ref)
                     }
                     onChange={(e) => handleImageChange(e, "aboutUs", "image3")}
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="mt-4">
@@ -750,20 +750,20 @@ const BarberFresh = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("aboutUs", "image1")}
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => (fileInputRefs.current["aboutUs-image3"] = ref)}
                 onChange={(e) => handleImageChange(e, "aboutUs", "image3")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -821,11 +821,11 @@ const BarberFresh = ({ userDetails, subdomain }) => {
               <div key={index} className="relative bg-white shadow-lg group">
                 <div className="relative overflow-hidden bg-gradient-to-b rounded-md from-black via-transparent to-black">
                   <button onClick={handleModalOpen}>
-                    <img
+                    {/* <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-300"
-                    />
+                    /> */}
                   </button>
                   <div className="absolute bottom-0 left-0 w-full px-6 py-2 bg-gradient-to-r from-black/60 to-[#cb54d1]/60 backdrop-blur-lg border border-white/20 shadow-xl">
                     <button onClick={handleModalOpen}>
@@ -890,13 +890,13 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                   } shadow`}
                 >
                   {/* Service Image */}
-                  {service.serviceImage && (
+                  {/* service.serviceImage && (
                     <img
                       src={service.serviceImage}
                       alt={service.name}
                       className="w-20 h-20 object-cover rounded-full mr-4"
                     />
-                  )}
+                  ) */}
                   {/* Service Details */}
                   <div className="flex-1">
                     <h5 className="text-lg font-semibold text-gray-800">
@@ -996,7 +996,7 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("Gallery", `image${index + 1}`)
@@ -1004,9 +1004,9 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Gallery-image${index + 1}`] = ref)
@@ -1015,7 +1015,7 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Gallery", `image${index + 1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             ))}
@@ -1087,22 +1087,22 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("LargeCta", "image1")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["LargeCta-image1"] = ref)
                   }
                   onChange={(e) => handleImageChange(e, "LargeCta", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -1137,7 +1137,7 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("Team", `image${index + 1}`)
@@ -1145,9 +1145,9 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current[`Team-image${index + 1}`] = ref)
@@ -1156,7 +1156,7 @@ const BarberFresh = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Team", `image${index + 1}`)
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="text-center">

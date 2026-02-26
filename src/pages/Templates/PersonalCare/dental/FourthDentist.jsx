@@ -390,11 +390,11 @@ const FourthDentist = () => {
 
                   <div className="flex justify-center mb-4 mt-7">
                     <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                      <img
+                      {/* <img
                         src={service.serviceImage}
                         alt={service.name}
                         className="w-12 rounded-full h-12 "
-                      />
+                      /> */}
                     </div>
                   </div>
                   <h3 className="text-xl font-semibold">{service.name}</h3>

@@ -432,11 +432,11 @@ const SixthSpa = ({ details, subdomain, userDetails }) => {
             {/* Item 1 */}
             {eServices.map((service, index) => (
               <div className="flex flex-col items-center">
-                <img
+                {/* <img
                   src={service.serviceImage}
                   alt={service.name}
                   className="w-[250px] h-auto rounded-[60%_40%_60%_40%/40%_60%_40%_60%] object-cover"
-                />
+                /> */}
                 <h3 className="text-2xl font-bold text-[#1c1c1c] mt-6">
                   {service.name}
                 </h3>

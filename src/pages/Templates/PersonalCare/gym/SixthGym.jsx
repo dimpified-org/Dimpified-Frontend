@@ -658,11 +658,11 @@ const SixthGym = () => {
                     {getFormattedPrice(service.price, countryCode)}
                   </h2>
                 </div>
-                <img
+                {/* <img
                   src={service.serviceImage}
                   alt={service.name}
                   className="w-full h-48 mb-4  object-cover relative rounded-xl"
-                />
+                /> */}
 
                 <div className="space-y-2 mb-6">
                   <p className="flex items-center mb-2 pe-6 text-gray-100">

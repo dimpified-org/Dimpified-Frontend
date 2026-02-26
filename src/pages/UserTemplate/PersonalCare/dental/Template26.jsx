@@ -200,11 +200,7 @@ const SecondDentist = ({ details, subdomain, userDetails }) => {
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           {/* Logo */}
           <a href="#home" className="flex items-center text-gray-800">
-            <img
-              src={details && details.navbar.logo}
-              alt="logo"
-              className="w-10 h-10 mr-2"
-            />
+            <span className="text-2xl font-bold">{userDetails?.ecosystemName || ""}</span>
             <span className="text-md text-[#1E84B5] font-semibold leading-tight">
               {userDetails?.ecosystemName}
               <br />
@@ -457,11 +453,11 @@ const SecondDentist = ({ details, subdomain, userDetails }) => {
                 className="bg-white p-6 rounded-xl shadow-lg transition-all transform [#1E84B5]:scale-105 [#1E84B5]:bg-blue-700 [#1E84B5]:text-white"
               >
                 <div className="flex items-center justify-center w-12 h-12 mb-3">
-                  <img
+                  {/* <img
                     src={service.serviceImage}
                     alt={service.name}
                     className="w-12 h-12 "
-                  />
+                  /> */}
                 </div>
                 <h3 className="text-xl font-semibold">{service.name}</h3>
                 <p className="mt-2">{service.shortDescription}</p>

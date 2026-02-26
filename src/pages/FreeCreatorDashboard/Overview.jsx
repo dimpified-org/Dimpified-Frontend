@@ -37,7 +37,7 @@ const FreeOverview = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const profileUrl = `https://dimpified.com/${ecosystemDomain}`;
+  const profileUrl = `https://dimpified.com/${creatorProfile?.profile?.ecosystemDomain}`;
 
   // Fetch creator profile
   const getCreatorProfile = async () => {

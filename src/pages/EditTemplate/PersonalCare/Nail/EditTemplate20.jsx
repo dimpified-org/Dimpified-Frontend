@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditTemplateLongInput } from "../../../../component/Inputs";
 import { updateContent } from "../../../../features/Template/editTemplate";
 import { ButtonSmallPurple } from "../../../../component/Buttons";
-import { useImageEditor } from "../../../../helper/UploadImage";
+// import { useImageEditor } from "../../../../helper/UploadImage";
 import { PERMISSIONS } from "../../../../component/Permission/Creator";
 import { getCurrencySymbol } from "../../../../helper/getCurrencySymbol";
 // App Component
@@ -52,12 +52,12 @@ const SecondNail = ({ userDetails, subdomain }) => {
     });
   };
 
-  const {
-    fileInputRefs,
-    handleEditImageClick,
-    handleImageChange,
-    loadingImage,
-  } = useImageEditor();
+//   const {
+//     fileInputRefs,
+//     handleEditImageClick,
+//     handleImageChange,
+//     loadingImage,
+//   } = useImageEditor();
 
   // to change content
   const handleContentChange = (section, field, event, index = null) => {
@@ -264,7 +264,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
             }}
           >
             <div>
-              {userPlan && userPermissions.canEditImage ? (
+              {/* userPlan && userPermissions.canEditImage ? (
                 <ButtonSmallPurple
                   onClick={() =>
                     handleEditImageClick("hero", "backgroundImage1")
@@ -272,16 +272,16 @@ const SecondNail = ({ userDetails, subdomain }) => {
                 >
                   {loadingImage ? <LoadingSmall /> : "Edit Image"}
                 </ButtonSmallPurple>
-              ) : null}
+              ) : null*/}
             </div>
-            <input
+            {/* <input
               type="file"
               ref={(ref) =>
                 (fileInputRefs.current["hero-backgroundImage1"] = ref)
               }
               onChange={(e) => handleImageChange(e, "hero", "backgroundImage1")}
               style={{ display: "none" }}
-            />
+            /> */}
           </div>
         </div>
         <div className="flex gap-5 ">
@@ -340,20 +340,20 @@ const SecondNail = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("aboutUs", "image1")}
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) => (fileInputRefs.current["aboutUs-image1"] = ref)}
                   onChange={(e) => handleImageChange(e, "aboutUs", "image1")}
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -454,7 +454,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           onClick={() =>
                             handleEditImageClick("aboutUs", `image${index + 1}`)
@@ -462,7 +462,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
                     <input
                       type="file"
@@ -638,7 +638,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                 className="w-full h-auto object-cover rounded-xl"
               />
               {/* Edit Button and File Input */}
-              {userPlan && userPermissions.canEditImage && (
+              {/* userPlan && userPermissions.canEditImage && (
                 <div className="absolute top-2 left-2 z-10">
                   <ButtonSmallPurple
                     width="60"
@@ -655,7 +655,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
             </div>
             <div className="col-span-5 relative">
               <img
@@ -663,7 +663,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                 alt={galleryImages[1].alt}
                 className="w-full h-auto object-cover rounded-xl"
               />
-              {userPlan && userPermissions.canEditImage && (
+              {/* userPlan && userPermissions.canEditImage && (
                 <div className="absolute top-2 left-2 z-10">
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("Gallery", "image2")}
@@ -679,7 +679,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                     style={{ display: "none" }}
                   />
                 </div>
-              )}
+              )*/}
             </div>
             <div className="col-span-3 space-y-4 relative">
               <div className="relative">
@@ -688,7 +688,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                   alt={galleryImages[2].alt}
                   className="w-full h-auto object-cover rounded-xl"
                 />
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2 z-10">
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Gallery", "image2")}
@@ -706,7 +706,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
               <div className="relative">
                 <img
@@ -714,7 +714,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                   alt={galleryImages[3].alt}
                   className="w-full h-auto object-cover rounded-xl"
                 />
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2 z-10">
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Gallery", "image3")}
@@ -732,7 +732,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
             </div>
             <div className="col-span-2 space-y-4">
@@ -742,7 +742,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                   alt={galleryImages[4].alt}
                   className="w-full h-auto object-cover rounded-xl"
                 />
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2 z-10">
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Gallery", "image4")}
@@ -760,7 +760,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
               <div className="relative">
                 <img
@@ -768,7 +768,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                   alt={galleryImages[5].alt}
                   className="w-full h-auto object-cover rounded-xl"
                 />
-                {userPlan && userPermissions.canEditImage && (
+                {/* userPlan && userPermissions.canEditImage && (
                   <div className="absolute top-2 left-2 z-10">
                     <ButtonSmallPurple
                       onClick={() => handleEditImageClick("Gallery", "image5")}
@@ -786,7 +786,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                       style={{ display: "none" }}
                     />
                   </div>
-                )}
+                )*/}
               </div>
             </div>
           </div>
@@ -813,20 +813,20 @@ const SecondNail = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("Blog", "image1")}
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => (fileInputRefs.current["Blog-image1"] = ref)}
                 onChange={(e) => handleImageChange(e, "Blog", "image1")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
 
@@ -1179,7 +1179,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() =>
                         handleEditImageClick("Patrners", "sectionImage1")
@@ -1187,9 +1187,9 @@ const SecondNail = ({ userDetails, subdomain }) => {
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["Patrners-sectionImage1"] = ref)
@@ -1198,7 +1198,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                     handleImageChange(e, "Patrners", "sectionImage1")
                   }
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
 
@@ -1244,7 +1244,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("Patrners", "sectionImage2")
@@ -1252,9 +1252,9 @@ const SecondNail = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["Patrners-sectionImage2"] = ref)
@@ -1263,7 +1263,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "Patrners", "sectionImage2")
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -1286,7 +1286,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                 }}
               >
                 <div>
-                  {userPlan && userPermissions.canEditImage ? (
+                  {/* userPlan && userPermissions.canEditImage ? (
                     <ButtonSmallPurple
                       onClick={() =>
                         handleEditImageClick("Patrners", "sectionImage3")
@@ -1294,9 +1294,9 @@ const SecondNail = ({ userDetails, subdomain }) => {
                     >
                       {loadingImage ? <LoadingSmall /> : "Edit Image"}
                     </ButtonSmallPurple>
-                  ) : null}
+                  ) : null*/}
                 </div>
-                <input
+                {/* <input
                   type="file"
                   ref={(ref) =>
                     (fileInputRefs.current["Patrners-sectionImage3"] = ref)
@@ -1305,7 +1305,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                     handleImageChange(e, "Patrners", "sectionImage3")
                   }
                   style={{ display: "none" }}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -1351,7 +1351,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                     }}
                   >
                     <div>
-                      {userPlan && userPermissions.canEditImage ? (
+                      {/* userPlan && userPermissions.canEditImage ? (
                         <ButtonSmallPurple
                           onClick={() =>
                             handleEditImageClick("Reviews", `image${index + 1}`)
@@ -1359,7 +1359,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                         >
                           {loadingImage ? <LoadingSmall /> : "Edit Image"}
                         </ButtonSmallPurple>
-                      ) : null}
+                      ) : null*/}
                     </div>
                     <input
                       type="file"
@@ -1439,7 +1439,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                   }}
                 >
                   <div>
-                    {userPlan && userPermissions.canEditImage ? (
+                    {/* userPlan && userPermissions.canEditImage ? (
                       <ButtonSmallPurple
                         onClick={() =>
                           handleEditImageClick("contactUs", "heading1")
@@ -1447,9 +1447,9 @@ const SecondNail = ({ userDetails, subdomain }) => {
                       >
                         {loadingImage ? <LoadingSmall /> : "Edit Image"}
                       </ButtonSmallPurple>
-                    ) : null}
+                    ) : null*/}
                   </div>
-                  <input
+                  {/* <input
                     type="file"
                     ref={(ref) =>
                       (fileInputRefs.current["contactUs-heading1"] = ref)
@@ -1458,7 +1458,7 @@ const SecondNail = ({ userDetails, subdomain }) => {
                       handleImageChange(e, "contactUs", "heading1")
                     }
                     style={{ display: "none" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <h3 className="text-lg font-bold">
@@ -1540,20 +1540,20 @@ const SecondNail = ({ userDetails, subdomain }) => {
               }}
             >
               <div>
-                {userPlan && userPermissions.canEditImage ? (
+                {/* userPlan && userPermissions.canEditImage ? (
                   <ButtonSmallPurple
                     onClick={() => handleEditImageClick("LargeCta", "image1")}
                   >
                     {loadingImage ? <LoadingSmall /> : "Edit Image"}
                   </ButtonSmallPurple>
-                ) : null}
+                ) : null*/}
               </div>
-              <input
+              {/* <input
                 type="file"
                 ref={(ref) => (fileInputRefs.current["LargeCta-image1"] = ref)}
                 onChange={(e) => handleImageChange(e, "LargeCta", "image1")}
                 style={{ display: "none" }}
-              />
+              /> */}
             </div>
           </div>
         </section>
