@@ -150,21 +150,28 @@ const Hero = () => {
       </div>
 
       <div className="flex justify-center mt-12 lg:mt-20 px-4">
-        <div className="relative max-w-5xl w-full group">
+        <div className="relative max-w-5xl w-full">
           {/* Main video container with gradient border */}
-          <div className="relative rounded-3xl overflow-hidden Get Started Now-2xl bg-gradient-to-br from-[#F3E8FF]0/20 via-transparent to-pink-400/10 p-1 lg:p-1.5">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-[#F3E8FF]/20 via-transparent to-pink-400/10 p-1 lg:p-1.5">
             {/* Glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#9810FA]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl -z-10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#9810FA]/20 to-transparent rounded-3xl blur-xl -z-10" />
 
             {/* Video container */}
             <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-black">
-              {/* Subtle pattern overlay */}
-
-              {/* Video iframe */}
+              {/* Video iframe with cover image */}
               <div className="relative aspect-video">
+                {/* Cover image - shows for 1 second then fades */}
+                <img
+                  src="https://img.youtube.com/vi/sFLKCLPMG4k/maxresdefault.jpg"
+                  alt="Video cover"
+                  className="absolute inset-0 w-full h-full object-cover animate-fade-out"
+                  style={{ animation: "fadeOut 1s ease-in forwards" }}
+                />
+
+                {/* Video iframe - starts after 1 second */}
                 <iframe
                   className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/Bi6yNbGc750?autoplay=1&mute=1&controls=0&loop=1&playlist=Bi6yNbGc750&playsinline=1&modestbranding=1&showinfo=0"
+                  src="https://www.youtube.com/embed/sFLKCLPMG4k?autoplay=1&mute=1&controls=0&loop=1&playlist=sFLKCLPMG4k&playsinline=1&modestbranding=1&showinfo=0&enablejsapi=1"
                   title="Hero Video"
                   allow="autoplay; encrypted-media"
                   allowFullScreen
@@ -175,12 +182,15 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Play button overlay for clarity */}
+            {/* Play button overlay - shows for 1 second then fades */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-gradient-to-r from-[#9810FA]/20 to-pink-500/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-gradient-to-r from-[#9810FA] to-pink-500 flex items-center justify-center Get Started Now-lg">
+              <div
+                className="w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-black/30 backdrop-blur-[2px] flex items-center justify-center animate-fade-out"
+                style={{ animation: "fadeOut 1s ease-in forwards" }}
+              >
+                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 lg:w-7 lg:h-7 text-white ml-1"
+                    className="w-8 h-8 lg:w-10 lg:h-10 text-white ml-1"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -195,6 +205,19 @@ const Hero = () => {
           <div className="absolute -z-10 top-10 -right-10 w-40 h-40 bg-purple-400/10 rounded-full blur-3xl" />
           <div className="absolute -z-10 bottom-10 -left-10 w-32 h-32 bg-pink-400/10 rounded-full blur-3xl" />
         </div>
+
+        {/* Add this style tag to your component or global CSS */}
+        <style jsx>{`
+          @keyframes fadeOut {
+            0% {
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+              visibility: hidden;
+            }
+          }
+        `}</style>
       </div>
     </section>
   );
