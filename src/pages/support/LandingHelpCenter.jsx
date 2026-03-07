@@ -10,13 +10,12 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import NavbarLanding from "../LandingPages/NavbarLanding";
-import { FooterWithLinks } from "../LandingPages/FooterWithLinks";
+import Navbar from "../../component/Blog/Navbar";
+import Footer from "../../component/Blog/Footer";
 
 import GradientBG from "../LandingPages/images/gradient-bg.png";
 import { showToast } from "../../component/ShowToast";
 import { motion } from "motion/react";
-
 
 // Validation Schema
 const schema = yup.object({
@@ -57,7 +56,7 @@ const LandingHelpCenter = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/make-an-enquiry`,
-        data
+        data,
       );
       showToast(response.data.message || "Form submitted successfully!");
       reset();
@@ -65,7 +64,7 @@ const LandingHelpCenter = () => {
       setLoading(false);
       showToast(
         error.response?.data?.message ||
-          "Error submitting the form. Please try again."
+          "Error submitting the form. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -81,7 +80,7 @@ const LandingHelpCenter = () => {
     >
       {" "}
       <div className="font-jak">
-        <NavbarLanding />
+        <Navbar />
         <FloatingContactButton />
         <section
           className="py-24 font-jak px-0 relative bg-cover  bg-center"
@@ -91,7 +90,7 @@ const LandingHelpCenter = () => {
             <div className="flex flex-wrap md:flex-row items-center h-full">
               <div className=" md:w-1/2 px-3 justify-center  h-full">
                 <h1 className="lg:text-5xl text-[3rem] text-dark font-normal leading-tight my-6">
-                  <span className="font-bold bg-gradient-to-r from-[#4f2683]  via-[#9966cc] to-[#ffa600] text-transparent bg-clip-text">
+                  <span className="font-bold bg-gradient-to-r from-[#9810FA] to-purple-600 hover:from-purple-600 hover:to-[#3F0994] text-transparent bg-clip-text">
                     Help Center
                   </span>
                 </h1>
@@ -107,7 +106,7 @@ const LandingHelpCenter = () => {
             <p className="text-lg  text-dark leading-relaxed mb-8 w-4/5">
               Kindly check the{" "}
               <a
-                className="underline font-bold text-primary3 hover:text-yellow-400"
+                className="underline font-bold text-purple-600 hover:text-yellow-400"
                 href="#faq"
               >
                 FAQs
@@ -131,7 +130,7 @@ const LandingHelpCenter = () => {
                         type="text"
                         id="firstName"
                         placeholder="First Name"
-                        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-primary3"
+                        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-purple-600"
                         {...register("firstName")}
                       />
                       {errors.firstName && (
@@ -151,7 +150,7 @@ const LandingHelpCenter = () => {
                         type="text"
                         id="lastName"
                         placeholder="Last Name"
-                        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-primary3"
+                        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-purple-600"
                         {...register("lastName")}
                       />
                       {errors.lastName && (
@@ -175,7 +174,7 @@ const LandingHelpCenter = () => {
                         type="tel"
                         id="phoneNumber"
                         placeholder="XXX XXX XXXX"
-                        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-primary3"
+                        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-purple-600"
                         {...register("phoneNumber")}
                       />
                       {errors.phoneNumber && (
@@ -195,7 +194,7 @@ const LandingHelpCenter = () => {
                         type="email"
                         id="email"
                         placeholder="Email"
-                        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-primary3"
+                        className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-purple-600"
                         {...register("email")}
                       />
                       {errors.email && (
@@ -216,7 +215,7 @@ const LandingHelpCenter = () => {
                     </label>
                     <select
                       id="enquire"
-                      className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-primary3"
+                      className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-purple-600"
                       {...register("enquire")}
                     >
                       <option value="">Select Enquiry Type</option>
@@ -249,7 +248,7 @@ const LandingHelpCenter = () => {
                     <textarea
                       id="message"
                       rows="5"
-                      className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-primary3"
+                      className="border border-gray-300 rounded-md p-3 focus:outline-none focus:border-purple-600"
                       {...register("message")}
                     ></textarea>
                     {errors.message && (
@@ -261,7 +260,7 @@ const LandingHelpCenter = () => {
 
                   <button
                     type="submit"
-                    className={`w-full md:w-auto bg-primary3 text-white py-3 px-8 rounded-md hover:bg-primary4 focus:outline-none ${
+                    className={`w-full md:w-auto bg-purple-600 text-white py-3 px-8 rounded-md hover:bg-primary4 focus:outline-none ${
                       loading ? "opacity-70 cursor-not-allowed" : ""
                     }`}
                     disabled={loading} // Disable button during loading
@@ -273,7 +272,7 @@ const LandingHelpCenter = () => {
 
               {/* Contact Details Section */}
               <div className="w-full lg:w-4/12">
-                <div className="bg-primary3 p-7 rounded-lg text-white">
+                <div className="bg-purple-600 p-7 rounded-lg text-white">
                   <div className="border-b border-white/10 pb-6 mb-6">
                     <h3 className="text-xl font-bold mb-2">Get in touch</h3>
                     <p className="text-md">
@@ -315,8 +314,7 @@ const LandingHelpCenter = () => {
                       <>
                         <DisclosureButton className="flex justify-between w-full py-4 text-left text-gray-800">
                           <h3 className="font-bold text-lg">
-                            What is the purpose of your business management
-                            platform?
+                            What is the purpose of your Dimpified as a platform?
                           </h3>
                           <span className="flex items-center">
                             {open ? "-" : "+"}
@@ -346,11 +344,11 @@ const LandingHelpCenter = () => {
                           </span>
                         </DisclosureButton>
                         <DisclosurePanel className="text-gray-500 pb-4">
-                          Our intuitive website builder, along with customizable
-                          no-code templates, allows you to create a polished and
-                          professional website quickly. You can showcase your
-                          services, expertise, and achievements to attract
-                          potential clients.
+                          Our fast, intuitive onboarding process, along with
+                          customizable no-code templates, allows you to create a
+                          polished and professional website quickly. You can
+                          showcase your services, expertise, and set up a
+                          booking page to attract more customers or clients.
                         </DisclosurePanel>
                       </>
                     )}
@@ -368,10 +366,10 @@ const LandingHelpCenter = () => {
                           </span>
                         </DisclosureButton>
                         <DisclosurePanel className="text-gray-500 pb-4">
-                          Yes, our no-code templates are highly customizable.
-                          You can tailor the content, layout, and features to
-                          match your brand’s identity and specific needs,
-                          ensuring a consistent and professional look.
+                          Yes, our no-code templates are customizable. You can
+                          tailor the description and services to match your
+                          brand’s identity and specific needs, ensuring a
+                          consistent and professional look.
                         </DisclosurePanel>
                       </>
                     )}
@@ -415,7 +413,7 @@ const LandingHelpCenter = () => {
                         <DisclosurePanel className="text-gray-500 pb-4">
                           Our platform supports a variety of payment methods,
                           including credit/debit cards, Flutterwave, Paystack,
-                          and other popular online payment systems. This
+                          and users can pay directly to your bank account. This
                           flexibility ensures a convenient and secure
                           transaction experience for your clients.
                         </DisclosurePanel>
@@ -456,11 +454,11 @@ const LandingHelpCenter = () => {
                           </span>
                         </DisclosureButton>
                         <DisclosurePanel className="text-gray-500 pb-4">
-                          Getting started is easy! Simply click "Get Started for
-                          free" below, choose the plan that best fits your
-                          needs, and begin exploring the features. Our
-                          user-friendly interface and comprehensive onboarding
-                          resources will guide you through the setup process.
+                          Getting started is easy! Simply click "Get Started
+                          Now" above, choose the plan that best fits your needs,
+                          and begin exploring the features. Our user-friendly
+                          interface and comprehensive onboarding resources will
+                          guide you through the setup process.
                         </DisclosurePanel>
                       </>
                     )}
@@ -471,7 +469,7 @@ const LandingHelpCenter = () => {
           </div>
         </section>
 
-        <FooterWithLinks />
+        <Footer />
       </div>
     </motion.div>
   );
