@@ -382,7 +382,7 @@ const PricingPlans = ({ billingCycle, activePlan, setActivePlan }) => {
                   Chat with our sales team to find the perfect plan for your
                   business needs.
                 </p>
-                <Link to="/contact">
+                <Link to="/help">
                   <button className="w-full py-3 border-2 border-[#9810FA] text-[#9810FA] rounded-lg font-semibold hover:bg-[#9810FA] hover:text-white transition-all">
                     Talk to Sales
                   </button>
@@ -615,13 +615,13 @@ const FAQSection = () => {
             Still have questions about pricing or features?
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/contact">
+            <Link to="/help">
               <button className="px-6 py-3 border-2 border-[#9810FA] text-[#9810FA] rounded-full font-semibold hover:bg-[#9810FA] hover:text-white transition-all duration-300 flex items-center gap-2">
                 <MessageSquare className="w-4 h-4" />
                 Chat with Sales
               </button>
             </Link>
-            <Link to="/contact">
+            <Link to="/help">
               <button className="px-6 py-3 bg-gradient-to-r from-[#9810FA] to-purple-600 text-white rounded-full font-semibold hover:shadow-lg transition-all duration-300 flex items-center gap-2">
                 <Phone className="w-4 h-4" />
                 Schedule a Call

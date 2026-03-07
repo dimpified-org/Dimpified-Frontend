@@ -28,146 +28,302 @@ const API_BASE_URL =
   "https://dimpified-bckend-development.azurewebsites.net/api/v1";
 const POPULAR_API_URL = `${API_BASE_URL}/popular-blogs`;
 const SINGLE_BLOG_API = `${API_BASE_URL}/view-blog`;
+const ADD_COMMENT_API = `${API_BASE_URL}/add-comment`;
+const GET_COMMENTS_API = `${API_BASE_URL}/comments`;
 
-// CommentsSection Component
-// function CommentsSection() {
-//   const [name, setName] = useState("");
-//   const [message, setMessage] = useState("");
-//   const [comments, setComments] = useState([
-//     {
-//       id: 1,
-//       name: "Tessy",
-//       message:
-//         "This is well written and engaging. You're doing a great job—keep up the good work!",
-//       date: "December 24th, 2025",
-//     },
-//     {
-//       id: 2,
-//       name: "Tessy",
-//       message:
-//         "This is well written and engaging. You're doing a great job—keep up the good work!",
-//       date: "December 24th, 2025",
-//     },
-//     {
-//       id: 3,
-//       name: "Tessy",
-//       message:
-//         "This is well written and engaging. You're doing a great job—keep up the good work!",
-//       date: "December 24th, 2025",
-//     },
-//     {
-//       id: 4,
-//       name: "Tessy",
-//       message:
-//         "This is well written and engaging. You're doing a great job—keep up the good work!",
-//       date: "December 24th, 2025",
-//     },
-//     {
-//       id: 5,
-//       name: "Tessy",
-//       message:
-//         "This is well written and engaging. You're doing a great job—keep up the good work!",
-//       date: "December 24th, 2025",
-//     },
-//     {
-//       id: 6,
-//       name: "Tessy",
-//       message:
-//         "This is well written and engaging. You're doing a great job—keep up the good work!",
-//       date: "December 24th, 2025",
-//     },
-//   ]);
+// CommentsSection Component with API Integration
+function CommentsSection() {
+  const { id } = useParams(); // Get blog ID from URL params
+  const [username, setUsername] = useState("");
+  const [message, setMessage] = useState("");
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     if (!name || !message) return;
+  // Fetch comments for this blog post
+  useEffect(() => {
+    if (id) {
+      fetchComments();
+    }
+  }, [id]);
 
-//     const newComment = {
-//       id: Date.now(),
-//       name,
-//       message,
-//       date: new Date().toLocaleDateString("en-US", {
-//         month: "long",
-//         day: "numeric",
-//         year: "numeric",
-//       }),
-//     };
+  const fetchComments = async () => {
+    if (!id) return;
 
-//     setComments([newComment, ...comments]);
-//     setName("");
-//     setMessage("");
-//   };
+    setLoading(true);
+    setError(null);
 
-//   return (
-//     <section className="w-full max-w-3xl px-4 mx-auto py-10">
-//       {/* Comment Form */}
-//       <div className="mb-10">
-//         <h2 className="text-lg font-semibold mb-4">Leave a comment</h2>
+    try {
+      // GET all comments per post: api/v1/comments/:blogId
+      const response = await axios.get(`${GET_COMMENTS_API}/${id}`);
+      console.log("Comments API Response:", response.data); // For debugging
 
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <input
-//             type="text"
-//             placeholder="Name"
-//             value={name}
-//             onChange={(e) => setName(e.target.value)}
-//             className="w-full border rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-//           />
+      // Handle the response structure: { success, count, data }
+      if (response.data.success && response.data.data) {
+        setComments(response.data.data);
+      } else {
+        setComments([]);
+      }
+    } catch (err) {
+      console.error("Error fetching comments:", err);
+      setError(err.response?.data?.message || "Failed to load comments");
+      setComments([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//           <textarea
-//             placeholder="Type your message"
-//             value={message}
-//             onChange={(e) => setMessage(e.target.value)}
-//             rows={4}
-//             className="w-full border rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-//           />
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-//           <button
-//             type="submit"
-//             className="bg-purple-500 text-white px-6 py-2 rounded-md text-sm hover:bg-purple-600 transition"
-//           >
-//             Submit
-//           </button>
-//         </form>
-//       </div>
+    // Validation
+    if (!username || !message) {
+      setError("Please fill in all fields");
+      return;
+    }
 
-//       {/* Comments */}
-//       <div>
-//         <h3 className="text-sm font-semibold mb-6">
-//           {comments.length} comments
-//         </h3>
+    setSubmitting(true);
+    setError(null);
+    setSuccess(false);
 
-//         <div className="space-y-6">
-//           {comments.map((comment) => (
-//             <div
-//               key={comment.id}
-//               className="flex items-start gap-4 border-b pb-6"
-//             >
-//               {/* Avatar */}
-//               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-200 text-purple-700 flex items-center justify-center font-semibold">
-//                 {comment.name.charAt(0)}
-//               </div>
+    try {
+      // POST comment: /api/v1/add-comment
+      const response = await axios.post(
+        ADD_COMMENT_API,
+        {
+          username,
+          blogId: id,
+          message,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
-//               {/* Content */}
-//               <div className="flex-1">
-//                 <div className="flex items-center justify-between">
-//                   <p className="font-semibold text-sm">{comment.name}</p>
-//                   <span className="text-xs text-gray-400">
-//                     {comment.date}
-//                   </span>
-//                 </div>
+      console.log("Add Comment Response:", response.data); // For debugging
 
-//                 <p className="text-sm text-gray-600 mt-1">
-//                   {comment.message}
-//                 </p>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
+      // Add the new comment to the list
+      // Check if response has data property or is directly the comment
+      const newComment = response.data.data || response.data;
 
+      setComments([newComment, ...comments]);
+      setSuccess(true);
+
+      // Clear form
+      setUsername("");
+      setMessage("");
+
+      // Auto-hide success message after 3 seconds
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err) {
+      console.error("Error submitting comment:", err);
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Failed to submit comment. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Format date and time for comments
+  const formatCommentDateTime = (dateString) => {
+    if (!dateString) return "";
+
+    try {
+      const date = new Date(dateString);
+
+      // Format: "March 4, 2026 at 10:15 AM"
+      return (
+        date.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        }) +
+        " at " +
+        date.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        })
+      );
+    } catch (error) {
+      return "Unknown date";
+    }
+  };
+
+  // Format relative time (e.g., "2 hours ago")
+  const formatRelativeTime = (dateString) => {
+    if (!dateString) return "";
+
+    const createdTime = new Date(dateString).getTime();
+    const now = new Date().getTime();
+    const diffInSeconds = Math.floor((now - createdTime) / 1000);
+
+    if (diffInSeconds < 60) return "Just now";
+
+    const intervals = [
+      { label: "year", seconds: 31536000 },
+      { label: "month", seconds: 2592000 },
+      { label: "day", seconds: 86400 },
+      { label: "hour", seconds: 3600 },
+      { label: "minute", seconds: 60 },
+    ];
+
+    for (const interval of intervals) {
+      const count = Math.floor(diffInSeconds / interval.seconds);
+      if (count >= 1) {
+        return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
+      }
+    }
+
+    return "Just now";
+  };
+
+  return (
+    <section className="w-full max-w-3xl px-4 mx-auto py-10">
+      {/* Comment Form */}
+      <div className="mb-10">
+        <h2 className="text-lg font-semibold mb-4">Leave a comment</h2>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-md text-sm">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-600 rounded-md text-sm">
+            Comment submitted successfully!
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Your Name *"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            disabled={submitting}
+            className="w-full border rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            required
+          />
+
+          <textarea
+            placeholder="Type your message *"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={4}
+            disabled={submitting}
+            className="w-full border rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            required
+          />
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="bg-purple-500 text-white px-6 py-2 rounded-md text-sm hover:bg-purple-600 transition disabled:bg-purple-300 disabled:cursor-not-allowed flex items-center justify-center min-w-[100px]"
+          >
+            {submitting ? (
+              <>
+                <span className="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></span>
+                Submitting...
+              </>
+            ) : (
+              "Submit"
+            )}
+          </button>
+        </form>
+      </div>
+
+      {/* Comments */}
+      <div>
+        <h3 className="text-sm font-semibold mb-6">
+          {loading
+            ? "Loading comments..."
+            : comments.length === 1
+              ? "1 comment"
+              : `${comments.length} comments`}
+        </h3>
+
+        {loading ? (
+          <div className="space-y-6">
+            {[1, 2, 3].map((n) => (
+              <div
+                key={n}
+                className="flex items-start gap-4 border-b pb-6 animate-pulse"
+              >
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-200"></div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    <div className="h-3 bg-gray-200 rounded w-32"></div>
+                  </div>
+                  <div className="h-3 bg-gray-200 rounded w-full"></div>
+                  <div className="h-3 bg-gray-200 rounded w-3/4 mt-2"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : comments.length > 0 ? (
+          <div className="space-y-6">
+            {comments.map((comment) => (
+              <div
+                key={comment._id}
+                className="flex items-start gap-4 border-b pb-6"
+              >
+                {/* Avatar with better styling */}
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 text-white flex items-center justify-center font-semibold text-sm shadow-sm">
+                    {comment.username?.charAt(0).toUpperCase() || "?"}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <p className="font-semibold text-sm text-gray-900">
+                      {comment.username}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs">
+                      {/* Relative time (e.g., "2 hours ago") */}
+                      <span className="text-purple-600 font-medium">
+                        {formatRelativeTime(comment.createdAt)}
+                      </span>
+                      {/* Full date and time */}
+                      {/* <span
+                        className="text-gray-400"
+                        title={formatCommentDateTime(comment.createdAt)}
+                      >
+                        {formatCommentDateTime(comment.createdAt)}
+                      </span> */}
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+                    {comment.message}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <p className="text-gray-500 mb-2">No comments yet.</p>
+            <p className="text-sm text-gray-400">
+              Be the first to share your thoughts!
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 // Async thunk for fetching popular blogs
 export const fetchPopularBlogs = createAsyncThunk(
   "blog/fetchPopularBlogs",
@@ -177,10 +333,10 @@ export const fetchPopularBlogs = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch blogs"
+        error.response?.data?.message || "Failed to fetch blogs",
       );
     }
-  }
+  },
 );
 
 // Async thunk for fetching single blog by ID
@@ -195,18 +351,63 @@ export const fetchBlogById = createAsyncThunk(
     } catch (error) {
       console.error("Error fetching single blog:", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch blog"
+        error.response?.data?.message || "Failed to fetch blog",
       );
     }
-  }
+  },
+);
+
+// Async thunk for fetching blog comments
+export const fetchBlogComments = createAsyncThunk(
+  "blog/fetchBlogComments",
+  async (blogId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${GET_COMMENTS_API}/${blogId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch comments",
+      );
+    }
+  },
+);
+
+// Async thunk for adding a comment
+export const addComment = createAsyncThunk(
+  "blog/addComment",
+  async ({ blogId, username, message }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        ADD_COMMENT_API,
+        {
+          username,
+          blogId,
+          message,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to add comment",
+      );
+    }
+  },
 );
 
 // Initial state
 const initialState = {
   popularBlogs: [],
   currentBlog: null,
+  comments: [],
   loadingPopular: false,
   loadingSingle: false,
+  loadingComments: false,
+  addingComment: false,
   error: null,
   success: false,
   count: 0,
@@ -222,6 +423,9 @@ const blogSlice = createSlice({
     },
     clearCurrentBlog: (state) => {
       state.currentBlog = null;
+    },
+    clearComments: (state) => {
+      state.comments = [];
     },
   },
   extraReducers: (builder) => {
@@ -250,11 +454,41 @@ const blogSlice = createSlice({
       })
       .addCase(fetchBlogById.fulfilled, (state, action) => {
         state.loadingSingle = false;
-        state.currentBlog = action.payload.blog; // Data is in action.payload.blog
+        state.currentBlog = action.payload.blog;
       })
       .addCase(fetchBlogById.rejected, (state, action) => {
         state.loadingSingle = false;
         state.error = action.payload || "Failed to load blog";
+      })
+      // Fetch comments
+      .addCase(fetchBlogComments.pending, (state) => {
+        state.loadingComments = true;
+        state.error = null;
+      })
+      .addCase(fetchBlogComments.fulfilled, (state, action) => {
+        state.loadingComments = false;
+        state.comments = action.payload.comments || [];
+      })
+      .addCase(fetchBlogComments.rejected, (state, action) => {
+        state.loadingComments = false;
+        state.error = action.payload || "Failed to load comments";
+      })
+      // Add comment
+      .addCase(addComment.pending, (state) => {
+        state.addingComment = true;
+        state.error = null;
+      })
+      .addCase(addComment.fulfilled, (state, action) => {
+        state.addingComment = false;
+        state.success = true;
+        // Add the new comment to the beginning of the comments array
+        if (action.payload.comment) {
+          state.comments = [action.payload.comment, ...state.comments];
+        }
+      })
+      .addCase(addComment.rejected, (state, action) => {
+        state.addingComment = false;
+        state.error = action.payload || "Failed to add comment";
       });
   },
 });
@@ -267,7 +501,8 @@ const store = configureStore({
 });
 
 // Export actions
-export const { clearError, clearCurrentBlog } = blogSlice.actions;
+export const { clearError, clearCurrentBlog, clearComments } =
+  blogSlice.actions;
 
 // Format time ago function
 const formatTimeAgo = (dateString) => {
@@ -313,13 +548,6 @@ const formatDate = (dateString) => {
   }
 };
 
-// Format description function
-const formatDescription = (content) => {
-  if (!content) return "";
-  const text = content.replace(/<[^>]*>/g, "");
-  return text.length > 100 ? `${text.substring(0, 100)}...` : text;
-};
-
 // Section Header Component
 const SectionHeader = ({ title }) => (
   <div className="flex justify-between items-center mb-6">
@@ -330,7 +558,7 @@ const SectionHeader = ({ title }) => (
   </div>
 );
 
-// Post Card Component for Popular Posts - EXACT STRUCTURE AS REQUESTED
+// Post Card Component for Popular Posts
 const PostCard = ({ post, onNavigateToBlog }) => {
   const handleCardClick = () => {
     if (post?._id) {
@@ -349,7 +577,7 @@ const PostCard = ({ post, onNavigateToBlog }) => {
         />
       </div>
 
-      {/*  NAME AND TIME CREATED */}
+      {/* NAME AND TIME CREATED */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Link
@@ -370,7 +598,7 @@ const PostCard = ({ post, onNavigateToBlog }) => {
         {post.title || "Untitled"}
       </h3>
 
-      {/*  CATEGORY AND DATE CREATED */}
+      {/* CATEGORY AND DATE CREATED */}
       <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
         <span className="px-2 py-0.5 text-black font-medium">
           {(post.category || "uncategorized").charAt(0).toUpperCase() +
@@ -386,11 +614,6 @@ const PostCard = ({ post, onNavigateToBlog }) => {
             : "Unknown date"}
         </span>
       </div>
-
-      {/*  DESCRIPTION/CONTENT */}
-      {/* <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-        {formatDescription(post.content || post.title)}
-      </p> */}
     </div>
   );
 };
@@ -427,16 +650,13 @@ const LoadingSkeleton = () => (
             <div className="h-4 bg-gray-200 animate-pulse rounded w-1/4"></div>
             <div className="h-4 bg-gray-200 animate-pulse rounded w-1/3"></div>
           </div>
-
-          {/* Description skeleton */}
-          <div className="h-4 bg-gray-200 animate-pulse rounded w-full"></div>
         </div>
       </SwiperSlide>
     ))}
   </Swiper>
 );
 
-// ShareSection Component with all elements on one line
+// ShareSection Component
 const ShareSection = () => {
   const [showModal, setShowModal] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -446,16 +666,16 @@ const ShareSection = () => {
 
   const shareLinks = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      currentUrl
+      currentUrl,
     )}`,
     twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-      currentUrl
+      currentUrl,
     )}&text=${encodeURIComponent(pageTitle)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-      currentUrl
+      currentUrl,
     )}`,
     email: `mailto:?subject=${encodeURIComponent(
-      pageTitle
+      pageTitle,
     )}&body=${encodeURIComponent(`Check out this article: ${currentUrl}`)}`,
   };
 
@@ -468,7 +688,7 @@ const ShareSection = () => {
       window.open(
         shareUrl,
         "_blank",
-        "noopener,noreferrer,width=600,height=400"
+        "noopener,noreferrer,width=600,height=400",
       );
     }
   };
@@ -772,53 +992,6 @@ const SingleBlogPage = () => {
     }
   };
 
-  console.log("Current state:", {
-    id,
-    currentBlog,
-    loadingSingle,
-    loadingPopular,
-    error,
-  });
-
-  // If we're loading the single blog (when ID exists), show loading state
-  if (id && loadingSingle) {
-    return (
-      <div className="font-sans text-gray-800">
-        <Navbar />
-        <LoadingSpinner />
-        <Footer />
-      </div>
-    );
-  }
-
-  if (id && error) {
-    return (
-      <div className="font-sans text-gray-800">
-        <Navbar />
-        <ErrorDisplay error={error} onRetry={handleRetrySingle} />
-        <Footer />
-      </div>
-    );
-  }
-
-  if (id && !currentBlog) {
-    return (
-      <div className="font-sans text-gray-800">
-        <Navbar />
-        <div className="flex flex-col justify-center items-center min-h-[60vh] px-4">
-          <p className="text-gray-500 text-lg mb-4">Blog post not found</p>
-          <p className="text-sm text-gray-400 mb-6">ID: {id}</p>
-          <button
-            onClick={() => navigate("/")}
-            className="px-6 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
-          >
-            Back to Home
-          </button>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
   // CSS styles for blog content links
   const blogContentStyles = `
     .blog-content a {
@@ -846,31 +1019,15 @@ const SingleBlogPage = () => {
   // Function to process blog content HTML and ensure links have proper styling
   const processBlogContent = (htmlContent) => {
     if (!htmlContent) return htmlContent;
-
-    // Add the blog-content class wrapper to ensure our CSS targets it
     return `<div class="blog-content">${htmlContent}</div>`;
   };
+
   // MAIN PAGE LAYOUT
   return (
     <div className="w-full bg-white text-gray-800">
       <style>{blogContentStyles}</style>
       {/* Navbar */}
       <Navbar />
-
-      {/* Back button  */}
-      {/* {id && currentBlog && (
-        <div className="max-w-5xl mx-auto px-4 md:px-16 pt-8">
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center text-violet-600 hover:text-violet-800 transition-colors mb-8"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
-          </button>
-        </div>
-      )} */}
 
       {/* ARTICLE SECTION */}
       <section className="py-16 px-6 md:px-32 lg:px-60 mx-auto">
@@ -1012,6 +1169,9 @@ const SingleBlogPage = () => {
         <ShareSection />
       </div>
 
+       {/* Comments Section - Now Integrated with Updated API */}
+      <CommentsSection />
+
       {/* Popular Post Section with Swiper */}
       <section className="py-16 px-6 md:px-64 bg-white">
         <SectionHeader title="Popular Post" />
@@ -1070,8 +1230,7 @@ const SingleBlogPage = () => {
         )}
       </section>
 
-      {/* Comments Section */}
-      {/* <CommentsSection /> */}
+     
 
       {/* Newsletter Section */}
       <section className="bg-purple-700 text-white py-16 text-center">

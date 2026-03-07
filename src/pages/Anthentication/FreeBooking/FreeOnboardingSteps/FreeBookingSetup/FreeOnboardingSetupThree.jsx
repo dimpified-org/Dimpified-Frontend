@@ -17,6 +17,7 @@ const durationOptions = [
   { value: 120, label: "120 Min" },
   { value: 150, label: "150 Min" },
   { value: 180, label: "180 Min" },
+  { value: "custom", label: "Custom" },
 ];
 
 const FreeOnboardingSetupThree = () => {
@@ -24,7 +25,7 @@ const FreeOnboardingSetupThree = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
 
   const [services, setServices] = useState([
-    { id: Date.now(), name: "", amount: "", duration: 30 },
+    { id: Date.now(), name: "", amount: "", duration: 30, customDuration: "" },
   ]);
 
   const [bankDetails, setBankDetails] = useState({
@@ -44,7 +45,15 @@ const FreeOnboardingSetupThree = () => {
     const saved = sessionStorage.getItem("services");
     const bank = sessionStorage.getItem("bankDetails");
 
-    if (saved) setServices(JSON.parse(saved).services);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Ensure customDuration field exists for all services
+      const servicesWithCustom = parsed.services.map(service => ({
+        ...service,
+        customDuration: service.customDuration || ""
+      }));
+      setServices(servicesWithCustom);
+    }
     if (bank) setBankDetails(JSON.parse(bank));
   }, []);
 
@@ -110,7 +119,7 @@ const FreeOnboardingSetupThree = () => {
 
     setServices([
       ...services,
-      { id: Date.now(), name: "", amount: "", duration: 30 },
+      { id: Date.now(), name: "", amount: "", duration: 30, customDuration: "" },
     ]);
   };
 
@@ -127,11 +136,20 @@ const FreeOnboardingSetupThree = () => {
 
   /* -------------------------------- VALIDATION -------------------------------- */
 
+  const getServiceDuration = (service) => {
+    if (service.duration === "custom") {
+      return parseInt(service.customDuration) || 0;
+    }
+    return service.duration;
+  };
+
   const isServiceValid = (service) => {
+    const duration = getServiceDuration(service);
+    
     return (
       service.name.trim().length >= 3 &&
       Number(service.amount) > 0 &&
-      service.duration >= 30
+      duration >= 1
     );
   };
 
@@ -187,54 +205,78 @@ const FreeOnboardingSetupThree = () => {
             return (
               <div
                 key={service.id}
-                className={`grid sm:grid-cols-12 gap-4 p-4 rounded-xl ${
+                className={`p-4 rounded-xl ${
                   invalid ? "bg-red-50" : "bg-gray-50"
                 }`}
               >
-                <input
-                  placeholder="Service name"
-                  value={service.name}
-                  onChange={(e) =>
-                    updateService(service.id, "name", e.target.value)
-                  }
-                  className="sm:col-span-5 h-12 px-4 rounded-xl border"
-                />
+                <div className="grid sm:grid-cols-12 gap-4">
+                  <input
+                    placeholder="Service name"
+                    value={service.name}
+                    onChange={(e) =>
+                      updateService(service.id, "name", e.target.value)
+                    }
+                    className="sm:col-span-5 h-12 px-4 rounded-xl border"
+                  />
 
-                <input
-                  placeholder="Amount"
-                  value={service.amount}
-                  onChange={(e) =>
-                    updateService(
-                      service.id,
-                      "amount",
-                      e.target.value.replace(/\D/g, "")
-                    )
-                  }
-                  className="sm:col-span-3 h-12 px-4 rounded-xl border"
-                />
+                  <input
+                    placeholder="Amount"
+                    value={service.amount}
+                    onChange={(e) =>
+                      updateService(
+                        service.id,
+                        "amount",
+                        e.target.value.replace(/\D/g, "")
+                      )
+                    }
+                    className="sm:col-span-3 h-12 px-4 rounded-xl border"
+                  />
 
-                <select
-                  value={service.duration}
-                  onChange={(e) =>
-                    updateService(
-                      service.id,
-                      "duration",
-                      Number(e.target.value)
-                    )
-                  }
-                  className="sm:col-span-3 h-12 px-4 rounded-xl border"
-                >
-                  {durationOptions.map((d) => (
-                    <option key={d.value} value={d.value}>
-                      {d.label}
-                    </option>
-                  ))}
-                </select>
+                  <select
+                    value={service.duration}
+                    onChange={(e) =>
+                      updateService(
+                        service.id,
+                        "duration",
+                        e.target.value
+                      )
+                    }
+                    className="sm:col-span-3 h-12 px-4 rounded-xl border"
+                  >
+                    {durationOptions.map((d) => (
+                      <option key={d.value} value={d.value}>
+                        {d.label}
+                      </option>
+                    ))}
+                  </select>
 
-                {services.length > 1 && (
-                  <button onClick={() => removeService(service.id)}>
-                    <Trash2 className="text-red-500" />
-                  </button>
+                  {services.length > 1 && (
+                    <button 
+                      onClick={() => removeService(service.id)}
+                      className="sm:col-span-1 flex justify-center items-center"
+                    >
+                      <Trash2 className="text-red-500" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Custom Duration Input */}
+                {service.duration === "custom" && (
+                  <div className="mt-4">
+                    <input
+                      type="number"
+                      min="1"
+                      placeholder="Enter custom duration in minutes"
+                      value={service.customDuration}
+                      onChange={(e) =>
+                        updateService(service.id, "customDuration", e.target.value)
+                      }
+                      className="w-full h-12 px-4 rounded-xl border"
+                    />
+                    <p className="text-sm text-gray-500 mt-1">
+                      Enter duration in minutes (minimum 1 minute)
+                    </p>
+                  </div>
                 )}
               </div>
             );
@@ -301,7 +343,6 @@ const FreeOnboardingSetupThree = () => {
           width="w-full"
           disabled={!isFormValid()}
           className="bg-purple-600 mt-10 h-14 text-lg font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all"
-         
         >
           Next: Review Details
         </ButtonLongPurple>

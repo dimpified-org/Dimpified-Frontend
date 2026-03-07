@@ -130,6 +130,14 @@ const FreeOnboardingReview = () => {
         dispatch(setEcosystemDomain(businessData.websiteAddress));
       }
 
+      // Helper function to get final duration
+      const getFinalDuration = (service) => {
+        if (service.duration === "custom") {
+          return parseInt(service.customDuration) || 30;
+        }
+        return service.duration;
+      };
+
       // Step 2: Create Services
       const servicePayload = {
         accessToken,
@@ -147,7 +155,7 @@ const FreeOnboardingReview = () => {
           name: service.name,
           shortDescription: `Professional ${service.name.toLowerCase()} service`,
           price: parseFloat(service.amount) || 0,
-          deliveryTime: service.duration,
+          deliveryTime: getFinalDuration(service),
           priceFormat: "Fixed",
           serviceImage: "null",
         })),
@@ -432,7 +440,9 @@ const FreeOnboardingReview = () => {
               </div>
 
               <div>
-                <p className="text-sm text-gray-600">Your Prospective Booking Link</p>
+                <p className="text-sm text-gray-600">
+                  Your Prospective Booking Link
+                </p>
                 <p className="text-purple-600 font-medium break-all">
                   dimpified.com/{businessData.websiteAddress}
                 </p>
@@ -506,18 +516,33 @@ const FreeOnboardingReview = () => {
                 <span>Duration</span>
               </div>
 
-              {servicesData.services.map((service, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-3 gap-4 items-center bg-white rounded-xl p-4 border border-gray-200"
-                >
-                  <span className="font-medium text-gray-900">
-                    {service.name}
-                  </span>
-                  <span className="text-gray-800">₦ {service.amount}</span>
-                  <span className="text-gray-800">{service.duration} mins</span>
-                </div>
-              ))}
+              {servicesData.services.map((service, index) => {
+                // Determine the display duration
+                const displayDuration =
+                  service.duration === "custom"
+                    ? service.customDuration
+                    : service.duration;
+
+                return (
+                  <div
+                    key={index}
+                    className="grid grid-cols-3 gap-4 items-center bg-white rounded-xl p-4 border border-gray-200"
+                  >
+                    <span className="font-medium text-gray-900">
+                      {service.name}
+                    </span>
+                    <span className="text-gray-800">₦ {service.amount}</span>
+                    <span className="text-gray-800">
+                      {displayDuration} mins
+                      {service.duration === "custom" && (
+                        <span className="ml-2 text-xs text-purple-600 bg-purple-50 px-2 py-1 rounded-full">
+                          Custom
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 

@@ -40,7 +40,7 @@ const DentistOnboarding = lazy(
 );
 
 const PaidTemplateOne = lazy(
-  () => import("../features/Booking/LatestBookingModal"),
+  () => import("../pages/PaidTemplates/PaidTemplateOne"),
 );
 
 //REDIRECT PAGES
@@ -506,7 +506,7 @@ const AllRoutes = () => {
             )}
             <Route path="/merchants" element={<DimpLanding />} />
             <Route path="/invest" element={<InvestorLanding />} />
-          
+           
             <Route path="/:subdomain" element={<FreeBookingPage />} />
             <Route
               path="/merchants/banner"
@@ -514,6 +514,7 @@ const AllRoutes = () => {
             />
             {/* New Landings */}
             <Route path="/" element={<NewLanding />} />
+             <Route path="/paid-template-one" element={<PaidTemplateOne />} />
             <Route path="/about-dimpified" element={<NewAboutPage />} />
             <Route path="/subscriptions" element={<SubscriptionsPage />} />
             <Route path="/features" element={<FeaturesPage />} />
@@ -949,9 +950,7 @@ const AllRoutes = () => {
                 element={<ManageServices />}
               />
             </Route>
-
-
-             {/* Paid Onboarding */}
+            {/* Paid Onboarding */}
             <Route
               path="/paid/auth/pre-signup"
               element={<PaidOnboardingPreSignup />}
