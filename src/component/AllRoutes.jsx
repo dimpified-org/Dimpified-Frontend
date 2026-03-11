@@ -39,8 +39,8 @@ const DentistOnboarding = lazy(
   () => import("../pages/LandingPages/DentistOnboarding"),
 );
 
-const PaidTemplateOne = lazy(
-  () => import("../pages/PaidTemplates/PaidTemplateOne"),
+const MinimalistTemplate = lazy(
+  () => import("../pages/PaidTemplates/MinimalistTemplate"),
 );
 
 //REDIRECT PAGES
@@ -514,7 +514,7 @@ const AllRoutes = () => {
             />
             {/* New Landings */}
             <Route path="/" element={<NewLanding />} />
-             <Route path="/paid-template-one" element={<PaidTemplateOne />} />
+             <Route path="/paid-templates/minimalist" element={<MinimalistTemplate />} />
             <Route path="/about-dimpified" element={<NewAboutPage />} />
             <Route path="/subscriptions" element={<SubscriptionsPage />} />
             <Route path="/features" element={<FeaturesPage />} />
