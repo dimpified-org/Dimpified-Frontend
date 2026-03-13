@@ -1,7 +1,7 @@
 import { Mail } from "lucide-react";
 import PaidOnboardingImage from "../../../assets/FreeBooking/FreeAuthImage.png";
 import Logo from "../../../assets/NewAuthImage/NewLogo.png";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
 import { creatorLoginWithGoogle } from "../../../features/authentication";
@@ -10,10 +10,12 @@ import { setEcosystemDomain } from "../../../features/ecosystemDomain";
 import { setEcosystemPlan } from "../../../features/ecosystemPlan";
 import { setEcosystemStatus } from "../../../features/ecosystemStatus";
 import axios from "axios";
+import { useEffect } from "react";
 
 export default function PaidOnboardingPreSignup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const { isLoading } = useSelector((state) => state.auth);
 
   // Helper function to set auth headers
@@ -38,6 +40,20 @@ export default function PaidOnboardingPreSignup() {
     const params = new URLSearchParams(location.search);
     return params.get("ref") || params.get("refcode") || null;
   };
+
+  // Store refcode in session storage when component mounts
+  useEffect(() => {
+    const urlRefcode = getRefCodeFromURL();
+    if (urlRefcode) {
+      sessionStorage.setItem('signupRefcode', urlRefcode);
+      console.log('✅ Refcode stored in session (Paid):', urlRefcode);
+    } else {
+      const sessionRefcode = sessionStorage.getItem('signupRefcode');
+      if (sessionRefcode) {
+        console.log('📝 Using existing refcode from session (Paid):', sessionRefcode);
+      }
+    }
+  }, [location]);
 
   // Navigation function for paid booking flow
   const handleNavigation = (step, plan) => {
@@ -91,12 +107,17 @@ export default function PaidOnboardingPreSignup() {
     }
 
     const idToken = credentialResponse.credential;
-    const refcode = getRefCodeFromURL();
+    
+    // Get refcode from URL or session storage (priority: URL > session)
+    const urlRefcode = getRefCodeFromURL();
+    const sessionRefcode = sessionStorage.getItem('signupRefcode');
+    const refcode = urlRefcode || sessionRefcode;
 
-    // Save referral code to sessionStorage if present
-    if (refcode) {
-      sessionStorage.setItem("referralCode", refcode);
-    }
+    console.log('🔍 Refcode debug (Paid):', {
+      fromURL: urlRefcode,
+      fromSession: sessionRefcode,
+      used: refcode
+    });
 
     if (!idToken) {
       console.error("No ID token (credential) received from Google");
@@ -104,13 +125,13 @@ export default function PaidOnboardingPreSignup() {
       return;
     }
 
-    console.log("Sending ID token to backend for signup...");
+    console.log("Sending ID token to backend for signup with refcode:", refcode);
 
     try {
       const resultAction = await dispatch(
         creatorLoginWithGoogle({
           token: idToken,
-          refcode: refcode,
+          refcode: refcode, // Send refcode to backend
         }),
       );
 
@@ -164,6 +185,7 @@ export default function PaidOnboardingPreSignup() {
             }),
           );
 
+          // Preserve refcode when navigating to login
           if (refcode) {
             navigate(`/auth/login?refcode=${refcode}&googleAuth=true`);
           } else {
@@ -228,6 +250,9 @@ export default function PaidOnboardingPreSignup() {
           sessionStorage.setItem("subCategory", userData.subCategory);
         }
 
+        // Clear refcode from session after successful signup
+        sessionStorage.removeItem('signupRefcode');
+
         const userStep = userData.step || 1;
         handleNavigation(userStep, userPlan);
       }
@@ -241,6 +266,10 @@ export default function PaidOnboardingPreSignup() {
     console.error("Google Sign-Up Failed:", error);
     showToast("Google Sign-Up Failed. Please try again.", "error");
   };
+
+  // Get refcode for the email signup link
+  const refcode = getRefCodeFromURL() || sessionStorage.getItem('signupRefcode');
+  const emailSignupLink = `/paid/auth/personal-Information${refcode ? `?ref=${refcode}` : ''}`;
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden flex">
@@ -311,6 +340,13 @@ export default function PaidOnboardingPreSignup() {
             <p className="text-sm sm:text-base text-gray-600 mb-6">
               Kindly choose a sign-up option
             </p>
+            
+            {/* Visual feedback for refcode */}
+            {refcode && (
+              <p className="text-sm text-green-600 mb-4 bg-green-50 p-2 rounded-lg">
+                ✓ Referral code applied: <span className="font-semibold">{refcode}</span>
+              </p>
+            )}
           </div>
 
           {/* Auth Buttons */}
@@ -395,8 +431,8 @@ export default function PaidOnboardingPreSignup() {
               />
             </div>
 
-            {/* Email Sign Up */}
-            <RouterLink to="/paid/auth/personal-Information" className="block">
+            {/* Email Sign Up - With refcode */}
+            <RouterLink to={emailSignupLink} className="block">
               <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 sm:py-4 px-6 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 border border-purple-600 hover:shadow-lg active:scale-[0.98] group">
                 <Mail className="w-5 h-5" />
                 <span className="text-sm sm:text-base">Sign Up with Email</span>
@@ -417,12 +453,12 @@ export default function PaidOnboardingPreSignup() {
             </RouterLink>
           </div>
 
-          {/* Already have an account? */}
+          {/* Already have an account? - Preserve refcode */}
           <div className="mt-8 text-center">
             <p className="text-gray-600">
               Already have an account?{" "}
               <RouterLink
-                to="/auth/login"
+                to={`/auth/login${refcode ? `?ref=${refcode}` : ''}`}
                 className="text-purple-600 font-medium hover:text-purple-700 hover:underline transition-colors duration-300"
               >
                 Log in here
