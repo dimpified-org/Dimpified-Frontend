@@ -46,6 +46,7 @@ import Spa5 from "../../../Templates/PersonalCare/spa/SixthSpa";
 import MakeupTemplate from "../../../Templates/PersonalCare/makeup/MakeupTemplate";
 import BarberPosh from "../../../Templates/PersonalCare/Barber/BarberPosh";
 import GeneralTemplate from "../../../../pages/Templates/General/BookQuickServicesNew";
+import MinimalistTemplate from "../../../../pages/PaidTemplates/MinimalistTemplate";
 import mixpanel from "../../../../analytics/mixpanel";
 
 import { barber, HairSalon, MakeUp, Nail, gym, spa, dental } from "../../../../data/Services";
@@ -137,41 +138,41 @@ const PaidPreviewTemplate = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!accessToken || !refreshToken) return showToast("Auth tokens missing");
+  // const handleSubmit = async () => {
+  //   if (!accessToken || !refreshToken) return showToast("Auth tokens missing");
 
-    const ecosystemDomain = userDetails?.ecosystemDomain || "not available";
-    const payload = {
-      accessToken,
-      refreshToken,
-      creatorId,
-      ecosystemDomain,
-      templateId,
-      navbar: content.navbar,
-      hero: content.hero,
-      aboutUs: content.aboutUs,
-      Vision: content.Vision,
-      Statistics: content.Statistics,
-      Partners: content.Patrners,
-      Events: content.Events,
-      Gallery: content.Gallery,
-      LargeCta: content.LargeCta,
-      Team: content.Team,
-      Blog: content.Blog,
-      Reviews: content.Reviews,
-      contactUs: content.contactUs,
-      faq: content.faq,
-      faqStyles: content.faqStyles,
-      footer: content.footer,
-    };
-    try {
-      await api2.createTemplate(payload);
-      return true;
-    } catch {
-      showToast("Error submitting template");
-      return false;
-    }
-  };
+  //   const ecosystemDomain = userDetails?.ecosystemDomain || "not available";
+  //   const payload = {
+  //     accessToken,
+  //     refreshToken,
+  //     creatorId,
+  //     ecosystemDomain,
+  //     templateId,
+  //     navbar: content.navbar,
+  //     hero: content.hero,
+  //     aboutUs: content.aboutUs,
+  //     Vision: content.Vision,
+  //     Statistics: content.Statistics,
+  //     Partners: content.Patrners,
+  //     Events: content.Events,
+  //     Gallery: content.Gallery,
+  //     LargeCta: content.LargeCta,
+  //     Team: content.Team,
+  //     Blog: content.Blog,
+  //     Reviews: content.Reviews,
+  //     contactUs: content.contactUs,
+  //     faq: content.faq,
+  //     faqStyles: content.faqStyles,
+  //     footer: content.footer,
+  //   };
+  //   try {
+  //     await api2.createTemplate(payload);
+  //     return true;
+  //   } catch {
+  //     showToast("Error submitting template");
+  //     return false;
+  //   }
+  // };
 
   const handleContinue = async () => {
     if (ecosystemLoading || !userDetails) {
@@ -191,11 +192,17 @@ const PaidPreviewTemplate = () => {
     setLoading(true);
 
     try {
-      const success = await handleSubmit();
+      // const success = await handleSubmit();
+      const ecosystemDomain = userDetails?.ecosystemDomain || "not available";
+      await api2.createEcosystemTemplate({
+        creatorId,
+        ecosystemDomain,
+        templateNumber: templateId,
+        accessToken,
+        refreshToken,
+      });
       setLoading(false);
-      if (success) {
-        setShowSuccessModal(true);
-      }
+      setShowSuccessModal(true);
     } catch {
       setLoading(false);
       showToast("Error creating template");
@@ -291,6 +298,13 @@ const PaidPreviewTemplate = () => {
           />
         );
       }
+      case 52:
+        return (
+          <MinimalistTemplate
+            subdomain={userDetails?.ecosystemDomain}
+            userDetails={userDetails}
+          />
+        );
       default:
         return <div>Invalid template</div>;
     }

@@ -431,7 +431,7 @@ const FreeOnboardingReview = () => {
 
               <div>
                 <p className="text-sm text-gray-600">Description</p>
-                <p className="text-gray-800">{businessData.description}</p>
+                <p className="text-gray-800 break-words whitespace-pre-wrap">{businessData.description}</p>
               </div>
 
               <div>

@@ -117,20 +117,16 @@ export const businessTypesData = [
 const FreeOnboardingSetupOne = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    pageName: "",
-    businessType: "Hair Salon",
-    description: "",
-    address: "",
-  });
-
-  // Load from sessionStorage on mount
-  useEffect(() => {
+  const [formData, setFormData] = useState(() => {
     const saved = sessionStorage.getItem("businessIdentity");
-    if (saved) {
-      setFormData(JSON.parse(saved));
-    }
-  }, []);
+    if (saved) return JSON.parse(saved);
+    return {
+      pageName: "",
+      businessType: "Hair Salon",
+      description: "",
+      address: "",
+    };
+  });
 
   // Auto-save to sessionStorage on change
   useEffect(() => {

@@ -309,12 +309,13 @@ export const createBusinessIdentity = async ({
   category,
   timezone,
   week,
+  type,
   dispatch,
   navigate
 }) => {
   // Create axios instance with interceptors
   const authFetch = AxiosInterceptor(dispatch, navigate);
-  
+
   try {
     const response = await authFetch.post(
       `${import.meta.env.VITE_API_URL}/creator/create-business-identity`,
@@ -327,6 +328,7 @@ export const createBusinessIdentity = async ({
         category,
         timezone,
         week,
+        ...(type && { type }),
       }
     );
 

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/e/codebase/Company/dimp New/Dimpified-Frontend\" && find . -path ./node_modules -prune -o -path ./dist -prune -o -type f \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" -o -name \"*.jsx\" -o -name \"*.js\" \\\\\\) -print | xargs grep -l \"freeBooking\" 2>/dev/null | head -20)",
+      "Bash(cd \"/e/codebase/Company/dimp New/Dimpified-Frontend\" && find src -path \"*/redux/*\" -o -path \"*/store/*\" -o -path \"*/api/*\" 2>/dev/null | grep -E \"\\\\.\\(tsx?|jsx?\\)$\" | head -30)",
+      "Bash(cd \"E:/codebase/Company/dimp New/Dimpified-Frontend\" && npx vite build 2>&1 | tail -15)"
+    ]
+  }
+}
