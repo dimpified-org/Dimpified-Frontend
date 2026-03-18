@@ -24,38 +24,32 @@ const FreeOnboardingSetupThree = () => {
   const navigate = useNavigate();
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
 
-  const [services, setServices] = useState([
-    { id: Date.now(), name: "", amount: "", duration: 30, customDuration: "" },
-  ]);
+  const [services, setServices] = useState(() => {
+    const saved = sessionStorage.getItem("services");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return parsed.services.map(service => ({
+        ...service,
+        customDuration: service.customDuration || ""
+      }));
+    }
+    return [{ id: Date.now(), name: "", amount: "", duration: 30, customDuration: "" }];
+  });
 
-  const [bankDetails, setBankDetails] = useState({
-    bankName: "",
-    bankCode: "",
-    accountNumber: "",
-    accountName: "",
-    verified: false,
+  const [bankDetails, setBankDetails] = useState(() => {
+    const saved = sessionStorage.getItem("bankDetails");
+    if (saved) return JSON.parse(saved);
+    return {
+      bankName: "",
+      bankCode: "",
+      accountNumber: "",
+      accountName: "",
+      verified: false,
+    };
   });
 
   const [allBanks, setAllBanks] = useState([]);
   const [isVerifying, setIsVerifying] = useState(false);
-
-  /* ---------------------------------- STORAGE ---------------------------------- */
-
-  useEffect(() => {
-    const saved = sessionStorage.getItem("services");
-    const bank = sessionStorage.getItem("bankDetails");
-
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Ensure customDuration field exists for all services
-      const servicesWithCustom = parsed.services.map(service => ({
-        ...service,
-        customDuration: service.customDuration || ""
-      }));
-      setServices(servicesWithCustom);
-    }
-    if (bank) setBankDetails(JSON.parse(bank));
-  }, []);
 
   useEffect(() => {
     sessionStorage.setItem("services", JSON.stringify({ services }));

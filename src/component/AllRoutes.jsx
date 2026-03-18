@@ -45,6 +45,10 @@ const MinimalistTemplate = lazy(
   () => import("../pages/PaidTemplates/MinimalistTemplate"),
 );
 
+const PaidBookingPage = lazy(
+  () => import("../pages/PaidTemplates/PaidBookingPage"),
+);
+
 const SubtleGrayTemplate = lazy(
   () => import("../pages/PaidTemplates/SubtleGrayTemplate"),
 );
@@ -515,6 +519,7 @@ const AllRoutes = () => {
             )}
             <Route path="/merchants" element={<DimpLanding />} />
             <Route path="/invest" element={<InvestorLanding />} />
+            <Route path="/paid/:subdomain" element={<PaidBookingPage />} />
             <Route path="/:subdomain" element={<FreeBookingPage />} />
             <Route
               path="/merchants/banner"

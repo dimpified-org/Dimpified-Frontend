@@ -160,7 +160,7 @@ const PaidSubscription = () => {
   ];
 
   const price =
-    subscriptionPlans[selectedInterval]?.["Lite"]?.amount || 4500;
+    subscriptionPlans[selectedInterval]?.["Lite"]?.amount || 2500;
 
   const getReferralAmount = () => {
     const referralDiscounts = { "2R0873": 0.925, "6LS937": 0.85 };
@@ -170,7 +170,7 @@ const PaidSubscription = () => {
 
   // Flutterwave config for recurring payment
   const handleFlutterwavePaymentRecurring = useFlutterwave({
-    public_key: import.meta.env.VITE_FLW_PUBLIC_KEY,
+    public_key: import.meta.env.VITE_TEST_FLW_PUBLIC_KEY,
     tx_ref: `tx-${Date.now()}-${userDetails?.creatorId}`,
     amount: price,
     currency: "NGN",
@@ -204,7 +204,7 @@ const PaidSubscription = () => {
   const oneTimeAmount = getOneTimeAmount();
 
   const handleFlutterwavePaymentOneTime = useFlutterwave({
-    public_key: import.meta.env.VITE_FLW_PUBLIC_KEY,
+    public_key: import.meta.env.VITE_TEST_FLW_PUBLIC_KEY,
     tx_ref: `tx-${Date.now()}-${userDetails?.creatorId}`,
     amount: oneTimeAmount,
     currency: "NGN",
@@ -222,7 +222,7 @@ const PaidSubscription = () => {
   });
 
   const handleFlutterwavePaymentReferral = useFlutterwave({
-    public_key: import.meta.env.VITE_FLW_PUBLIC_KEY,
+    public_key: import.meta.env.VITE_TEST_FLW_PUBLIC_KEY,
     tx_ref: `tx-ref-${Date.now()}-${userDetails?.creatorId}`,
     amount: referralAmount,
     currency: "NGN",
