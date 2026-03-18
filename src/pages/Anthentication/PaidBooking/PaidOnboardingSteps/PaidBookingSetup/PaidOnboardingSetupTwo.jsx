@@ -50,35 +50,33 @@ const PaidOnboardingSetupTwo = () => {
   // Detect user's timezone automatically
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  const [selectedDays, setSelectedDays] = useState({
-    Sunday: false,
-    Monday: true,
-    Tuesday: true,
-    Wednesday: true,
-    Thursday: true,
-    Friday: true,
-    Saturday: false,
+  const [selectedDays, setSelectedDays] = useState(() => {
+    const saved = sessionStorage.getItem("availability");
+    if (saved) return JSON.parse(saved).selectedDays;
+    return {
+      Sunday: false,
+      Monday: true,
+      Tuesday: true,
+      Wednesday: true,
+      Thursday: true,
+      Friday: true,
+      Saturday: false,
+    };
   });
 
-  const [timeSlots, setTimeSlots] = useState({
-    Sunday: { from: "09:00", to: "17:00" },
-    Monday: { from: "09:00", to: "22:00" },
-    Tuesday: { from: "09:00", to: "22:00" },
-    Wednesday: { from: "09:00", to: "22:00" },
-    Thursday: { from: "09:00", to: "22:00" },
-    Friday: { from: "09:00", to: "22:00" },
-    Saturday: { from: "09:00", to: "22:00" },
+  const [timeSlots, setTimeSlots] = useState(() => {
+    const saved = sessionStorage.getItem("availability");
+    if (saved) return JSON.parse(saved).timeSlots;
+    return {
+      Sunday: { from: "09:00", to: "17:00" },
+      Monday: { from: "09:00", to: "22:00" },
+      Tuesday: { from: "09:00", to: "22:00" },
+      Wednesday: { from: "09:00", to: "22:00" },
+      Thursday: { from: "09:00", to: "22:00" },
+      Friday: { from: "09:00", to: "22:00" },
+      Saturday: { from: "09:00", to: "22:00" },
+    };
   });
-
-  // Load from sessionStorage on mount
-  useEffect(() => {
-    const savedAvailability = sessionStorage.getItem("availability");
-    if (savedAvailability) {
-      const data = JSON.parse(savedAvailability);
-      setSelectedDays(data.selectedDays);
-      setTimeSlots(data.timeSlots);
-    }
-  }, []);
 
   // Auto-save to sessionStorage on change
   useEffect(() => {

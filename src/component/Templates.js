@@ -291,6 +291,13 @@ const templates = [
     image: GeneralTemplate,
     category: "All Category Template",
   },
+  {
+    id: 52,
+    title: "BerryBlast Template",
+    description: "Clean, minimalist booking page for paid ecosystems",
+    image: null,
+    category: "Paid Booking",
+  },
 ];
 
 export default templates;

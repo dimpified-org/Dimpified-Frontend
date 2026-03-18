@@ -160,10 +160,36 @@ const userContactForm = async ({
   }
 };
 
+const createEcosystemTemplate = async ({
+  creatorId,
+  ecosystemDomain,
+  templateNumber,
+  accessToken,
+  refreshToken,
+}) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+  try {
+    const response = await authFetch.post(
+      `${API_URL}/creator/create-ecosystem-template`,
+      {
+        creatorId,
+        ecosystemDomain,
+        templateNumber,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Could not create ecosystem template"
+    );
+  }
+};
+
 export default {
   getTemplateDetails,
   getBusinessInfo,
   createTemplate,
+  createEcosystemTemplate,
   editTemplate,
   userContactForm
 };
