@@ -32,7 +32,8 @@ import Template37 from "../UserTemplate/PersonalCare/dental/Template37";
 
 import Template47 from "../UserTemplate/PersonalCare/HairStylelist/Template47";
 import Template48 from "../UserTemplate/PersonalCare/HairStylelist/Template48";
-import Template51 from "../UserTemplate/GeneralTemplate/Template51"
+import Template51 from "../UserTemplate/GeneralTemplate/Template51";
+import Template52 from "../UserTemplate/PaidTemplates/Template52";
 const MainTemplate = ({ subdomain }) => {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -323,7 +324,14 @@ const MainTemplate = ({ subdomain }) => {
           details={details}
           subdomain={subdomain}
           userDetails={ecosystemDetails}
-          
+        />
+      );
+    case 52:
+      return (
+        <Template52
+          details={details}
+          subdomain={subdomain}
+          userDetails={ecosystemDetails}
         />
       );
     default:

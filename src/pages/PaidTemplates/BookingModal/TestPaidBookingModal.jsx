@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Calendar from "react-calendar";
 import { Link } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
@@ -20,76 +20,183 @@ import {
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import { showToast } from "../../../component/ShowToast";
 import DimpifiedLogo from "../../../pages/LandingPages/images/dimp-blue.png";
-import api from "../../../api/applicationFeature";
-import axios from "axios";
-import PaystackPop from "@paystack/inline-js";
 
 const PaidBookingModal = ({
   isOpen = false,
   handleClose,
+  information,
   subdomain,
   serviceCurrency = "NGN",
+  userDetails,
   businessInfo: propBusinessInfo,
+  services: propServices,
+  teamMembers: propTeamMembers,
+  timeSlots: propTimeSlots,
+  bankDetails: propBankDetails,
   initialSelectedService = null,
 }) => {
-  // Business information - enriched from API data when available
-  const [apiContactInfo, setApiContactInfo] = useState(null);
-  const businessInfo = {
-    name: propBusinessInfo?.name || "Business",
-    description: propBusinessInfo?.description || "",
+  // Business information - use props if provided, otherwise use defaults
+  const businessInfo = propBusinessInfo || {
+    name: "Maverique",
+    description:
+      "We offer different fitness packages tailored towards your body and your desired shape. Our facilities are well equiped to allow you to get the best results in the least amount of time.",
     contact: {
-      phone: apiContactInfo?.phoneNumber || propBusinessInfo?.contact?.phone || "",
-      email: apiContactInfo?.email || propBusinessInfo?.contact?.email || "",
-      address: apiContactInfo?.localGovernment || propBusinessInfo?.contact?.address || "",
+      phone: "2348109174125",
+      email: "message.abdulazeez@gmail.com",
+      address: "4, Rajab Quarters, Islamic Village, Gerewu",
     },
   };
 
-  const lastFetchedParams = useRef(null);
-  const fetchLoadingRef = useRef(false);
+  // Services data - use props if provided, otherwise use defaults
+  const dummyServices = propServices || [
+    {
+      _id: "1",
+      name: "Full Cardio",
+      shortDescription: "Professional full cardio service",
+      category: "Cardio",
+      price: 4000,
+      duration: "120 mins",
+      image: "https://images.unsplash.com/photo-1599058917765-a780eda07a3e",
+      rating: 4.8,
+    },
+    {
+      _id: "2",
+      name: "Abs Only",
+      shortDescription: "Focused abdominal workout",
+      category: "Strength",
+      price: 2000,
+      duration: "30 mins",
+      image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438",
+      rating: 4.6,
+    },
+    {
+      _id: "3",
+      name: "Strength Training",
+      shortDescription: "Build strength and endurance",
+      category: "Strength",
+      price: 5000,
+      duration: "90 mins",
+      image: "https://images.unsplash.com/photo-1581009137042-c552e485697a",
+      rating: 4.9,
+    },
+    {
+      _id: "4",
+      name: "Personal Training",
+      shortDescription: "1-on-1 professional training",
+      category: "Personal",
+      price: 6500,
+      duration: "120 mins",
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
+      rating: 5.0,
+    },
+    {
+      _id: "5",
+      name: "Yoga Session",
+      shortDescription: "Relaxing yoga training",
+      category: "Wellness",
+      price: 3500,
+      duration: "60 mins",
+      image: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3",
+      rating: 4.7,
+    },
+    {
+      _id: "6",
+      name: "HIIT Workout",
+      shortDescription: "High intensity interval training",
+      category: "Cardio",
+      price: 4500,
+      duration: "45 mins",
+      image: "https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=400",
+      rating: 4.8,
+    },
+  ];
 
-  // State - API-fetched data
-  const [eServices, setEServices] = useState([]);
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [fetchLoading, setFetchLoading] = useState(false);
-  const [businessHours, setBusinessHours] = useState(null);
-  const [creatorId, setCreatorId] = useState(null);
-  const [planType, setPlanType] = useState(null);
-  const [allBankDetails, setAllBankDetails] = useState(null);
-  const [merchantDetails, setMerchantDetails] = useState({
-    accountNumber: "N/A",
-    accountName: "N/A",
-    bankName: "N/A",
-    whatsappNumber: "N/A",
-  });
-  const [paymentState, setPaymentState] = useState({
-    paymentLoading: false,
-    stripeModalOpen: false,
-    clientSecret: "",
-  });
-  const [serviceCharge, setServiceCharge] = useState(0);
-  const [totalAmount, setTotalAmount] = useState(null);
-  const [paymentStatus, setPaymentStatus] = useState("");
-  const [uniqueID, setUniqueID] = useState("");
-  const [timeZones, setTimeZones] = useState("");
-  const [duration, setDuration] = useState(null);
+  // Team members data - use props if provided
+  const teamMembers = propTeamMembers || [
+    {
+      _id: "1",
+      name: "Ahmed Musa",
+      role: "Head Trainer",
+      specialty: "Cardio & Strength",
+      experience: "10+ years",
+      image:
+        "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=300",
+      bio: "Certified personal trainer specializing in cardio and strength training",
+    },
+    {
+      _id: "2",
+      name: "Aisha Bello",
+      role: "Yoga Instructor",
+      specialty: "Yoga & Meditation",
+      experience: "7+ years",
+      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300",
+      bio: "Experienced yoga instructor helping clients find balance and flexibility",
+    },
+    {
+      _id: "3",
+      name: "John Okafor",
+      role: "Strength Coach",
+      specialty: "Strength Training",
+      experience: "8+ years",
+      image:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300",
+      bio: "Specializes in building strength and muscle mass through effective training",
+    },
+    {
+      _id: "4",
+      name: "Fatima Ibrahim",
+      role: "HIIT Specialist",
+      specialty: "HIIT & Cardio",
+      experience: "5+ years",
+      image:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300",
+      bio: "High energy trainer specializing in HIIT and fat burning workouts",
+    },
+  ];
 
-  // State - UI
+  // Bank account details - use props if provided
+  const bankDetails = propBankDetails || {
+    accountName: "Maverique Fitness LLC",
+    bankName: "GTBank",
+    accountNumber: "0123456789",
+  };
+
+  // Available time slots - use props if provided
+  const timeSlots = propTimeSlots || [
+    { time: "09:00 AM", booked: false },
+    { time: "10:00 AM", booked: false },
+    { time: "11:00 AM", booked: false },
+    { time: "12:00 PM", booked: false },
+    { time: "01:00 PM", booked: false },
+    { time: "02:00 PM", booked: false },
+    { time: "03:00 PM", booked: false },
+    { time: "04:00 PM", booked: false },
+    { time: "05:00 PM", booked: false },
+  ];
+
+  // State
   const [step, setStep] = useState(1);
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedTeamMember, setSelectedTeamMember] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(null);
-  const [paymentStep, setPaymentStep] = useState("selection");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
     details: "",
   });
+  const [bookingId, setBookingId] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [paymentStep, setPaymentStep] = useState("selection");
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   // Initialize selected service from prop
   useEffect(() => {
@@ -98,15 +205,8 @@ const PaidBookingModal = ({
     }
   }, [initialSelectedService, isOpen]);
 
-  // Timezone detection
-  useEffect(() => {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    setTimeZones(tz);
-  }, []);
-
   // Helper Functions
   const getInitials = (text, maxLength = 2) => {
-    if (!text) return "";
     return text
       .split(/\s+/)
       .map((word) => word[0])
@@ -124,19 +224,23 @@ const PaidBookingModal = ({
     }).format(amount);
   };
 
+  // Generate a random booking ID
+  const generateBookingId = () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "DIMP-";
+    for (let i = 0; i < 8; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length),
+      );
+    }
+    return result;
+  };
+
   const normalizeDate = useCallback((date) => {
     const normalized = new Date(date);
     normalized.setHours(0, 0, 0, 0);
     return normalized;
   }, []);
-
-  const generateTxRef = () => {
-    const randomString = Math.random().toString(36).substring(7);
-    const timestamp = Date.now();
-    return `${timestamp}-${randomString}`;
-  };
-
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   // Computed Values
   const totalPrice = useMemo(() => {
@@ -164,502 +268,40 @@ const PaidBookingModal = ({
     formData,
   ]);
 
-  // Time slot definitions
-  const timeSlots = [
-    { time: "07:30 AM", booked: false },
-    { time: "08:00 AM", booked: false },
-    { time: "08:30 AM", booked: false },
-    { time: "09:00 AM", booked: false },
-    { time: "09:30 AM", booked: false },
-    { time: "10:00 AM", booked: false },
-    { time: "10:30 AM", booked: false },
-    { time: "11:00 AM", booked: false },
-    { time: "11:30 AM", booked: false },
-    { time: "12:00 PM", booked: false },
-    { time: "12:30 PM", booked: false },
-    { time: "01:00 PM", booked: false },
-    { time: "01:30 PM", booked: false },
-    { time: "02:00 PM", booked: false },
-    { time: "02:30 PM", booked: false },
-    { time: "03:00 PM", booked: false },
-    { time: "03:30 PM", booked: false },
-    { time: "04:00 PM", booked: false },
-    { time: "04:30 PM", booked: false },
-    { time: "05:00 PM", booked: false },
-    { time: "05:30 PM", booked: false },
-    { time: "06:00 PM", booked: false },
-    { time: "06:30 PM", booked: false },
-    { time: "07:00 PM", booked: false },
-    { time: "07:30 PM", booked: false },
-    { time: "08:00 PM", booked: false },
-    { time: "08:30 PM", booked: false },
-    { time: "09:00 PM", booked: false },
-    { time: "09:30 PM", booked: false },
-    { time: "10:00 PM", booked: false },
-  ];
-
-  const timeToMinutes = useCallback((timeStr) => {
-    const [time, modifier] = timeStr.split(" ");
-    let [hours, minutes] = time.split(":").map(Number);
-    if (modifier === "PM" && hours !== 12) hours += 12;
-    if (modifier === "AM" && hours === 12) hours = 0;
-    return hours * 60 + minutes;
-  }, []);
-
-  // ==================== API CALLS ====================
-
-  // Fetch services
+  // Effects
   useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-    const fetchServices = async () => {
-      if (!subdomain) return;
+    const loadServices = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/get-all-services/${subdomain}`,
-          { signal: controller.signal },
-        );
-        if (isMounted) {
-          const allServices = response.data.flatMap((item) => item.services);
-          setEServices(allServices);
-          // Extract business hours, creatorId, and contact info from first item
-          if (response.data[0]) {
-            const firstItem = response.data[0];
-            setBusinessHours(firstItem.businessHoursRecords || null);
-            setCreatorId(firstItem.creatorId || null);
-            setApiContactInfo({
-              email: firstItem.email,
-              phoneNumber: firstItem.phoneNumber,
-              localGovernment: firstItem.localGovernment,
-              state: firstItem.state,
-              country: firstItem.country,
-              ecosystemName: firstItem.businessHoursRecords?.[0]?.ecosystemName,
-            });
-          }
-        }
-      } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("Error fetching services:", error);
-        }
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setServices(dummyServices);
       } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-    if (isOpen) fetchServices();
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, [isOpen, subdomain]);
-
-  // Fetch team members when services are selected
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-    const fetchTeamMembers = async () => {
-      const firstService = selectedServices[0];
-      if (!firstService?._id || !subdomain) return;
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/team-member-by-service?ecosystemDomain=${subdomain}&serviceId=${firstService._id}`,
-          { signal: controller.signal },
-        );
-        if (isMounted) {
-          const members = response.data.teamMembers.flatMap((item) => item);
-          setTeamMembers(members);
-        }
-      } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("Error fetching team members:", error);
-        }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-    fetchTeamMembers();
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, [selectedServices, subdomain]);
-
-  // Fetch bank details
-  useEffect(() => {
-    const fetchBankDetails = async () => {
-      if (!subdomain) return;
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/bank-details/${subdomain}`,
-        );
-        setAllBankDetails(response.data);
-        const [firstAccount] = response.data?.accountDetails || [];
-        setMerchantDetails({
-          accountNumber: firstAccount?.accountNumber || "N/A",
-          accountName: firstAccount?.accountName || "N/A",
-          bankName: firstAccount?.bankName || "N/A",
-          whatsappNumber: firstAccount?.whatsappNumber || "N/A",
-        });
-      } catch (error) {
-        console.error("Could not get bank details:", error);
-      }
-    };
-    if (isOpen) fetchBankDetails();
-  }, [isOpen, subdomain]);
-
-  // Helper: generate 30-min slots from business hours for a given date
-  const generateSlotsFromBusinessHours = useCallback((date) => {
-    const weekRecord = businessHours?.[0]?.week;
-    if (!weekRecord) return timeSlots; // fallback to all slots if no business hours
-
-    const dayNames = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    const dayName = dayNames[date.getDay()];
-    const dayConfig = weekRecord.find((d) => d.day === dayName);
-
-    if (!dayConfig || !dayConfig.enabled || !dayConfig.slots?.length) {
-      return []; // day is closed
-    }
-
-    const allowedRanges = dayConfig.slots.map((slot) => {
-      const [startH, startM] = slot.start.split(":").map(Number);
-      const [endH, endM] = slot.end.split(":").map(Number);
-      return { start: startH * 60 + startM, end: endH * 60 + endM };
-    });
-
-    const generatedSlots = [];
-    allowedRanges.forEach(({ start, end }) => {
-      for (let mins = start; mins < end; mins += 30) {
-        const h24 = Math.floor(mins / 60);
-        const m = mins % 60;
-        const modifier = h24 >= 12 ? "PM" : "AM";
-        const h12 = h24 === 0 ? 12 : h24 > 12 ? h24 - 12 : h24;
-        const timeStr = `${String(h12).padStart(2, "0")}:${String(m).padStart(2, "0")} ${modifier}`;
-        generatedSlots.push({ time: timeStr, booked: false });
-      }
-    });
-
-    return generatedSlots;
-  }, [businessHours]);
-
-  // Generate slots from business hours, then overlay booked times from API
-  useEffect(() => {
-    if (step !== 3 || !selectedDate) {
-      setAvailableTimeSlots(timeSlots);
-      return;
-    }
-
-    // Step 1: Generate base slots from business hours
-    const baseSlots = generateSlotsFromBusinessHours(selectedDate);
-    if (baseSlots.length === 0) {
-      setAvailableTimeSlots([]);
-      return;
-    }
-
-    // Step 2: If we have a specialist and service, fetch booked times from API
-    const specialist = selectedTeamMember;
-    const firstService = selectedServices[0];
-    if (!specialist?.creatorId || !firstService?._id || !subdomain) {
-      setAvailableTimeSlots(baseSlots);
-      return;
-    }
-
-    // Dedup check
-    const paramsKey = JSON.stringify({
-      creatorId: specialist.creatorId,
-      date: selectedDate.toISOString(),
-      serviceId: firstService._id,
-    });
-    if (lastFetchedParams.current === paramsKey) return;
-    if (fetchLoadingRef.current) return;
-
-    fetchLoadingRef.current = true;
-
-    const fetchBookedTimes = async () => {
-      try {
-        setLoading(true);
-        const year = selectedDate.getFullYear();
-        const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
-        const day = String(selectedDate.getDate()).padStart(2, "0");
-        const formattedDate = `${year}-${month}-${day}`;
-
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/get-available-time/${specialist.creatorId}/${formattedDate}/${firstService._id}/${subdomain}`,
-        );
-
-        const { bookedTimes = [], duration: serviceDuration } = response.data;
-        if (serviceDuration) setDuration(serviceDuration);
-        if (response.data.planType) setPlanType(response.data.planType);
-
-        const effectiveDuration = serviceDuration || duration || 30;
-
-        // Build set of blocked minute values from booked times
-        const bookedSlots = new Set();
-        bookedTimes.forEach((bookedTime) => {
-          const startMinutes = timeToMinutes(bookedTime);
-          const slotInterval = 30;
-          const slotsToBlock = Math.ceil(effectiveDuration / slotInterval);
-          for (let i = 0; i < slotsToBlock; i++) {
-            bookedSlots.add(startMinutes + i * slotInterval);
-          }
-        });
-
-        // Mark booked slots within business-hours-generated slots
-        const updatedSlots = baseSlots.map((slot) => ({
-          ...slot,
-          booked: bookedSlots.has(timeToMinutes(slot.time)),
-        }));
-        setAvailableTimeSlots(updatedSlots);
-        lastFetchedParams.current = paramsKey;
-      } catch (error) {
-        console.error("Error fetching availability:", error);
-        // On error, still show business hours slots without booked info
-        setAvailableTimeSlots(baseSlots);
-      } finally {
-        fetchLoadingRef.current = false;
         setLoading(false);
       }
     };
 
-    fetchBookedTimes();
-  }, [selectedDate, selectedTeamMember, selectedServices, subdomain, step, generateSlotsFromBusinessHours]);
-
-  // ==================== PAYMENT LOGIC ====================
-
-  const calculateServiceCharge = useCallback(
-    (price, planType, paymentMethod) => {
-      switch (planType) {
-        case "Lite":
-          return paymentMethod === "Online" ? price * 0.024 + 150 : 0;
-        case "Plus":
-          return paymentMethod === "Online" ? price * 0.021 + 175 : 0;
-        case "Pro":
-          return paymentMethod === "Online" ? price * 0.018 + 200 : 0;
-        case "Extra":
-          return paymentMethod === "Online" ? price * 0.015 + 250 : 0;
-        default:
-          return 0;
-      }
-    },
-    [],
-  );
-
-  const handlePayOnline = useCallback(async () => {
-    // Validate
-    if (!formData.email || !formData.fullName || !formData.phone) {
-      showToast("Please fill in all required fields", "error");
-      return;
+    if (isOpen) {
+      loadServices();
     }
-    const firstService = selectedServices[0];
-    if (!firstService) {
-      showToast("Please select a service", "error");
-      return;
+  }, [isOpen, dummyServices]);
+
+  useEffect(() => {
+    if (step === 3 && selectedDate) {
+      setLoading(true);
+      const timer = setTimeout(() => {
+        const updatedSlots = timeSlots.map((slot) => ({
+          ...slot,
+          booked: Math.random() < 0.3,
+        }));
+        setAvailableTimeSlots(updatedSlots);
+        setLoading(false);
+      }, 500);
+
+      return () => clearTimeout(timer);
     }
-    if (!selectedTeamMember?.creatorId) {
-      showToast("Please select a specialist", "error");
-      return;
-    }
-    if (!selectedTimeSlot) {
-      showToast("Please select a time slot", "error");
-      return;
-    }
+  }, [step, selectedDate, timeSlots]);
 
-    setPaymentState((prev) => ({ ...prev, paymentLoading: true }));
-
-    const priceToSend = totalPrice;
-    const charge = calculateServiceCharge(priceToSend, planType, "Online");
-    const totalToPay = priceToSend + charge;
-    setServiceCharge(charge);
-    setTotalAmount(totalToPay.toLocaleString());
-
-    const paystackConfig = {
-      key: import.meta.env.VITE_Paystack_PUBLIC_TEST_KEY,
-      email: formData.email,
-      amount: Math.round(totalToPay * 100),
-      currency: "NGN",
-      ref: generateTxRef(),
-      metadata: {
-        provider: "paystack",
-        ecosystemDomain: subdomain,
-        email: formData.email,
-        name: formData.fullName,
-        phone: formData.phone,
-        description: formData.details || "Nil",
-        service: selectedServices.map((s) => s.name).join(", "),
-        date: selectedDate?.toDateString(),
-        time: selectedTimeSlot,
-        servicePrice: priceToSend,
-        serviceCharge: charge,
-        creatorId: selectedTeamMember?.creatorId,
-        serviceId: firstService._id,
-      },
-    };
-
-    try {
-      const paystack = new PaystackPop();
-      await new Promise((resolve, reject) => {
-        paystack.newTransaction({
-          ...paystackConfig,
-          onSuccess: (transaction) => {
-            resolve(transaction);
-          },
-          onCancel: () => {
-            showToast("Payment cancelled", "info");
-            reject(new Error("Cancelled"));
-          },
-          onError: (error) => {
-            showToast("Payment failed", "error");
-            reject(error);
-          },
-        });
-      });
-
-      setPaymentState((prev) => ({ ...prev, paymentLoading: false }));
-      setPaymentStatus("Online");
-      // Verification step
-      setStep(7);
-
-      let attempts = 0;
-      const maxAttempts = 6;
-
-      while (attempts < maxAttempts) {
-        attempts++;
-        try {
-          const response = await axios.post(
-            `${import.meta.env.VITE_API_URL}/verify-booking-status`,
-            {
-              creatorId: selectedTeamMember?.creatorId,
-              ecosystemDomain: subdomain,
-              time: selectedTimeSlot,
-              date: selectedDate?.toDateString(),
-              email: formData.email,
-              serviceId: firstService._id,
-            },
-          );
-          if (
-            response.status === 201 &&
-            response.data.message === "Booking verified successfully"
-          ) {
-            setUniqueID(
-              response.data.bookingDetails?.bookingId || "N/A",
-            );
-            setPaymentStatus("paid");
-            showToast("Payment Verified Successfully", "success");
-            handleNextStep(6);
-            return;
-          }
-        } catch (error) {
-          if (
-            error.response &&
-            error.response.status === 404
-          ) {
-            if (attempts >= maxAttempts) {
-              showToast("Verification timed out", "error");
-              setStep(5);
-              return;
-            }
-            await delay(15000);
-          } else {
-            showToast("Error verifying payment", "error");
-            setStep(5);
-            return;
-          }
-        }
-      }
-    } catch (error) {
-      setPaymentState((prev) => ({ ...prev, paymentLoading: false }));
-      if (error.message !== "Cancelled") {
-        showToast("Payment failed", "error");
-      }
-    }
-  }, [
-    formData,
-    selectedServices,
-    selectedTeamMember,
-    selectedTimeSlot,
-    selectedDate,
-    subdomain,
-    planType,
-    totalPrice,
-    calculateServiceCharge,
-  ]);
-
-  const handlePayToMerchant = useCallback(async () => {
-    if (!formData.email || !formData.fullName || !formData.phone) {
-      showToast("Please fill in all required fields", "error");
-      return;
-    }
-    const firstService = selectedServices[0];
-    if (!firstService) {
-      showToast("Please select a service", "error");
-      return;
-    }
-    if (!selectedTeamMember?.creatorId) {
-      showToast("Please select a specialist", "error");
-      return;
-    }
-    if (!selectedTimeSlot) {
-      showToast("Please select a time slot", "error");
-      return;
-    }
-
-    setPaymentState((prev) => ({ ...prev, paymentLoading: true }));
-
-    const priceToSend = totalPrice;
-    const charge = calculateServiceCharge(priceToSend, planType, "Bank Transfer");
-    setServiceCharge(charge);
-    setTotalAmount(priceToSend.toLocaleString());
-    setPaymentStatus("Pay directly to merchant");
-
-    try {
-      const response = await api.submitBooking({
-        ecosystemDomain: subdomain,
-        name: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        address: businessInfo?.contact?.address || "N/A",
-        description: formData.details || "Nil",
-        location: "Shop",
-        service: selectedServices.map((s) => s.name).join(", "),
-        date: selectedDate ? selectedDate.toDateString() : "Not selected",
-        time: selectedTimeSlot,
-        bookingType: "Shop",
-        servicePrice: priceToSend,
-        serviceCharge: charge,
-        creatorId: selectedTeamMember?.creatorId,
-        serviceId: firstService._id,
-        currency: "NGN",
-        provider: "cash",
-      });
-
-      setPaymentState((prev) => ({ ...prev, paymentLoading: false }));
-      showToast("Booking submitted successfully. Please complete payment to the merchant.", "success");
-      setUniqueID(response.data.booking?.bookingId || "N/A");
-      setPaymentStatus("Pay directly to merchant");
-      handleNextStep(6);
-    } catch (error) {
-      setPaymentState((prev) => ({ ...prev, paymentLoading: false }));
-      console.error("Bank transfer booking error:", error);
-      showToast(
-        error.response?.data?.message || "Failed to submit booking. Please try again.",
-        "error",
-      );
-    }
-  }, [
-    formData,
-    selectedServices,
-    selectedTeamMember,
-    selectedTimeSlot,
-    selectedDate,
-    subdomain,
-    planType,
-    totalPrice,
-    calculateServiceCharge,
-    businessInfo,
-  ]);
-
-  // ==================== HANDLERS ====================
-
+  // Handlers
   const resetModal = useCallback(() => {
     setStep(1);
     setSelectedServices([]);
@@ -675,25 +317,12 @@ const PaidBookingModal = ({
     setPaymentMethod(null);
     setPaymentStep("selection");
     setShowCancelDialog(false);
-    setPaymentState({
-      paymentLoading: false,
-      stripeModalOpen: false,
-      clientSecret: "",
-    });
-    setTotalAmount(null);
-    setServiceCharge(0);
-    setPaymentStatus("");
-    setUniqueID("");
   }, [normalizeDate]);
 
   const onCloseModal = useCallback(async () => {
-    if (paymentState.paymentLoading) {
-      showToast("Payment is processing. Please wait.", "info");
-      return;
-    }
     resetModal();
     handleClose();
-  }, [resetModal, handleClose, paymentState.paymentLoading]);
+  }, [resetModal, handleClose]);
 
   const handleCancelClick = () => {
     setShowCancelDialog(true);
@@ -736,7 +365,7 @@ const PaidBookingModal = ({
   }, []);
 
   const handleNextStep = useCallback((nextStep) => {
-    if (nextStep <= 7) {
+    if (nextStep <= 6) {
       setStep(nextStep);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -757,37 +386,43 @@ const PaidBookingModal = ({
 
   const handleSubmitBooking = async (e) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.email || !formData.phone) {
-      showToast("Please fill in all required fields", "error");
-      return;
+    setLoading(true);
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setBookingId(generateBookingId());
+      showToast("You've confirmed your booking details!", "success");
+      handleNextStep(5);
+    } catch (error) {
+      showToast("Failed to submit booking. Please try again.", "error");
+    } finally {
+      setLoading(false);
     }
-    handleNextStep(5);
   };
 
   const handlePaymentSelection = (method) => {
     setPaymentMethod(method);
-    if (method === "stripe") {
-      // Trigger Paystack payment immediately
-      setPaymentStep("processing");
-    } else if (method === "bank") {
-      setPaymentStep("processing");
+    setPaymentStep("processing");
+  };
+
+  const handleProcessPayment = async () => {
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setPaymentStep("details");
+    setLoading(false);
+  };
+
+  const handleConfirmPayment = () => {
+    if (!bookingId) {
+      setBookingId(generateBookingId());
     }
+    handleNextStep(6);
   };
 
   const disablePastDates = ({ date, view }) => {
-    if (view !== "month") return false;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    if (date < today) return true;
-
-    // Disable days not enabled in business hours
-    const weekRecord = businessHours?.[0]?.week;
-    if (weekRecord) {
-      const dayNames = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-      const dayConfig = weekRecord.find((d) => d.day === dayNames[date.getDay()]);
-      if (!dayConfig || !dayConfig.enabled) return true;
-    }
-    return false;
+    return view === "month" && date < today;
   };
 
   // Progress steps configuration
@@ -936,7 +571,7 @@ const PaidBookingModal = ({
                 Selected Specialist
               </h3>
               <span className="text-gray-900 font-medium">
-                {selectedTeamMember.fullName}
+                {selectedTeamMember.name}
               </span>
             </div>
           </>
@@ -1014,7 +649,7 @@ const PaidBookingModal = ({
                 Selected Specialist
               </h3>
               <span className="text-gray-900 font-medium">
-                {selectedTeamMember.fullName}
+                {selectedTeamMember.name}
               </span>
             </div>
           </>
@@ -1079,7 +714,7 @@ const PaidBookingModal = ({
       {selectedTeamMember && (
         <div className="mb-4">
           <h4 className="font-semibold text-gray-700 mb-2">Specialist</h4>
-          <p className="text-sm">{selectedTeamMember.fullName}</p>
+          <p className="text-sm">{selectedTeamMember.name}</p>
         </div>
       )}
 
@@ -1111,7 +746,7 @@ const PaidBookingModal = ({
       </div>
 
       {/* Total */}
-      <div className="border-t-2 border-purple-200 pt-4 mt-4">
+      <div className="border-t pt-4 mt-4">
         <div className="flex justify-between items-center">
           <span className="font-bold text-gray-900">Total Amount:</span>
           <span className="text-2xl font-bold text-purple-600">
@@ -1155,38 +790,11 @@ const PaidBookingModal = ({
                   </button>
                   <button
                     onClick={handleConfirmCancel}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                   >
-                    Yes, Cancel
+                    Yes
                   </button>
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* Payment Loading Overlay */}
-          {paymentState.paymentLoading && (
-            <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-[60]">
-              <div className="bg-white p-6 rounded-lg flex items-center gap-3 shadow-lg">
-                <svg
-                  className="animate-spin h-8 w-8 text-purple-600"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                <p>Processing payment, please wait...</p>
               </div>
             </div>
           )}
@@ -1235,17 +843,17 @@ const PaidBookingModal = ({
                 <div className="lg:hidden mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-gray-700">
-                      Step {Math.min(step, progressSteps.length)} of {progressSteps.length}
+                      Step {step} of {progressSteps.length}
                     </span>
                     <span className="text-sm text-gray-500">
-                      {Math.min(step, progressSteps.length)}/{progressSteps.length}
+                      {step}/{progressSteps.length}
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
                       className="bg-purple-600 h-2 rounded-full transition-all duration-500 ease-out"
                       style={{
-                        width: `${(Math.min(step, progressSteps.length) / progressSteps.length) * 100}%`,
+                        width: `${(step / progressSteps.length) * 100}%`,
                       }}
                     />
                   </div>
@@ -1331,7 +939,7 @@ const PaidBookingModal = ({
                     ) : (
                       <>
                         <div className="grid sm:grid-cols-2 gap-6 max-w-6xl mb-6 mx-auto">
-                          {eServices.map((service) => {
+                          {services.map((service) => {
                             const isSelected = selectedServices.some(
                               (s) => s._id === service._id,
                             );
@@ -1354,9 +962,9 @@ const PaidBookingModal = ({
                                 }}
                               >
                                 <div className="relative overflow-hidden rounded-lg">
-                                  {service.image || service.serviceImage ? (
+                                  {service.image ? (
                                     <img
-                                      src={service.image || service.serviceImage}
+                                      src={service.image}
                                       alt={service.name}
                                       className="w-20 h-20 object-cover transition group-hover:scale-110"
                                       onError={(e) => {
@@ -1447,80 +1055,74 @@ const PaidBookingModal = ({
                       </p>
                     </div>
 
-                    {loading ? (
-                      <div className="flex justify-center items-center h-48 lg:h-64">
-                        <div className="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-b-2 border-purple-600" />
-                      </div>
-                    ) : (
-                      <div className="grid sm:grid-cols-2 gap-6 max-w-6xl mb-6 mx-auto">
-                        {teamMembers.map((member) => (
-                          <div
-                            key={member.creatorId}
-                            className={`group cursor-pointer bg-white border rounded-xl hover:border-purple-600 p-4 flex gap-4 items-center hover:-translate-y-1 transition-all duration-300 ${
-                              selectedTeamMember?.creatorId === member.creatorId
-                                ? "border-purple-600 bg-purple-50/50"
-                                : "border-gray-200"
-                            }`}
-                            onClick={() => setSelectedTeamMember(member)}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" || e.key === " ") {
-                                e.preventDefault();
-                                setSelectedTeamMember(member);
-                              }
-                            }}
-                          >
-                            <div className="relative overflow-hidden rounded-lg">
-                              {member.profilePicture ? (
-                                <img
-                                  src={member.profilePicture}
-                                  alt={member.fullName}
-                                  className="w-20 h-20 object-cover transition group-hover:scale-110"
-                                  onError={(e) => {
-                                    e.currentTarget.onerror = null;
-                                    e.currentTarget.style.display = "none";
-                                    const parent = e.currentTarget.parentElement;
-                                    if (parent) {
-                                      const fallback =
-                                        document.createElement("div");
-                                      fallback.className =
-                                        "w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-purple-700 font-semibold text-lg";
-                                      fallback.textContent = getInitials(
-                                        member.fullName,
-                                      );
-                                      parent.appendChild(fallback);
-                                    }
-                                  }}
-                                />
-                              ) : (
-                                <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-purple-700 font-semibold text-lg">
-                                  {getInitials(member.fullName)}
-                                </div>
-                              )}
-
-                              {selectedTeamMember?.creatorId === member.creatorId && (
-                                <div className="absolute top-1 right-1">
-                                  <FaCheckCircle className="text-purple-500 text-sm bg-white rounded-full" />
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="flex-1">
-                              <div className="flex items-start justify-between">
-                                <h3 className="font-semibold text-gray-800 group-hover:text-purple-600">
-                                  {member.fullName}
-                                </h3>
+                    <div className="grid sm:grid-cols-2 gap-6 max-w-6xl mb-6 mx-auto">
+                      {teamMembers.map((member) => (
+                        <div
+                          key={member._id}
+                          className={`group cursor-pointer bg-white border rounded-xl hover:border-purple-600 p-4 flex gap-4 items-center hover:-translate-y-1 transition-all duration-300 ${
+                            selectedTeamMember?._id === member._id
+                              ? "border-purple-600 bg-purple-50/50"
+                              : "border-gray-200"
+                          }`}
+                          onClick={() => setSelectedTeamMember(member)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              setSelectedTeamMember(member);
+                            }
+                          }}
+                        >
+                          <div className="relative overflow-hidden rounded-lg">
+                            {member.image ? (
+                              <img
+                                src={member.image}
+                                alt={member.name}
+                                className="w-20 h-20 object-cover transition group-hover:scale-110"
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.style.display = "none";
+                                  const parent = e.currentTarget.parentElement;
+                                  if (parent) {
+                                    const fallback =
+                                      document.createElement("div");
+                                    fallback.className =
+                                      "w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-purple-700 font-semibold text-lg";
+                                    fallback.textContent = getInitials(
+                                      member.name,
+                                    );
+                                    parent.appendChild(fallback);
+                                  }
+                                }}
+                              />
+                            ) : (
+                              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-purple-700 font-semibold text-lg">
+                                {getInitials(member.name)}
                               </div>
+                            )}
 
-                              <p className="text-sm text-purple-600 mt-0.5">
-                                {member.specialisation}
-                              </p>
-                            </div>
+                            {selectedTeamMember?._id === member._id && (
+                              <div className="absolute top-1 right-1">
+                                <FaCheckCircle className="text-purple-500 text-sm bg-white rounded-full" />
+                              </div>
+                            )}
                           </div>
-                        ))}
-                      </div>
-                    )}
+
+                          <div className="flex-1">
+                            <div className="flex items-start justify-between">
+                              <h3 className="font-semibold text-gray-800 group-hover:text-purple-600">
+                                {member.name}
+                              </h3>
+                            </div>
+
+                            <p className="text-sm text-purple-600 mt-0.5">
+                              {member.role}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                     <TeamSummary />
                     <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8 lg:mt-12">
                       <button
@@ -1781,12 +1383,11 @@ const PaidBookingModal = ({
                       </p>
                     </div>
 
-                    {/* Payment options — currently only bank transfer is active */}
                     {paymentStep === "selection" && (
                       <div className="space-y-4 mb-8">
-                        {/* Pay Online Option — commented out for now
+                        {/* Stripe Option */}
                         <div
-                          onClick={handlePayOnline}
+                          onClick={() => handlePaymentSelection("stripe")}
                           className={`group bg-white rounded-xl lg:rounded-2xl p-6 border-2 cursor-pointer transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1 ${
                             paymentMethod === "stripe"
                               ? "border-purple-500 shadow-lg ring-2 ring-purple-200"
@@ -1797,7 +1398,7 @@ const PaidBookingModal = ({
                           onKeyDown={(e) => {
                             if (e.key === "Enter" || e.key === " ") {
                               e.preventDefault();
-                              handlePayOnline();
+                              handlePaymentSelection("stripe");
                             }
                           }}
                         >
@@ -1820,7 +1421,6 @@ const PaidBookingModal = ({
                             )}
                           </div>
                         </div>
-                        */}
 
                         {/* Bank Transfer Option */}
                         <div
@@ -1862,6 +1462,69 @@ const PaidBookingModal = ({
                     )}
 
                     {paymentStep === "processing" &&
+                      paymentMethod === "stripe" && (
+                        <div className="bg-white rounded-xl lg:rounded-2xl p-8 border-2 border-purple-200 mb-8 text-center animate-fade-in">
+                          <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <FaCreditCard className="text-purple-600 text-3xl" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                            Stripe Payment
+                          </h3>
+                          <p className="text-gray-600 mb-8">
+                            Enter your card details to complete payment
+                          </p>
+
+                          <div className="space-y-4 mb-8">
+                            <div className="relative">
+                              <input
+                                type="text"
+                                placeholder="Card Number"
+                                className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                defaultValue="4242 4242 4242 4242"
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <input
+                                type="text"
+                                placeholder="MM/YY"
+                                className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                defaultValue="12/25"
+                              />
+                              <input
+                                type="text"
+                                placeholder="CVC"
+                                className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                defaultValue="123"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex gap-4">
+                            <button
+                              onClick={() => setPaymentStep("selection")}
+                              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300"
+                            >
+                              Back
+                            </button>
+                            <button
+                              onClick={handleProcessPayment}
+                              disabled={loading}
+                              className="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {loading ? (
+                                <div className="flex items-center justify-center gap-2">
+                                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                                  Processing...
+                                </div>
+                              ) : (
+                                "Pay Now"
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                    {paymentStep === "processing" &&
                       paymentMethod === "bank" && (
                         <div className="bg-white rounded-xl lg:rounded-2xl p-8 border-2 border-purple-200 mb-8 animate-fade-in">
                           <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -1882,7 +1545,7 @@ const PaidBookingModal = ({
                                   Account Name:
                                 </span>
                                 <span className="text-blue-900 font-semibold">
-                                  {merchantDetails.accountName}
+                                  {bankDetails.accountName}
                                 </span>
                               </div>
                               <div className="flex justify-between items-center p-3 bg-white rounded-lg">
@@ -1890,7 +1553,7 @@ const PaidBookingModal = ({
                                   Bank Name:
                                 </span>
                                 <span className="text-blue-900 font-semibold">
-                                  {merchantDetails.bankName}
+                                  {bankDetails.bankName}
                                 </span>
                               </div>
                               <div className="flex justify-between items-center p-3 bg-white rounded-lg">
@@ -1898,98 +1561,183 @@ const PaidBookingModal = ({
                                   Account Number:
                                 </span>
                                 <span className="text-blue-900 font-semibold">
-                                  {merchantDetails.accountNumber}
+                                  {bankDetails.accountNumber}
                                 </span>
                               </div>
-                            </div>
-
-                            <div className="mt-4 p-4 bg-blue-100 rounded-lg">
-                              <p className="text-blue-700 text-sm">
-                                Amount to pay:{" "}
-                                <span className="font-bold text-purple-600">
-                                  {formatCurrency(totalPrice)}
-                                </span>
-                              </p>
                             </div>
                           </div>
 
                           <div className="flex gap-4">
                             <button
-                              onClick={() => {
-                                setPaymentStep("selection");
-                                setPaymentMethod(null);
-                              }}
+                              onClick={() => setPaymentStep("selection")}
                               className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all duration-300"
                             >
                               Back
                             </button>
                             <button
-                              onClick={handlePayToMerchant}
-                              disabled={paymentState.paymentLoading}
+                              onClick={handleProcessPayment}
+                              disabled={loading}
                               className="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              {paymentState.paymentLoading ? (
+                              {loading ? (
                                 <div className="flex items-center justify-center gap-2">
                                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
                                   Hold on...
                                 </div>
                               ) : (
-                                "I've Made the Transfer"
+                                "Continue"
                               )}
                             </button>
                           </div>
+                        </div>
+                      )}
+
+                    {paymentStep === "details" &&
+                      paymentMethod === "stripe" && (
+                        <div className="bg-white rounded-xl lg:rounded-2xl p-8 border-2 border-purple-200 mb-8 animate-fade-in">
+                          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <FaCheckCircle className="text-green-600 text-3xl" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                            Payment Successful!
+                          </h3>
+                          <p className="text-gray-600 mb-6">
+                            Your payment has been processed successfully.
+                          </p>
+
+                          <div className="bg-purple-50 rounded-lg p-4 mb-6">
+                            <p className="text-purple-700 text-sm">
+                              Transaction ID: #TR
+                              {Math.floor(Math.random() * 1000000)}
+                            </p>
+                          </div>
 
                           <button
-                            onClick={() => {
-                              const servicesList = selectedServices
-                                .map(
-                                  (s) =>
-                                    `- ${s.name} (${formatCurrency(s.price)}) - ${s.duration}`,
-                                )
-                                .join("\n");
+                            onClick={handleConfirmPayment}
+                            className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-all duration-300 shadow-lg"
+                          >
+                            Continue to Confirmation
+                          </button>
+                        </div>
+                      )}
 
-                              const message = `*New Booking Alert!*
-Hello *${businessInfo.name}*, I have made a bank transfer for my booking.
+                    {paymentStep === "details" && paymentMethod === "bank" && (
+                      <div className="bg-white rounded-xl lg:rounded-2xl p-8 border-2 border-purple-200 mb-8 animate-fade-in">
+                        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <FaUniversity className="text-blue-600 text-3xl" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                          Bank Transfer Initiated
+                        </h3>
 
-*Services:*
+                        <div className="bg-blue-50 rounded-xl p-6 mb-6 border border-blue-200">
+                          <h4 className="font-semibold text-blue-800 mb-4 flex items-center gap-2">
+                            <FaUniversity className="text-blue-600" />
+                            Payment Instructions
+                          </h4>
+                          <div className="space-y-3 text-left mb-4">
+                            <div className="flex justify-between p-3 bg-white rounded-lg">
+                              <span className="text-blue-700">
+                                Amount to pay:
+                              </span>
+                              <span className="font-bold text-purple-600">
+                                {formatCurrency(totalPrice)}
+                              </span>
+                            </div>
+                            <div className="flex justify-between p-3 bg-white rounded-lg">
+                              <span className="text-blue-700">
+                                Account Name:
+                              </span>
+                              <span className="font-semibold">
+                                {bankDetails.accountName}
+                              </span>
+                            </div>
+                            <div className="flex justify-between p-3 bg-white rounded-lg">
+                              <span className="text-blue-700">
+                                Account Number:
+                              </span>
+                              <span className="font-semibold">
+                                {bankDetails.accountNumber}
+                              </span>
+                            </div>
+                            <div className="flex justify-between p-3 bg-white rounded-lg">
+                              <span className="text-blue-700">Bank:</span>
+                              <span className="font-semibold">
+                                {bankDetails.bankName}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="mt-4 p-4 bg-blue-100 rounded-lg">
+                            <p className="text-blue-700 text-sm">
+                              Please complete the transfer, click the button
+                              below to notify us and attach your payment
+                              screenshot. After that, you can come back to this
+                              screen and click "continue to confirmation".
+                            </p>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            const servicesList = selectedServices
+                              .map(
+                                (s) =>
+                                  `• ${s.name} (${formatCurrency(s.price)}) - ${s.duration}`,
+                              )
+                              .join("\n");
+
+                            const message = `*New Booking Alert!* 
+Hello *${businessInfo.name}*, I have successfully booked your service(s). 
+
+Here are my booking details:
+
+*Booking ID:* ${bookingId || "Pending"}
+
+*Services:* 
 ${servicesList}
 
 *Total Amount:* ${formatCurrency(totalPrice)}
 
-*Specialist:* ${selectedTeamMember?.fullName || "Not selected"}
+*Specialist:* ${selectedTeamMember?.name || "Not selected"} (${selectedTeamMember?.role || ""})
 
-*Date & Time:*
-${selectedDate?.toLocaleDateString("en-US", {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-})}
-${selectedTimeSlot || "Not selected"}
+*Date & Time:* 
+ ${selectedDate?.toLocaleDateString("en-US", {
+   weekday: "long",
+   year: "numeric",
+   month: "long",
+   day: "numeric",
+ })}
+ ${selectedTimeSlot || "Not selected"}
 
 *Customer Details:*
-Name: ${formData.fullName}
-Email: ${formData.email}
-Phone: ${formData.phone}
+ Name: ${formData.fullName}
+ Email: ${formData.email}
+ Phone: ${formData.phone}
 
-*Attached is a screenshot of my payment receipt for confirmation.*
+*Additional Information:* 
+${formData.details || "No additional notes provided"}
 
-Thank you!`;
+ *Attached is a screenshot of my payment receipt for confirmation.*
 
-                              const whatsappUrl = `https://wa.me/${
-                                merchantDetails.whatsappNumber !== "N/A"
-                                  ? merchantDetails.whatsappNumber.replace(/\D/g, "")
-                                  : businessInfo.contact.phone.replace(/\D/g, "")
-                              }?text=${encodeURIComponent(message)}`;
-                              window.open(whatsappUrl, "_blank");
-                            }}
-                            className="w-full mt-4 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
-                          >
-                            <FaWhatsapp className="text-white" />
-                            Send Payment Proof via WhatsApp
-                          </button>
-                        </div>
-                      )}
+Thank you! `;
+
+                            const whatsappUrl = `https://wa.me/${businessInfo.contact.phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+                            window.open(whatsappUrl, "_blank");
+                          }}
+                          className="w-full mb-4 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
+                        >
+                          <FaWhatsapp className="text-white" />
+                          I've Made the Payment
+                        </button>
+
+                        <button
+                          onClick={handleConfirmPayment}
+                          className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-all duration-300 shadow-lg"
+                        >
+                          Continue to Confirmation
+                        </button>
+                      </div>
+                    )}
 
                     {paymentStep === "selection" && (
                       <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -2006,7 +1754,7 @@ Thank you!`;
                   </div>
                 )}
 
-                {/* Step 6: Confirmation */}
+                {/* Step 6: Confirm */}
                 {step === 6 && (
                   <div className="animate-fade-in text-center max-w-2xl mx-auto">
                     <div className="w-16 h-16 lg:w-24 lg:h-24 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8 animate-bounce">
@@ -2029,31 +1777,29 @@ Thank you!`;
                       </h3>
 
                       {/* Booking ID */}
-                      {uniqueID && (
-                        <div className="mb-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
-                          <p className="text-xs text-purple-600 font-medium uppercase tracking-wider mb-1">
-                            Booking Reference
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-2xl font-mono font-bold text-purple-700 tracking-wider">
-                              {uniqueID}
-                            </span>
-                            <button
-                              onClick={() => {
-                                navigator.clipboard.writeText(uniqueID);
-                                showToast(
-                                  "Booking ID copied to clipboard!",
-                                  "success",
-                                );
-                              }}
-                              className="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg hover:bg-purple-700 transition-colors"
-                              aria-label="Copy booking ID"
-                            >
-                              Copy
-                            </button>
-                          </div>
+                      <div className="mb-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                        <p className="text-xs text-purple-600 font-medium uppercase tracking-wider mb-1">
+                          Booking Reference
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-2xl font-mono font-bold text-purple-700 tracking-wider">
+                            {bookingId}
+                          </span>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(bookingId);
+                              showToast(
+                                "Booking ID copied to clipboard!",
+                                "success",
+                              );
+                            }}
+                            className="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg hover:bg-purple-700 transition-colors"
+                            aria-label="Copy booking ID"
+                          >
+                            Copy
+                          </button>
                         </div>
-                      )}
+                      </div>
 
                       <div className="space-y-3">
                         <div>
@@ -2074,7 +1820,7 @@ Thank you!`;
                         <div className="border-t pt-2">
                           <p className="text-sm text-gray-500">Specialist:</p>
                           <p className="font-medium">
-                            {selectedTeamMember?.fullName}
+                            {selectedTeamMember?.name}
                           </p>
                         </div>
 
@@ -2095,16 +1841,16 @@ Thank you!`;
                             Payment Method:
                           </p>
                           <div className="flex items-center gap-2 mt-1">
-                            {paymentStatus === "paid" || paymentStatus === "Online" ? (
+                            {paymentMethod === "stripe" ? (
                               <>
                                 <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
                                   <FaCreditCard className="text-white text-xs" />
                                 </div>
                                 <span className="font-medium text-gray-900">
-                                  Online Payment {paymentStatus === "paid" ? "(Verified)" : "(Processing)"}
+                                  Online Payment Gateway
                                 </span>
                               </>
-                            ) : paymentStatus === "Pay directly to merchant" ? (
+                            ) : paymentMethod === "bank" ? (
                               <>
                                 <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center">
                                   <FaUniversity className="text-white text-xs" />
@@ -2146,12 +1892,6 @@ Thank you!`;
                               {formatCurrency(totalPrice)}
                             </span>
                           </div>
-                          {serviceCharge > 0 && (
-                            <div className="flex justify-between items-center text-sm text-gray-500 mt-1">
-                              <span>Service charge:</span>
-                              <span>{formatCurrency(serviceCharge)}</span>
-                            </div>
-                          )}
                         </div>
                       </div>
                     </div>
@@ -2173,19 +1913,6 @@ Thank you!`;
                     </button>
 
                     <PoweredByLogo />
-                  </div>
-                )}
-
-                {/* Step 7: Payment Verification Loading */}
-                {step === 7 && (
-                  <div className="animate-fade-in text-center max-w-2xl mx-auto py-20">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-8" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                      Verifying Payment...
-                    </h2>
-                    <p className="text-gray-600">
-                      Please wait while we confirm your payment
-                    </p>
                   </div>
                 )}
               </div>
@@ -2285,7 +2012,7 @@ Thank you!`;
                                   Specialist:
                                 </span>
                                 <span className="font-medium text-gray-900">
-                                  {selectedTeamMember.fullName}
+                                  {selectedTeamMember.name}
                                 </span>
                               </div>
                             </div>

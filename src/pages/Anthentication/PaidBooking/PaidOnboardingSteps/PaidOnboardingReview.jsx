@@ -103,6 +103,7 @@ const PaidOnboardingReview = () => {
         week,
         accessToken,
         refreshToken,
+        type: "paid",
       };
 
       const businessResult = await api.createBusinessIdentity(businessPayload);
@@ -228,7 +229,7 @@ const PaidOnboardingReview = () => {
 
               <div>
                 <p className="text-sm text-gray-600">Description</p>
-                <p className="text-gray-800">{businessData.description}</p>
+                <p className="text-gray-800 break-words whitespace-pre-wrap">{businessData.description}</p>
               </div>
 
               <div>

@@ -3,62 +3,82 @@
 export const pricingPlans = ["Monthly", "Quarterly", "Half-Yearly", "Annually"];
 
 export const subscriptionData = {
-  Lite: ["₦4,500", "₦4,050", "₦3,600", "₦3,150"],
+  Lite: ["₦2,500", "₦7,000", "₦13,000", "₦23,000"],
   Plus: ["₦6,750", "₦6,075", "₦5,400", "₦4,725"],
   Pro: ["₦10,125", "₦9,113", "₦8,100", "₦7,088"],
   Extra: ["₦15,888", "₦14,299", "₦12,710", "₦11,122"],
 };
 
+// Toggle between test and live plan codes based on environment
+const isTestEnv = import.meta.env.VITE_ENV === "test";
+
+const liveSubscriptionPlansLite = {
+  Monthly: { code: 155395, amount: 2500.0 },
+  Quarterly: { code: 155396, amount: 7000.0 },
+  Biannually: { code: 155397, amount: 13000.0 },
+  Yearly: { code: 155398, amount: 23000.0 },
+};
+
+const testSubscriptionPlansLite = {
+  Monthly: { code: 230603, amount: 2500.0 },
+  Quarterly: { code: 230604, amount: 7000.0 },
+  Biannually: { code: 230605, amount: 13000.0 },
+  Yearly: { code: 230606, amount: 23000.0 },
+};
+
+const activeLitePlans = isTestEnv
+  ? testSubscriptionPlansLite
+  : liveSubscriptionPlansLite;
+
 export const subscriptionPlans = {
   Monthly: {
-    //Lite: { code: 225828, amount: 100.00 },
-    Lite: { code: 145789, amount: 4500.00 },
-    Plus: { code: 145793, amount: 6750.00 },
-    Pro: { code: 145797, amount: 10125.00 },
-    Extra: { code: 145801, amount: 15888.00 },
+    Lite: activeLitePlans.Monthly,
+    Plus: { code: 145793, amount: 6750.0 },
+    Pro: { code: 145797, amount: 10125.0 },
+    Extra: { code: 145801, amount: 15888.0 },
   },
   Quarterly: {
-    Lite: { code: 145790, amount: 12150.00 },
-    Plus: { code: 145794, amount: 18225.00 },
-    Pro: { code: 145798, amount: 27339.00 },
-    Extra: { code: 145803, amount: 42897.00 },
+    Lite: activeLitePlans.Quarterly,
+    Plus: { code: 145794, amount: 18225.0 },
+    Pro: { code: 145798, amount: 27339.0 },
+    Extra: { code: 145803, amount: 42897.0 },
   },
   Biannually: {
-    Lite: { code: 145791, amount: 21600.00 },
-    Plus: { code: 145795, amount: 32500.00 },
-    Pro: { code: 145799, amount: 48600.00 },
-    Extra: { code: 145804, amount: 76260.00 },
+    Lite: activeLitePlans.Biannually,
+    Plus: { code: 145795, amount: 32500.0 },
+    Pro: { code: 145799, amount: 48600.0 },
+    Extra: { code: 145804, amount: 76260.0 },
   },
   Yearly: {
-    Lite: { code: 145792, amount: 37800.00 },
-    Plus: { code: 145796, amount: 56700.00 },
-    Pro: { code: 145800, amount: 85056.00 },
-    Extra: { code: 145805, amount: 133464.00 },
+    Lite: activeLitePlans.Yearly,
+    Plus: { code: 145796, amount: 56700.0 },
+    Pro: { code: 145800, amount: 85056.0 },
+    Extra: { code: 145805, amount: 133464.0 },
   },
 };
 
 // oneTimePaymentPlan.js
 export const oneTimePaymentPlan = {
   Monthly: {
-    Lite: { amount: 12150 },
+    Lite: { amount: 7000 },
     Plus: { amount: 18225 },
     Pro: { amount: 27339 },
     Extra: { amount: 42897 },
   },
   Quarterly: {
-    Lite: { amount: 12150 },
+    Lite: { amount: 7000 },
     Plus: { amount: 18225 },
     Pro: { amount: 27339 },
     Extra: { amount: 42897 },
   },
   "Half-Yearly": {
-    Lite: { amount: 21600 },
+    Lite: { amount: 13000 },
     Plus: { amount: 32400 },
     Pro: { amount: 48600 },
     Extra: { amount: 76260 },
   },
   Annually: {
-    Lite: { amount: 37800 },
+    Lite: { amount: 23000 },
     Plus: { amount: 56700 },
     Pro: { amount: 85056 },
     Extra: { amount: 133464 },

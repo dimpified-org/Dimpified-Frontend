@@ -39,8 +39,21 @@ const DentistOnboarding = lazy(
   () => import("../pages/LandingPages/DentistOnboarding"),
 );
 
+//PAID TEMPLATES
+
 const MinimalistTemplate = lazy(
   () => import("../pages/PaidTemplates/MinimalistTemplate"),
+);
+
+const PaidBookingPage = lazy(
+  () => import("../pages/PaidTemplates/PaidBookingPage"),
+);
+
+const SubtleGrayTemplate = lazy(
+  () => import("../pages/PaidTemplates/SubtleGrayTemplate"),
+);
+const LightBlushTemplate = lazy(
+  () => import("../pages/PaidTemplates/LightBlushTemplate"),
 );
 
 //REDIRECT PAGES
@@ -506,7 +519,7 @@ const AllRoutes = () => {
             )}
             <Route path="/merchants" element={<DimpLanding />} />
             <Route path="/invest" element={<InvestorLanding />} />
-           
+            <Route path="/paid/:subdomain" element={<PaidBookingPage />} />
             <Route path="/:subdomain" element={<FreeBookingPage />} />
             <Route
               path="/merchants/banner"
@@ -514,11 +527,25 @@ const AllRoutes = () => {
             />
             {/* New Landings */}
             <Route path="/" element={<NewLanding />} />
-             <Route path="/paid-templates/minimalist" element={<MinimalistTemplate />} />
+           
             <Route path="/about-dimpified" element={<NewAboutPage />} />
             <Route path="/subscriptions" element={<SubscriptionsPage />} />
             <Route path="/features" element={<FeaturesPage />} />
             {/* New Landings End */}
+            {/* New Paid Templates */}
+            <Route
+              path="/paid-templates/minimalist"
+              element={<MinimalistTemplate />}
+            />
+            <Route
+              path="/paid-templates/subtle-gray"
+              element={<SubtleGrayTemplate />}
+            />
+            <Route
+              path="/paid-templates/light-blush"
+              element={<LightBlushTemplate />}
+            />
+            {/* New {/* New Landings End */}
             <Route path="/barbers/onboarding" element={<BarbersRedirect />} />
             <Route path="/makeup/onboarding" element={<MakeupRedirect />} />
             <Route path="/spa/onboarding" element={<SpaRedirect />} />
