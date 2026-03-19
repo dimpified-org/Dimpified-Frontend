@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   FaStar,
   FaCalendarCheck,
@@ -794,6 +795,11 @@ const SubtleGrayTemplate = ({ subdomain, userDetails }) => {
       `}</style>
     </div>
   );
+};
+
+SubtleGrayTemplate.propTypes = {
+  subdomain: PropTypes.string,
+  userDetails: PropTypes.object,
 };
 
 export default SubtleGrayTemplate;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   FaStar,
   FaCalendarCheck,
@@ -799,6 +800,11 @@ const LightBlushTemplate = ({ subdomain, userDetails }) => {
       `}</style>
     </div>
   );
+};
+
+LightBlushTemplate.propTypes = {
+  subdomain: PropTypes.string,
+  userDetails: PropTypes.object,
 };
 
 export default LightBlushTemplate;
