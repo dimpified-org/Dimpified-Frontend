@@ -22,161 +22,71 @@ import {
 import { Link } from "react-router-dom";
 import PaidBookingModal from "./BookingModal/PaidBookingModal";
 import DimpifiedLogo from "../../pages/LandingPages/images/dimp-blue.png";
+import axios from "axios";
 
-// Business contact information
-const businessContact = {
+// Demo fallback data (used when no subdomain/userDetails provided, e.g. preview mode)
+const demoBusinessContact = {
   phone: "+234 800 000 0000",
   email: "hello@serenityspa.com",
   address: "15 Peaceful Close, Victoria Island, Lagos",
 };
 
-// Business information
-const businessInfo = {
+const demoBusinessInfo = {
   name: "Serenity Wellness Spa",
   shortName: "Serenity",
   description:
     "A peaceful sanctuary for holistic wellness and rejuvenation. Experience true relaxation and healing.",
-  longDescription:
-    "At Serenity Wellness Spa, we believe in the power of holistic healing. Our tranquil environment combined with expert therapists provides the perfect escape from daily stress. From therapeutic massages to rejuvenating facials, every treatment is designed to restore balance and harmony to your mind, body, and spirit.",
-  contact: businessContact,
-  social: {
-    instagram: "https://instagram.com",
-    facebook: "https://facebook.com",
-    pinterest: "https://pinterest.com",
-  },
+  contact: demoBusinessContact,
 };
 
-// Bank account details for payments (NGN)
-const bankDetails = {
-  accountName: "Serenity Wellness Spa Ltd",
-  bankName: "Guaranty Trust Bank (GTB)",
-  accountNumber: "0123456789",
-  routingNumber: "058", // Bank code for GTB
-};
-
-// Time slots for bookings
-const timeSlots = [
-  { time: "09:00 AM", booked: false },
-  { time: "10:00 AM", booked: false },
-  { time: "11:00 AM", booked: false },
-  { time: "12:00 PM", booked: false },
-  { time: "01:00 PM", booked: false },
-  { time: "02:00 PM", booked: false },
-  { time: "03:00 PM", booked: false },
-  { time: "04:00 PM", booked: false },
-  { time: "05:00 PM", booked: false },
-];
-
-// Services data with images (prices in NGN)
-const services = [
+const demoServices = [
   {
     _id: "1",
     name: "Swedish Massage",
     shortDescription: "Gentle, relaxing full-body massage",
-    description:
-      "A gentle, relaxing full-body massage that promotes overall wellness and stress relief using long, flowing strokes.",
-    category: "Massage",
-    price: 45000, // NGN
+    price: 45000,
     duration: "60 min",
     image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400",
-    rating: 4.9,
-    features: ["Gentle Pressure", "Aromatherapy", "Hot Towels"],
   },
   {
     _id: "2",
     name: "Deep Tissue",
     shortDescription: "Therapeutic deep muscle work",
-    description:
-      "Therapeutic massage targeting deep muscle layers and connective tissue to release chronic tension and pain.",
-    category: "Massage",
-    price: 55000, // NGN
+    price: 55000,
     duration: "60 min",
     image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=400",
-    rating: 4.8,
-    features: ["Targeted Relief", "Chronic Pain", "Sports Therapy"],
   },
   {
     _id: "3",
     name: "Signature Facial",
     shortDescription: "Rejuvenating facial treatment",
-    description:
-      "A luxurious facial treatment that cleanses, exfoliates, and nourishes your skin, leaving it radiant and refreshed.",
-    category: "Facial",
-    price: 40000, // NGN
+    price: 40000,
     duration: "75 min",
     image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400",
-    rating: 4.7,
-    features: ["Deep Cleanse", "Mask Therapy", "Facial Massage"],
   },
   {
     _id: "4",
     name: "Hot Stone Massage",
     shortDescription: "Warm stone therapy for deep relaxation",
-    description:
-      "Heated stones placed on key energy points of the body to melt away tension and promote deep relaxation.",
-    category: "Massage",
-    price: 60000, // NGN
+    price: 60000,
     duration: "75 min",
     image: "https://images.unsplash.com/photo-1519823551278-64ac92734ab6?w=400",
-    rating: 4.9,
-    features: ["Warm Stones", "Deep Relaxation", "Muscle Release"],
   },
   {
     _id: "5",
     name: "Aromatherapy",
     shortDescription: "Essential oil healing experience",
-    description:
-      "Therapeutic use of essential oils combined with gentle massage to enhance physical and emotional well-being.",
-    category: "Wellness",
-    price: 50000, // NGN
+    price: 50000,
     duration: "60 min",
     image: "https://images.unsplash.com/photo-1600617184130-0c7b2d206c8b?w=400",
-    rating: 4.8,
-    features: ["Essential Oils", "Mood Enhancement", "Stress Relief"],
   },
   {
     _id: "6",
     name: "Couples Massage",
     shortDescription: "Share the relaxation experience",
-    description:
-      "Enjoy a side-by-side massage with your partner in our peaceful couples suite for a shared wellness experience.",
-    category: "Massage",
-    price: 105000, // NGN
+    price: 105000,
     duration: "90 min",
     image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400",
-    rating: 5.0,
-    features: ["Side-by-Side", "Private Suite", "Shared Experience"],
-  },
-];
-
-// Team members data
-const teamMembers = [
-  {
-    _id: "1",
-    name: "Emma Thompson",
-    role: "Lead Massage Therapist",
-    specialty: "Deep Tissue & Sports Massage",
-    experience: "12+ years",
-    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=300",
-    bio: "Certified in multiple massage modalities with a passion for therapeutic healing",
-  },
-  {
-    _id: "2",
-    name: "Sophia Martinez",
-    role: "Esthetician",
-    specialty: "Organic Facials",
-    experience: "8+ years",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300",
-    bio: "Specializes in natural skincare and organic facial treatments",
-  },
-  {
-    _id: "3",
-    name: "Olivia Chen",
-    role: "Wellness Coach",
-    specialty: "Aromatherapy & Meditation",
-    experience: "6+ years",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300",
-    bio: "Expert in holistic wellness and essential oil therapies",
   },
 ];
 
@@ -201,32 +111,99 @@ const getServiceInitials = (serviceName) => {
 };
 
 // Get random image for hero section - only from services that have images
-const getHeroImage = () => {
-  const servicesWithImages = services.filter(
-    (service) => service.image && service.image.trim() !== "",
+const getHeroImage = (servicesList) => {
+  const servicesWithImages = (servicesList || []).filter(
+    (service) => (service.image || service.serviceImage) && (service.image || service.serviceImage).trim() !== "",
   );
 
   if (servicesWithImages.length === 0) {
     return null;
   }
 
-  // Randomly select from services that have images
   const randomIndex = Math.floor(Math.random() * servicesWithImages.length);
-  return servicesWithImages[randomIndex].image;
+  return servicesWithImages[randomIndex].image || servicesWithImages[randomIndex].serviceImage;
 };
-const LightBlushTemplate = () => {
+
+const LightBlushTemplate = ({ subdomain, userDetails }) => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [heroImage, setHeroImage] = useState(null);
+  const [services, setServices] = useState(demoServices);
+  const [loading, setLoading] = useState(false);
+  const [apiData, setApiData] = useState(null);
+
+  // Derive business info: prefer API response data, then userDetails prop, then demo fallback
+  const businessName =
+    apiData?.businessHoursRecords?.[0]?.ecosystemName ||
+    userDetails?.ecosystemName ||
+    demoBusinessInfo.name;
+  const businessShortName = businessName.split(" ").slice(0, 2).join(" ");
+  const businessDescription =
+    apiData?.description ||
+    userDetails?.ecosystemDescription ||
+    demoBusinessInfo.description;
+  const businessContact = {
+    phone: apiData?.phoneNumber || userDetails?.phoneNumber || demoBusinessContact.phone,
+    email: apiData?.email || userDetails?.email || demoBusinessContact.email,
+    address:
+      apiData?.localGovernment ||
+      userDetails?.address ||
+      demoBusinessContact.address,
+  };
+  const businessInfo = {
+    name: businessName,
+    shortName: businessShortName,
+    description: businessDescription,
+    contact: businessContact,
+  };
+  const serviceCurrency = apiData?.currency || "NGN";
 
   // Get business initials dynamically
-  const businessInitials = getBusinessInitials(businessInfo.name);
+  const businessInitials = getBusinessInitials(businessName);
+
+  // Fetch real services when subdomain is provided
+  useEffect(() => {
+    if (!subdomain) return;
+
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/get-all-services/${subdomain}`,
+          { signal: controller.signal }
+        );
+        if (isMounted && response.data?.length > 0) {
+          const firstItem = response.data[0];
+          setApiData(firstItem);
+          const allServices = response.data.flatMap((item) => item.services);
+          if (allServices.length > 0) {
+            setServices(allServices);
+          }
+        }
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("Error fetching services:", error);
+        }
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchServices();
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [subdomain]);
 
   useEffect(() => {
-    // Set random hero image on component mount
-    setHeroImage(getHeroImage());
-  }, []);
+    // Set random hero image when services change
+    setHeroImage(getHeroImage(services));
+  }, [services]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -279,13 +256,9 @@ const LightBlushTemplate = () => {
       <PaidBookingModal
         isOpen={isBookingModalOpen}
         handleClose={closeBookingModal}
-        serviceCurrency="NGN"
-        subdomain="demo"
+        serviceCurrency={serviceCurrency}
+        subdomain={subdomain || "demo"}
         businessInfo={businessInfo}
-        services={services}
-        teamMembers={teamMembers}
-        timeSlots={timeSlots}
-        bankDetails={bankDetails}
         initialSelectedService={selectedService}
       />
 
@@ -467,6 +440,12 @@ const LightBlushTemplate = () => {
             </p>
           </div>
 
+          {loading ? (
+            <div className="flex justify-center items-center h-48">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brown-600" />
+            </div>
+          ) : (
+          <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service) => (
               <button
@@ -475,9 +454,9 @@ const LightBlushTemplate = () => {
                 className="group cursor-pointer bg-cream-50 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-left w-full"
               >
                 <div className="relative h-48 overflow-hidden">
-                  {service.image ? (
+                  {(service.image || service.serviceImage) ? (
                     <img
-                      src={service.image}
+                      src={service.image || service.serviceImage}
                       alt={service.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       onError={(e) => handleImageError(e, service.name)}
@@ -513,7 +492,7 @@ const LightBlushTemplate = () => {
                       </span>
                     </div>
                     <span className="text-sm text-brown-500 bg-cream-200 px-3 py-1 rounded-full font-light">
-                      {service.duration}
+                      {service.duration || `${service.deliveryTime} mins`}
                     </span>
                   </div>
                 </div>
@@ -535,6 +514,8 @@ const LightBlushTemplate = () => {
             </a>{" "}
             to also get a free booking link for your business.
           </div>
+          </>
+          )}
         </div>
       </section>
 

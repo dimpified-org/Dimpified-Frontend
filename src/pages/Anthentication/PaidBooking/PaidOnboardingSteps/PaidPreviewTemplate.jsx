@@ -47,6 +47,8 @@ import MakeupTemplate from "../../../Templates/PersonalCare/makeup/MakeupTemplat
 import BarberPosh from "../../../Templates/PersonalCare/Barber/BarberPosh";
 import GeneralTemplate from "../../../../pages/Templates/General/BookQuickServicesNew";
 import MinimalistTemplate from "../../../../pages/PaidTemplates/MinimalistTemplate";
+import SubtleGrayTemplate from "../../../../pages/PaidTemplates/SubtleGrayTemplate";
+import LightBlushTemplate from "../../../../pages/PaidTemplates/LightBlushTemplate";
 import mixpanel from "../../../../analytics/mixpanel";
 
 import { barber, HairSalon, MakeUp, Nail, gym, spa, dental } from "../../../../data/Services";
@@ -301,6 +303,20 @@ const PaidPreviewTemplate = () => {
       case 52:
         return (
           <MinimalistTemplate
+            subdomain={userDetails?.ecosystemDomain}
+            userDetails={userDetails}
+          />
+        );
+      case 53:
+        return (
+          <SubtleGrayTemplate
+            subdomain={userDetails?.ecosystemDomain}
+            userDetails={userDetails}
+          />
+        );
+      case 54:
+        return (
+          <LightBlushTemplate
             subdomain={userDetails?.ecosystemDomain}
             userDetails={userDetails}
           />

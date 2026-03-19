@@ -20,62 +20,28 @@ import {
 import { Link } from "react-router-dom";
 import PaidBookingModal from "./BookingModal/PaidBookingModal";
 import DimpifiedLogo from "../../pages/LandingPages/images/dimp-blue.png";
+import axios from "axios";
 
-// Business contact information - Premium Cuts Barbershop details
-const businessContact = {
+// Demo fallback data (used when no subdomain/userDetails provided, e.g. preview mode)
+const demoBusinessContact = {
   phone: "2348109174125",
   email: "premiumcuts.barber@gmail.com",
   address: "Shop 5, Unity Plaza, Allen Avenue, Ikeja, Lagos",
 };
 
-// Business information - Premium Cuts Barbershop
-const businessInfo = {
+const demoBusinessInfo = {
   name: "Premium Cuts Barbershop",
   shortName: "Premium Cuts",
   description:
     "Where style meets precision. We offer professional barbering services tailored to your unique style. Our experienced barbers use premium products and techniques to give you the perfect cut every time.",
-  longDescription:
-    "At Premium Cuts Barbershop, we combine traditional barbering techniques with modern styles to create looks that stand out. Our team of master barbers specializes in various cutting and grooming techniques, ensuring every client leaves feeling confident and looking their best.",
-  contact: businessContact,
-  social: {
-    facebook: "https://facebook.com/premiumcuts",
-    twitter: "https://twitter.com/premiumcuts",
-    instagram: "https://instagram.com/premiumcuts",
-    linkedin: "https://linkedin.com/company/premiumcuts",
-  },
+  contact: demoBusinessContact,
 };
 
-// Bank account details for payments
-const bankDetails = {
-  accountName: "Premium Cuts Barbershop Ltd",
-  bankName: "Access Bank",
-  accountNumber: "0789123456",
-};
-
-// Time slots for bookings
-const timeSlots = [
-  { time: "09:00 AM", booked: false },
-  { time: "10:00 AM", booked: false },
-  { time: "11:00 AM", booked: false },
-  { time: "12:00 PM", booked: false },
-  { time: "01:00 PM", booked: false },
-  { time: "02:00 PM", booked: false },
-  { time: "03:00 PM", booked: false },
-  { time: "04:00 PM", booked: false },
-  { time: "05:00 PM", booked: false },
-  { time: "06:00 PM", booked: false },
-  { time: "07:00 PM", booked: false },
-];
-
-// Services data with images - Barber services in NGN
-const services = [
+const demoServices = [
   {
     _id: "1",
     name: "Executive Haircut",
     shortDescription: "Precision haircut with hot towel treatment",
-    description:
-      "Professional haircut tailored to your face shape and style preferences. Includes consultation, precision cutting, hot towel treatment, and styling.",
-
     price: 5000,
     duration: "45 mins",
     image:
@@ -85,9 +51,6 @@ const services = [
     _id: "2",
     name: "Luxury Beard Trim",
     shortDescription: "Expert beard shaping and grooming",
-    description:
-      "Professional beard trimming and shaping service. Includes wash, conditioning, precise shaping, and oil application for a well-groomed look.",
-
     price: 3500,
     duration: "30 mins",
     image:
@@ -97,9 +60,6 @@ const services = [
     _id: "3",
     name: "Complete Package",
     shortDescription: "Haircut + Beard trim + Hot towel",
-    description:
-      "The ultimate grooming experience. Get a precision haircut, expert beard trim, and relaxing hot towel treatment all in one session.",
-
     price: 7500,
     duration: "75 mins",
     image:
@@ -109,9 +69,6 @@ const services = [
     _id: "4",
     name: "Royal Shave",
     shortDescription: "Traditional straight razor shave",
-    description:
-      "Experience the luxury of a traditional straight razor shave. Includes hot towel prep, premium shaving cream, and soothing after-shave treatment.",
-
     price: 4000,
     duration: "40 mins",
     image:
@@ -121,9 +78,6 @@ const services = [
     _id: "5",
     name: "Kids Haircut",
     shortDescription: "Friendly cuts for the little ones",
-    description:
-      "Patient and gentle haircuts for children. We make the experience fun and comfortable for kids of all ages.",
-
     price: 3000,
     duration: "30 mins",
     image:
@@ -133,53 +87,10 @@ const services = [
     _id: "6",
     name: "Hair Tattoo & Design",
     shortDescription: "Creative hair designs and line work",
-    description:
-      "Get creative with custom hair designs, line work, and patterns. Perfect for those who want to stand out from the crowd.",
-
     price: 4500,
     duration: "50 mins",
     image:
       "https://images.pexels.com/photos/3778699/pexels-photo-3778699.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-];
-
-// Team members data - Barbers
-const teamMembers = [
-  {
-    _id: "1",
-    name: "Michael Adebayo",
-    role: "Master Barber",
-    specialty: "Classic Cuts & Fades",
-    experience: "12+ years",
-    image: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=300",
-    bio: "Master barber specializing in precision fades and classic cuts. Winner of Lagos Barber Battle 2022.",
-  },
-  {
-    _id: "2",
-    name: "David Okafor",
-    role: "Senior Barber",
-    specialty: "Beard Sculpting & Designs",
-    experience: "8+ years",
-    image: "https://images.unsplash.com/photo-1621607512214-68297480165e?w=300",
-    bio: "Expert in beard sculpting and creative hair designs. Known for attention to detail and customer satisfaction.",
-  },
-  {
-    _id: "3",
-    name: "James Eze",
-    role: "Barber",
-    specialty: "Modern Styles & Fades",
-    experience: "5+ years",
-    image: "https://images.unsplash.com/photo-1622287162716-f311baa1a2b8?w=300",
-    bio: "Specializes in contemporary styles and trendy cuts. Always up-to-date with the latest barbering techniques.",
-  },
-  {
-    _id: "4",
-    name: "Grace Nnamdi",
-    role: "Color Specialist",
-    specialty: "Hair Coloring & Treatment",
-    experience: "6+ years",
-    image: "https://images.unsplash.com/photo-1582095133179-bfd8e2fc6b3c?w=300",
-    bio: "Expert in hair coloring and chemical treatments. Creates custom colors that complement each client's style.",
   },
 ];
 // Function to get initials from business name
@@ -205,10 +116,9 @@ const getServiceInitials = (serviceName) => {
 };
 
 // Get random images for hero section - only from services that have images
-// Get random images for hero section - only from services that have images
-const getHeroImages = () => {
-  const servicesWithImages = services.filter(
-    (service) => service.image && service.image.trim() !== "",
+const getHeroImages = (servicesList) => {
+  const servicesWithImages = (servicesList || []).filter(
+    (service) => (service.image || service.serviceImage) && (service.image || service.serviceImage).trim() !== "",
   );
 
   if (servicesWithImages.length === 0) {
@@ -227,24 +137,91 @@ const getHeroImages = () => {
   return shuffled
     .slice(0, Math.min(3, servicesWithImages.length))
     .map((service) => ({
-      image: service.image,
+      image: service.image || service.serviceImage,
       initials: getServiceInitials(service.name),
     }));
 };
 
-const SubtleGrayTemplate = () => {
+const SubtleGrayTemplate = ({ subdomain, userDetails }) => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [heroImages, setHeroImages] = useState([]);
+  const [services, setServices] = useState(demoServices);
+  const [loading, setLoading] = useState(false);
+  const [apiData, setApiData] = useState(null);
+
+  // Derive business info: prefer API response data, then userDetails prop, then demo fallback
+  const businessName =
+    apiData?.businessHoursRecords?.[0]?.ecosystemName ||
+    userDetails?.ecosystemName ||
+    demoBusinessInfo.name;
+  const businessShortName = businessName.split(" ").slice(0, 2).join(" ");
+  const businessDescription =
+    apiData?.description ||
+    userDetails?.ecosystemDescription ||
+    demoBusinessInfo.description;
+  const businessContact = {
+    phone: apiData?.phoneNumber || userDetails?.phoneNumber || demoBusinessContact.phone,
+    email: apiData?.email || userDetails?.email || demoBusinessContact.email,
+    address:
+      apiData?.localGovernment ||
+      userDetails?.address ||
+      demoBusinessContact.address,
+  };
+  const businessInfo = {
+    name: businessName,
+    shortName: businessShortName,
+    description: businessDescription,
+    contact: businessContact,
+  };
+  const serviceCurrency = apiData?.currency || "NGN";
 
   // Get business initials dynamically
-  const businessInitials = getBusinessInitials(businessInfo.name);
+  const businessInitials = getBusinessInitials(businessName);
+
+  // Fetch real services when subdomain is provided
+  useEffect(() => {
+    if (!subdomain) return;
+
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/get-all-services/${subdomain}`,
+          { signal: controller.signal }
+        );
+        if (isMounted && response.data?.length > 0) {
+          const firstItem = response.data[0];
+          setApiData(firstItem);
+          const allServices = response.data.flatMap((item) => item.services);
+          if (allServices.length > 0) {
+            setServices(allServices);
+          }
+        }
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("Error fetching services:", error);
+        }
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchServices();
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [subdomain]);
 
   useEffect(() => {
     // Set random hero images on component mount
-    setHeroImages(getHeroImages());
-  }, []);
+    setHeroImages(getHeroImages(services));
+  }, [services]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -321,13 +298,9 @@ const SubtleGrayTemplate = () => {
       <PaidBookingModal
         isOpen={isBookingModalOpen}
         handleClose={closeBookingModal}
-        serviceCurrency="NGN"
-        subdomain="demo"
+        serviceCurrency={serviceCurrency}
+        subdomain={subdomain || "demo"}
         businessInfo={businessInfo}
-        services={services}
-        teamMembers={teamMembers}
-        timeSlots={timeSlots}
-        bankDetails={bankDetails}
         initialSelectedService={selectedService}
       />
 
@@ -481,71 +454,79 @@ const SubtleGrayTemplate = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => (
-              <button
-                key={service._id}
-                onClick={() => openBookingModal(service)}
-                className="group cursor-pointer bg-offwhite-50 border border-darkgray-200 hover:border-darkgray-400 hover:shadow-lg transition-all duration-300 p-0 overflow-hidden text-left w-full"
-              >
-                {/* Service Image with Fallback */}
-                <div className="h-48 overflow-hidden bg-gray-200">
-                  {service.image ? (
-                    <img
-                      src={service.image}
-                      alt={service.name}
-                      className="w-full h-full object-cover transition group-hover:scale-110"
-                      onError={(e) => handleImageError(e, service.name)}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-gray-600 font-semibold text-2xl">
-                        {getServiceInitials(service.name)}
-                      </span>
+          {loading ? (
+            <div className="flex justify-center items-center h-48">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-600" />
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {services.map((service) => (
+                  <button
+                    key={service._id}
+                    onClick={() => openBookingModal(service)}
+                    className="group cursor-pointer bg-offwhite-50 border border-darkgray-200 hover:border-darkgray-400 hover:shadow-lg transition-all duration-300 p-0 overflow-hidden text-left w-full"
+                  >
+                    {/* Service Image with Fallback */}
+                    <div className="h-48 overflow-hidden bg-gray-200">
+                      {(service.image || service.serviceImage) ? (
+                        <img
+                          src={service.image || service.serviceImage}
+                          alt={service.name}
+                          className="w-full h-full object-cover transition group-hover:scale-110"
+                          onError={(e) => handleImageError(e, service.name)}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-gray-600 font-semibold text-2xl">
+                            {getServiceInitials(service.name)}
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
 
-                <div className="p-6">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold text-darkgray-900 mt-1 group-hover:text-darkgray-700">
-                      {service.name}
-                    </h3>
-                  </div>
+                    <div className="p-6">
+                      <div className="mb-4">
+                        <h3 className="text-xl font-bold text-darkgray-900 mt-1 group-hover:text-darkgray-700">
+                          {service.name}
+                        </h3>
+                      </div>
 
-                  <p className="text-darkgray-600 text-sm mb-6">
-                    {service.shortDescription}
-                  </p>
+                      <p className="text-darkgray-600 text-sm mb-6">
+                        {service.shortDescription}
+                      </p>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-darkgray-200">
-                    <div>
-                      <span className="text-2xl font-bold text-darkgray-900">
-                        {formatCurrency(service.price)}
-                      </span>
+                      <div className="flex items-center justify-between pt-4 border-t border-darkgray-200">
+                        <div>
+                          <span className="text-2xl font-bold text-darkgray-900">
+                            {formatCurrency(service.price)}
+                          </span>
+                        </div>
+                        <span className="text-sm text-darkgray-500 bg-darkgray-100 px-3 py-1">
+                          {service.duration || `${service.deliveryTime} mins`}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-sm text-darkgray-500 bg-darkgray-100 px-3 py-1">
-                      {service.duration}
-                    </span>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
+                  </button>
+                ))}
+              </div>
 
-          {/* Desktop Footer */}
-          <div className="hidden md:block text-center mt-16 text-sm text-gray-500">
-            Click{" "}
-            <a
-              href="https://dimpified.com/free/auth/pre-signup"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="text-purple-600 font-medium cursor-pointer hover:underline">
-                here
-              </span>
-            </a>{" "}
-            to also get a free booking link for your business.
-          </div>
+              {/* Desktop Footer */}
+              <div className="hidden md:block text-center mt-16 text-sm text-gray-500">
+                Click{" "}
+                <a
+                  href="https://dimpified.com/free/auth/pre-signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="text-purple-600 font-medium cursor-pointer hover:underline">
+                    here
+                  </span>
+                </a>{" "}
+                to also get a free booking link for your business.
+              </div>
+            </>
+          )}
         </div>
       </section>
 
