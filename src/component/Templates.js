@@ -298,6 +298,20 @@ const templates = [
     image: null,
     category: "Paid Booking",
   },
+  {
+    id: 53,
+    title: "Subtle Gray Template",
+    description: "Professional dark/gray themed booking page",
+    image: null,
+    category: "Paid Booking",
+  },
+  {
+    id: 54,
+    title: "Light Blush Template",
+    description: "Warm, spa-like booking page with blush tones",
+    image: null,
+    category: "Paid Booking",
+  },
 ];
 
 export default templates;

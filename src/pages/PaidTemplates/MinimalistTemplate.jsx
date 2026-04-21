@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import Logo from "../../pages/LandingPages/images/dimp-blue.png";
 import {
   HiOutlineLocationMarker,
@@ -427,6 +428,11 @@ const MinimalistTemplate = ({ subdomain, userDetails }) => {
       </div>
     </div>
   );
+};
+
+MinimalistTemplate.propTypes = {
+  subdomain: PropTypes.string,
+  userDetails: PropTypes.object,
 };
 
 export default MinimalistTemplate;

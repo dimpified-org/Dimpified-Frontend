@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import MinimalistTemplate from "./MinimalistTemplate";
+import SubtleGrayTemplate from "./SubtleGrayTemplate";
+import LightBlushTemplate from "./LightBlushTemplate";
 
 const PaidBookingPage = () => {
   const { subdomain } = useParams();
@@ -41,9 +43,18 @@ const PaidBookingPage = () => {
     );
   }
 
-  return (
-    <MinimalistTemplate subdomain={subdomain} userDetails={userDetails} />
-  );
+  // Determine which template to render based on ecosystem templateNumber
+  const templateNumber = userDetails?.templateNumber;
+
+  switch (templateNumber) {
+    case 53:
+      return <SubtleGrayTemplate subdomain={subdomain} userDetails={userDetails} />;
+    case 54:
+      return <LightBlushTemplate subdomain={subdomain} userDetails={userDetails} />;
+    case 52:
+    default:
+      return <MinimalistTemplate subdomain={subdomain} userDetails={userDetails} />;
+  }
 };
 
 export default PaidBookingPage;
