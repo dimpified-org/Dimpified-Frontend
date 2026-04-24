@@ -27,7 +27,7 @@ const litePlanFeatures = [
   },
   {
     title: "Booking link",
-    description: "Share on socials to get bookings, not DMs.",
+    description: "Share on socials to get bookings, not just DMs.",
   },
   {
     title: "Calendar sync",
@@ -138,7 +138,7 @@ const PaidSubscription = () => {
   const [selectedInterval, setSelectedInterval] = useState("Monthly");
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState(
-    "🔍 Verifying your payment... Just a sec! 😊"
+    "🔍 Verifying your payment... Just a sec! 😊",
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userDetailEco, setUserDetailEco] = useState(null);
@@ -159,8 +159,7 @@ const PaidSubscription = () => {
     "🎯 Finalizing your subscription... You're nearly set! ✨",
   ];
 
-  const price =
-    subscriptionPlans[selectedInterval]?.["Lite"]?.amount || 2500;
+  const price = subscriptionPlans[selectedInterval]?.["Lite"]?.amount || 2500;
 
   const getReferralAmount = () => {
     const referralDiscounts = { "2R0873": 0.925, "6LS937": 0.85 };
@@ -183,8 +182,7 @@ const PaidSubscription = () => {
       title: "Lite Subscription",
       description: `${selectedInterval} Lite plan subscription`,
     },
-    payment_plan:
-      subscriptionPlans[selectedInterval]?.["Lite"]?.code,
+    payment_plan: subscriptionPlans[selectedInterval]?.["Lite"]?.code,
   });
 
   // One-time payment amount
@@ -197,9 +195,7 @@ const PaidSubscription = () => {
   };
   const getOneTimeAmount = () => {
     const mappedInterval = oneTimeIntervalMap[selectedInterval] || "Quarterly";
-    return (
-      oneTimePaymentPlan[mappedInterval]?.["Lite"]?.amount || price * 3
-    );
+    return oneTimePaymentPlan[mappedInterval]?.["Lite"]?.amount || price * 3;
   };
   const oneTimeAmount = getOneTimeAmount();
 
@@ -233,8 +229,7 @@ const PaidSubscription = () => {
     },
     customizations: {
       title: "Lite Referral One-Time Subscription",
-      description:
-        "One-time Lite plan subscription with referral discount",
+      description: "One-time Lite plan subscription with referral discount",
     },
     meta: {
       discount: true,
@@ -276,13 +271,11 @@ const PaidSubscription = () => {
     const maxAttempts = 5;
     const intervalId = setInterval(async () => {
       attempts++;
-      setLoadingMessage(
-        loadingMessages[attempts - 1] || "Verifying..."
-      );
+      setLoadingMessage(loadingMessages[attempts - 1] || "Verifying...");
       const authFetch = AxiosInterceptor(accessToken, refreshToken);
       try {
         const result = await authFetch.get(
-          `${import.meta.env.VITE_API_URL}/check-subscription-status/${userDetails?.email}`
+          `${import.meta.env.VITE_API_URL}/check-subscription-status/${userDetails?.email}`,
         );
         if (
           result.status === 201 &&
@@ -300,9 +293,7 @@ const PaidSubscription = () => {
       } catch (error) {
         if (attempts >= maxAttempts) {
           clearInterval(intervalId);
-          showToast(
-            "Subscription verification timed out. Please try again."
-          );
+          showToast("Subscription verification timed out. Please try again.");
           setLoading(false);
         }
       }
@@ -314,13 +305,11 @@ const PaidSubscription = () => {
     const maxAttempts = 5;
     const intervalId = setInterval(async () => {
       attempts++;
-      setLoadingMessage(
-        loadingMessages[attempts - 1] || "Verifying..."
-      );
+      setLoadingMessage(loadingMessages[attempts - 1] || "Verifying...");
       const authFetch = AxiosInterceptor(accessToken, refreshToken);
       try {
         const result = await authFetch.get(
-          `${import.meta.env.VITE_API_URL}/check-subscription-status/${userDetails?.email}`
+          `${import.meta.env.VITE_API_URL}/check-subscription-status/${userDetails?.email}`,
         );
         if (
           result.status === 201 &&
@@ -339,9 +328,7 @@ const PaidSubscription = () => {
       } catch (error) {
         if (attempts >= maxAttempts) {
           clearInterval(intervalId);
-          showToast(
-            "Subscription verification timed out. Please try again."
-          );
+          showToast("Subscription verification timed out. Please try again.");
           setLoading(false);
         }
       }
@@ -407,9 +394,7 @@ const PaidSubscription = () => {
           <div className="bg-white rounded-2xl border-2 border-purple-200 overflow-hidden shadow-lg">
             {/* Card Header */}
             <div className="px-6 pt-8 pb-4">
-              <h2 className="text-2xl font-bold text-gray-900">
-                Lite Plan
-              </h2>
+              <h2 className="text-2xl font-bold text-gray-900">Lite Plan</h2>
               <p className="text-gray-500 text-sm mt-1">
                 Solopreneur with physical store and multiple staffs.
               </p>
@@ -423,7 +408,14 @@ const PaidSubscription = () => {
                     : price.toLocaleString()}
                 </span>
                 <span className="text-gray-500 text-sm ml-2">
-                  Per {selectedInterval === "Monthly" ? "Month" : selectedInterval === "Quarterly" ? "Quarter" : selectedInterval === "Biannually" ? "6 Months" : "Year"}
+                  Per{" "}
+                  {selectedInterval === "Monthly"
+                    ? "Month"
+                    : selectedInterval === "Quarterly"
+                      ? "Quarter"
+                      : selectedInterval === "Biannually"
+                        ? "6 Months"
+                        : "Year"}
                 </span>
               </div>
             </div>
@@ -449,8 +441,7 @@ const PaidSubscription = () => {
                   <li key={idx} className="flex items-start gap-3">
                     <FaCheck className="text-gray-500 mt-1 flex-shrink-0 text-xs" />
                     <span className="text-sm text-gray-700">
-                      <strong>{feature.title}:</strong>{" "}
-                      {feature.description}
+                      <strong>{feature.title}:</strong> {feature.description}
                     </span>
                   </li>
                 ))}

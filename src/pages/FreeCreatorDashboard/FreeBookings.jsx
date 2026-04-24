@@ -62,7 +62,7 @@ const FreeAllBookings = () => {
       booking.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       booking.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       booking.service?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      booking.bookingId?.toLowerCase().includes(searchQuery.toLowerCase())
+      booking.bookingId?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Pagination
@@ -115,13 +115,13 @@ const FreeAllBookings = () => {
                 View and manage all your bookings
               </p>
             </div>
-            <ButtonSmallPurple
+            {/* <ButtonSmallPurple
               bg="[#9F68FE]"
               className="text-white px-6 py-2 font-semibold flex items-center gap-2 transition-all rounded-xl whitespace-nowrap w-fit"
             >
               <ArrowUpCircle className="w-5 h-5" />
               Upgrade plan
-            </ButtonSmallPurple>
+            </ButtonSmallPurple> */}
           </div>
 
           {/* Search */}
@@ -264,7 +264,7 @@ const FreeAllBookings = () => {
                           >
                             {page}
                           </button>
-                        )
+                        ),
                       )}
                     </div>
                   </div>

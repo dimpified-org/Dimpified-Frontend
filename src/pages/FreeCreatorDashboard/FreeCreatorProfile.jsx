@@ -115,13 +115,13 @@ const FreeCreatorProfile = () => {
                 Manage your personal information
               </p>
             </div>
-            <ButtonSmallPurple
+            {/* <ButtonSmallPurple
               bg="[#9F68FE]"
               className="text-white px-6 py-2 font-semibold flex items-center gap-2 transition-all rounded-xl whitespace-nowrap w-fit"
             >
               <ArrowUpCircle className="w-5 h-5" />
               Upgrade plan
-            </ButtonSmallPurple>
+            </ButtonSmallPurple> */}
           </div>
 
           {/* Main Content Grid */}
@@ -275,7 +275,7 @@ const FreeCreatorProfile = () => {
                     </div>
 
                     {/* Address */}
-                    <div >
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Address
                       </label>
@@ -293,7 +293,7 @@ const FreeCreatorProfile = () => {
                     </div>
 
                     {/* Ecosystem Domain (Read-only) */}
-                    <div >
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Website Domain
                       </label>
@@ -319,7 +319,7 @@ const FreeCreatorProfile = () => {
                       placeholder="Tell us about your business..."
                     ></textarea>
                     {errors.description && (
-                      <p className="text-red-500 text-sm mt-1"> 
+                      <p className="text-red-500 text-sm mt-1">
                         {errors.description.message}
                       </p>
                     )}

@@ -145,11 +145,12 @@ const FreeOnboardingReview = () => {
         currency: "NGN",
         services: servicesData.services.map((service) => ({
           name: service.name,
-          shortDescription: `Professional ${service.name.toLowerCase()} service`,
+          shortDescription:
+            service.description || `Professional ${service.name} service`,
           price: parseFloat(service.amount) || 0,
           deliveryTime: service.duration,
           priceFormat: "Fixed",
-          serviceImage: "null",
+          serviceImage: service.image || null,
         })),
       };
 
@@ -432,7 +433,9 @@ const FreeOnboardingReview = () => {
               </div>
 
               <div>
-                <p className="text-sm text-gray-600">Your Prospective Booking Link</p>
+                <p className="text-sm text-gray-600">
+                  Your Prospective Booking Link
+                </p>
                 <p className="text-purple-600 font-medium break-all">
                   dimpified.com/{businessData.websiteAddress}
                 </p>
@@ -500,22 +503,53 @@ const FreeOnboardingReview = () => {
             </div>
 
             <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-4 text-sm font-medium text-gray-600 pb-2 border-b border-gray-300">
-                <span>Service</span>
-                <span>Amount</span>
-                <span>Duration</span>
+              <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-600 pb-2 border-b border-gray-300">
+                <span className="col-span-1">Image</span>
+                <span className="col-span-3">Service</span>
+                <span className="col-span-2">Amount</span>
+                <span className="col-span-2">Duration</span>
+                <span className="col-span-4">Description</span>
               </div>
 
               {servicesData.services.map((service, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-3 gap-4 items-center bg-white rounded-xl p-4 border border-gray-200"
+                  className="grid grid-cols-12 gap-4 items-start bg-white rounded-xl p-4 border border-gray-200"
                 >
-                  <span className="font-medium text-gray-900">
+                  {/* Image */}
+                  <div className="col-span-1 flex justify-center">
+                    {service.image ? (
+                      <img
+                        src={service.image}
+                        alt={service.name}
+                        className="w-12 h-12 object-cover rounded-lg"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-xs">
+                        No img
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Service Name */}
+                  <span className="col-span-3 font-medium text-gray-900">
                     {service.name}
                   </span>
-                  <span className="text-gray-800">₦ {service.amount}</span>
-                  <span className="text-gray-800">{service.duration} mins</span>
+
+                  {/* Amount */}
+                  <span className="col-span-2 text-gray-800">
+                    ₦ {service.amount}
+                  </span>
+
+                  {/* Duration */}
+                  <span className="col-span-2 text-gray-800">
+                    {service.duration} mins
+                  </span>
+
+                  {/* Description */}
+                  <span className="col-span-4 text-sm text-gray-700 line-clamp-2">
+                    {service.description || "No description"}
+                  </span>
                 </div>
               ))}
             </div>

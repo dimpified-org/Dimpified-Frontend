@@ -1,11 +1,13 @@
 // pages/auth/FreeOnboardingSetupOne.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 import FreeOnboardingLayout from "../FreeOnboardingLayout";
 import SubStepWrapper from "./SubStepWrapper";
 import { LongInputWithPlaceholder } from "../../../../../component/Inputs";
 import { ButtonLongPurple } from "../../../../../component/Buttons";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../../../../component/ShowToast";
+import api from "../../../../../api/verifyDomain";
 
 export const businessTypesData = [
   { name: "Hair Salon", icon: "", active: true, visible: true },
@@ -15,20 +17,45 @@ export const businessTypesData = [
   { name: "Spa and Wellness Center", icon: "", active: false, visible: true },
   { name: "Skincare Clinic", icon: "", active: false, visible: true },
   { name: "Makeup Artist Services", icon: "", active: false, visible: true },
-  { name: "Personal Training and Fitness Coaching", icon: "", active: false, visible: true },
+  {
+    name: "Personal Training and Fitness Coaching",
+    icon: "",
+    active: false,
+    visible: true,
+  },
   { name: "Yoga and Pilates Studio", icon: "", active: false, visible: true },
-  { name: "Weight Loss and Nutrition Counseling", icon: "", active: false, visible: true },
+  {
+    name: "Weight Loss and Nutrition Counseling",
+    icon: "",
+    active: false,
+    visible: true,
+  },
   { name: "Chiropractic Services", icon: "", active: false, visible: true },
   { name: "Mental Health Counseling", icon: "", active: false, visible: true },
-  { name: "Tattoo and Piercing Studio", icon: "", active: false, visible: true },
+  {
+    name: "Tattoo and Piercing Studio",
+    icon: "",
+    active: false,
+    visible: true,
+  },
   { name: "Aromatherapy Services", icon: "", active: false, visible: true },
   { name: "Dental Hygiene Services", icon: "", active: false, visible: true },
   { name: "Reflexology Services", icon: "", active: false, visible: true },
   { name: "Life Coaching", icon: "", active: false, visible: true },
-  { name: "Eyelash Extension Services", icon: "", active: false, visible: true },
+  {
+    name: "Eyelash Extension Services",
+    icon: "",
+    active: false,
+    visible: true,
+  },
   { name: "Cosmetic Dentistry", icon: "", active: false, visible: true },
-  { name: "Personal Stylist and Image Consulting", icon: "", active: false, visible: true },
-  
+  {
+    name: "Personal Stylist and Image Consulting",
+    icon: "",
+    active: false,
+    visible: true,
+  },
+
   // Trade Services
   { name: "Plumbing Services", icon: "", active: false, visible: true },
   { name: "Electrical Services", icon: "", active: false, visible: true },
@@ -40,7 +67,12 @@ export const businessTypesData = [
   { name: "Masonry Services", icon: "", active: false, visible: true },
   { name: "Flooring Installation", icon: "", active: false, visible: true },
   { name: "Auto Repair", icon: "", active: false, visible: true },
-  { name: "Welding and Metal Fabrication", icon: "", active: false, visible: true },
+  {
+    name: "Welding and Metal Fabrication",
+    icon: "",
+    active: false,
+    visible: true,
+  },
   { name: "Appliance Repair", icon: "", active: false, visible: true },
   { name: "Locksmith Services", icon: "", active: false, visible: true },
   { name: "Pest Control Services", icon: "", active: false, visible: true },
@@ -48,7 +80,7 @@ export const businessTypesData = [
   { name: "Moving Services", icon: "", active: false, visible: true },
   { name: "Handyman Services", icon: "", active: false, visible: true },
   { name: "Cleaning Services", icon: "", active: false, visible: true },
-  
+
   // Creative Services
   { name: "Graphic Design", icon: "", active: false, visible: true },
   { name: "Fashion Design", icon: "", active: false, visible: true },
@@ -66,7 +98,7 @@ export const businessTypesData = [
   { name: "Music Production", icon: "", active: false, visible: true },
   { name: "Voiceover Services", icon: "", active: false, visible: true },
   { name: "Podcast Production", icon: "", active: false, visible: true },
-  
+
   // Event Services
   { name: "Event Planning", icon: "", active: false, visible: true },
   { name: "Wedding Planning", icon: "", active: false, visible: true },
@@ -77,12 +109,17 @@ export const businessTypesData = [
   { name: "Videography Services", icon: "", active: false, visible: true },
   { name: "Florist Services", icon: "", active: false, visible: true },
   { name: "Event Rentals", icon: "", active: false, visible: true },
-  { name: "Lighting and Sound Services", icon: "", active: false, visible: true },
+  {
+    name: "Lighting and Sound Services",
+    icon: "",
+    active: false,
+    visible: true,
+  },
   { name: "Event Coordination", icon: "", active: false, visible: true },
   { name: "Bartending Services", icon: "", active: false, visible: true },
   { name: "Security Services", icon: "", active: false, visible: true },
   { name: "Decoration Services", icon: "", active: false, visible: true },
-  
+
   // Educational Services
   { name: "Tutoring", icon: "", active: false, visible: true },
   { name: "Test Preparation", icon: "", active: false, visible: true },
@@ -95,10 +132,15 @@ export const businessTypesData = [
   { name: "Corporate Training", icon: "", active: false, visible: true },
   { name: "Public Speaking Coaching", icon: "", active: false, visible: true },
   { name: "STEM Education", icon: "", active: false, visible: true },
-  { name: "College Admissions Counseling", icon: "", active: false, visible: true },
+  {
+    name: "College Admissions Counseling",
+    icon: "",
+    active: false,
+    visible: true,
+  },
   { name: "Career Coaching", icon: "", active: false, visible: true },
   { name: "Online Courses", icon: "", active: false, visible: true },
-  
+
   // Technology Services
   { name: "Software Development", icon: "", active: false, visible: true },
   { name: "IT Support", icon: "", active: false, visible: true },
@@ -116,6 +158,7 @@ export const businessTypesData = [
 
 const FreeOnboardingSetupOne = () => {
   const navigate = useNavigate();
+  const { accessToken, refreshToken } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState(() => {
     const saved = sessionStorage.getItem("businessIdentity");
@@ -128,12 +171,96 @@ const FreeOnboardingSetupOne = () => {
     };
   });
 
+  // Domain validation states
+  const [isDomainValid, setIsDomainValid] = useState(false);
+  const [domainMessage, setDomainMessage] = useState("");
+  const [domainErrorMessage, setDomainErrorMessage] = useState("");
+  const [domainSuggestions, setDomainSuggestions] = useState([]);
+  const [isValidatingDomain, setIsValidatingDomain] = useState(false);
+  const [hasCheckedDomain, setHasCheckedDomain] = useState(false);
+
   // Auto-save to sessionStorage on change
   useEffect(() => {
     if (formData.pageName || formData.description || formData.address) {
       sessionStorage.setItem("businessIdentity", JSON.stringify(formData));
     }
   }, [formData]);
+
+  // validate business name exist
+  const validateDomain = useCallback(
+    async (domainName) => {
+      if (!domainName || !accessToken || !refreshToken) {
+        setDomainErrorMessage(
+          "Please enter a domain name and ensure you are logged in.",
+        );
+        setIsDomainValid(false);
+        setDomainMessage("");
+        setDomainSuggestions([]);
+        return;
+      }
+
+      setIsValidatingDomain(true);
+
+      try {
+        const sanitizedDomain = domainName
+          .toLowerCase()
+          .replace(/\s+/g, "")
+          .replace(/[^a-z0-9-]/g, "");
+
+        const response = await api.creatorVerifyDomain({
+          domainName: sanitizedDomain,
+          businesstype: formData.businessType,
+          accessToken,
+          refreshToken,
+        });
+
+        if (response) {
+          const { message, suggestions = [] } = response.data;
+
+          if (message === "Domain name is available") {
+            setIsDomainValid(true);
+            setDomainMessage("✓ This domain is available!");
+            setDomainErrorMessage("");
+            setDomainSuggestions([]);
+          } else if (message === "Domain name not available") {
+            setIsDomainValid(false);
+            setDomainErrorMessage("This domain is already taken");
+            setDomainMessage("");
+            setDomainSuggestions(suggestions || []);
+          }
+        }
+      } catch (error) {
+        setIsDomainValid(false);
+        setDomainErrorMessage(
+          error.response?.data?.message ||
+            "Error checking domain availability.",
+        );
+        setDomainMessage("");
+        setDomainSuggestions([]);
+      } finally {
+        setIsValidatingDomain(false);
+      }
+    },
+    [accessToken, refreshToken, formData.businessType],
+  );
+
+  // Auto-validate domain when pageName changes (debounced)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (formData.pageName.trim()) {
+        validateDomain(formData.pageName.trim());
+        setHasCheckedDomain(true);
+      } else {
+        setIsDomainValid(false);
+        setDomainMessage("");
+        setDomainErrorMessage("");
+        setDomainSuggestions([]);
+        setHasCheckedDomain(false);
+      }
+    }, 800); // 800ms debounce
+
+    return () => clearTimeout(timer);
+  }, [formData.pageName, validateDomain]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -144,11 +271,19 @@ const FreeOnboardingSetupOne = () => {
     formData.pageName.trim() &&
     formData.businessType &&
     formData.description.trim().length >= 10 &&
-    formData.address.trim();
+    formData.address.trim() &&
+    isDomainValid; // Domain must be verified
 
   const handleNext = () => {
     if (!isValid) {
-      showToast("Please fill in all required fields", "error");
+      if (!isDomainValid && hasCheckedDomain) {
+        showToast(
+          "Please select an available domain or use a suggestion",
+          "error",
+        );
+      } else {
+        showToast("Please fill in all required fields", "error");
+      }
       return;
     }
 
@@ -170,6 +305,11 @@ const FreeOnboardingSetupOne = () => {
     navigate("/free/auth/availability");
   };
 
+  // Handle domain suggestion selection
+  const handleSuggestionClick = (suggestion) => {
+    setFormData((prev) => ({ ...prev, pageName: suggestion }));
+  };
+
   return (
     <FreeOnboardingLayout currentStep={3}>
       <div className="w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -183,28 +323,7 @@ const FreeOnboardingSetupOne = () => {
         </p>
 
         <div className="space-y-7 sm:space-y-8">
-          {/* Booking Page Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-800 mb-2">
-              Booking Page Name <span className="text-red-500">*</span>
-            </label>
-            <LongInputWithPlaceholder
-              name="pageName"
-              placeholder="e.g Emmanuel Barbing Salon"
-              value={formData.pageName}
-              onChange={handleChange}
-              className="h-14 rounded-2xl bg-gray-50 border-gray-200 text-base"
-            />
-            <p className="text-xs text-gray-500 mt-2">
-              Your booking link will be: dimpified.com/
-              <strong>
-                {formData.pageName.toLowerCase().replace(/[^a-z0-9]/g, "") ||
-                  "yourname"}
-              </strong>
-            </p>
-          </div>
-
-          {/* Business Type */}
+          {/* Business Type - FIRST */}
           <div>
             <label className="block text-sm font-medium text-gray-800 mb-2">
               Business Type <span className="text-red-500">*</span>
@@ -229,6 +348,98 @@ const FreeOnboardingSetupOne = () => {
                   </option>
                 ))}
             </select>
+          </div>
+
+          {/* Booking Page Name - SECOND */}
+          <div>
+            <label className="block text-sm font-medium text-gray-800 mb-2">
+              Booking Page Name <span className="text-red-500">*</span>
+            </label>
+            <LongInputWithPlaceholder
+              name="pageName"
+              placeholder="e.g Emmanuel Barbing Salon"
+              value={formData.pageName}
+              onChange={handleChange}
+              className="h-14 rounded-2xl bg-gray-50 border-gray-200 text-base"
+            />
+            <p className="text-xs text-gray-500 mt-2">
+              Your booking link will be: dimpified.com/
+              <strong>
+                {formData.pageName.toLowerCase().replace(/[^a-z0-9]/g, "") ||
+                  "yourname"}
+              </strong>
+            </p>
+
+            {/* Domain Validation Status */}
+            {formData.pageName.trim() && (
+              <div className="mt-3 space-y-2">
+                {isValidatingDomain && (
+                  <div className="flex items-center text-blue-600 text-sm">
+                    <div className="animate-spin inline-block w-4 h-4 mr-2 border-2 border-blue-600 border-t-transparent rounded-full" />
+                    Checking availability...
+                  </div>
+                )}
+
+                {!isValidatingDomain && hasCheckedDomain && isDomainValid && (
+                  <div className="flex items-center text-green-600 text-sm font-medium">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {domainMessage}
+                  </div>
+                )}
+
+                {!isValidatingDomain && hasCheckedDomain && !isDomainValid && (
+                  <div className="space-y-2">
+                    <div className="flex items-center text-red-600 text-sm font-medium">
+                      <svg
+                        className="w-4 h-4 mr-2"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      {domainErrorMessage}
+                    </div>
+
+                    {/* Domain Suggestions */}
+                    {domainSuggestions && domainSuggestions.length > 0 && (
+                      <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                        <p className="text-xs font-semibold text-blue-900 mb-2">
+                          Try these available alternatives:
+                        </p>
+                        <div className="space-y-1">
+                          {domainSuggestions.map((suggestion, index) => (
+                            <button
+                              key={index}
+                              onClick={() => handleSuggestionClick(suggestion)}
+                              className="w-full text-left px-3 py-2 text-sm text-blue-700 bg-white hover:bg-blue-100 rounded border border-blue-300 transition"
+                            >
+                              <span className="font-medium">
+                                dimpified.com/
+                              </span>
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Description */}

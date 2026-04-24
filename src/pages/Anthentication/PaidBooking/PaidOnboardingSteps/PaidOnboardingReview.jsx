@@ -136,11 +136,11 @@ const PaidOnboardingReview = () => {
         currency: "NGN",
         services: servicesData.services.map((service) => ({
           name: service.name,
-          shortDescription: `Professional ${service.name.toLowerCase()} service`,
+          shortDescription: service.description,
           price: parseFloat(service.amount) || 0,
           deliveryTime: service.duration,
           priceFormat: "Fixed",
-          serviceImage: "null",
+          serviceImage: service.image || "null",
         })),
       };
 
@@ -305,23 +305,53 @@ const PaidOnboardingReview = () => {
               </button>
             </div>
 
-            <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-4 text-sm font-medium text-gray-600 pb-2 border-b border-gray-300">
-                <span>Service</span>
-                <span>Amount</span>
-                <span>Duration</span>
-              </div>
-
+            <div className="space-y-4">
               {servicesData.services.map((service, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-3 gap-4 items-center bg-white rounded-xl p-4 border border-gray-200"
+                  className="bg-white rounded-xl p-4 border border-gray-200 space-y-3"
                 >
-                  <span className="font-medium text-gray-900">
-                    {service.name}
-                  </span>
-                  <span className="text-gray-800">₦ {service.amount}</span>
-                  <span className="text-gray-800">{service.duration} mins</span>
+                  {/* Service Header */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div>
+                      <p className="text-sm text-gray-600">Service</p>
+                      <p className="font-semibold text-gray-900">
+                        {service.name}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Amount</p>
+                      <p className="font-semibold text-gray-900">₦ {service.amount}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Duration</p>
+                      <p className="font-semibold text-gray-900">
+                        {service.duration} mins
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  {service.description && (
+                    <div>
+                      <p className="text-sm text-gray-600">Description</p>
+                      <p className="text-gray-800 break-words whitespace-pre-wrap">
+                        {service.description}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Image */}
+                  {service.image && (
+                    <div>
+                      <p className="text-sm text-gray-600 mb-2">Image</p>
+                      <img
+                        src={service.image}
+                        alt={service.name}
+                        className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

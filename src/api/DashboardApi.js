@@ -25,7 +25,7 @@ const creatorBookingDate = async ({
         date,
         creatorId,
         userType,
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -33,7 +33,7 @@ const creatorBookingDate = async ({
       navigate("/creator/signin");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error getting Booking Date"
+        error.response?.data?.message || "Error getting Booking Date",
       );
     }
   }
@@ -50,12 +50,12 @@ const creatorEarning = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.get(
       `${PLAIN_API_URL}/ecosystem-earnings/${ecosystemDomain}`,
-      {}
+      {},
     );
     return response;
   } catch (error) {
@@ -64,7 +64,7 @@ const creatorEarning = async ({
       navigate("/creator/signin");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error creating service"
+        error.response?.data?.message || "Error creating service",
       );
     }
   }
@@ -83,7 +83,7 @@ const creatorMonthlyBooking = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.post(`${PLAIN_API_URL}/booking-stats`, {
@@ -98,7 +98,7 @@ const creatorMonthlyBooking = async ({
       navigate("/creator/signin");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching monthly booking"
+        error.response?.data?.message || "Error fetching monthly booking",
       );
     }
   }
@@ -115,12 +115,12 @@ const creatorMonthlyIncome = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.get(
       `${PLAIN_API_URL}/income-stats/${ecosystemDomain}`,
-      {}
+      {},
     );
     return response;
   } catch (error) {
@@ -129,7 +129,7 @@ const creatorMonthlyIncome = async ({
       navigate("/creator/signin");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching Monthly Income"
+        error.response?.data?.message || "Error fetching Monthly Income",
       );
     }
   }
@@ -148,7 +148,7 @@ const creatorBookingActivities = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.post(`${PLAIN_API_URL}/booking-overview`, {
@@ -163,7 +163,7 @@ const creatorBookingActivities = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching Booking Activities"
+        error.response?.data?.message || "Error fetching Booking Activities",
       );
     }
   }
@@ -180,11 +180,11 @@ const creatorWithdrawHistory = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/get-withdrawal-requests/${ecosystemDomain}`
+      `${PLAIN_API_URL}/get-withdrawal-requests/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -193,7 +193,7 @@ const creatorWithdrawHistory = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching Withdraw History "
+        error.response?.data?.message || "Error fetching Withdraw History ",
       );
     }
   }
@@ -210,11 +210,11 @@ const creatorTransactionHistory = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/transaction-history/${ecosystemDomain}`
+      `${PLAIN_API_URL}/transaction-history/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -223,7 +223,7 @@ const creatorTransactionHistory = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching transaction History "
+        error.response?.data?.message || "Error fetching transaction History ",
       );
     }
   }
@@ -240,11 +240,11 @@ const creatorTodaySales = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/daily-successful/${ecosystemDomain}`
+      `${PLAIN_API_URL}/daily-successful/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -254,7 +254,7 @@ const creatorTodaySales = async ({
     } else {
       throw new Error(
         error.response?.data?.message ||
-          "Error fetching daily successful transactions"
+          "Error fetching daily successful transactions",
       );
     }
   }
@@ -271,11 +271,11 @@ const creatorPaymentCharts = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/total-monthly-sales/${ecosystemDomain}`
+      `${PLAIN_API_URL}/total-monthly-sales/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -285,7 +285,7 @@ const creatorPaymentCharts = async ({
     } else {
       throw new Error(
         error.response?.data?.message ||
-          "Error fetching daily successful transactions"
+          "Error fetching daily successful transactions",
       );
     }
   }
@@ -302,11 +302,11 @@ const creatorEcosystemServices = async ({
     accessToken,
     refreshToken,
     dispatch,
-    navigate
+    navigate,
   );
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/get-all-services/${ecosystemDomain}`
+      `${PLAIN_API_URL}/get-all-services/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -316,7 +316,7 @@ const creatorEcosystemServices = async ({
     } else {
       throw new Error(
         error.response?.data?.message ||
-          "Error fetching daily successful transactions"
+          "Error fetching daily successful transactions",
       );
     }
   }
@@ -349,7 +349,7 @@ const creatorVerifyAccount = async ({
       {
         account,
         bankCode,
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -357,7 +357,7 @@ const creatorVerifyAccount = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error verifying Account Number"
+        error.response?.data?.message || "Error verifying Account Number",
       );
     }
   }
@@ -384,7 +384,7 @@ const creatorAddAccount = async ({
         bankName,
         currency,
         ecosystemDomain,
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -392,7 +392,7 @@ const creatorAddAccount = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error verifying Account Number"
+        error.response?.data?.message || "Error verifying Account Number",
       );
     }
   }
@@ -406,7 +406,7 @@ const creatorAllBankDetails = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/bank-details/${ecosystemDomain}`
+      `${PLAIN_API_URL}/bank-details/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -437,7 +437,7 @@ const creatorWithDraw = async ({
         amount,
         currency,
         ecosystemDomain,
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -445,7 +445,7 @@ const creatorWithDraw = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Withdrawing Earning"
+        error.response?.data?.message || "Error Withdrawing Earning",
       );
     }
   }
@@ -481,11 +481,12 @@ const creatorEditService = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Withdrawing Earning"
+        error.response?.data?.message || "Error Withdrawing Earning",
       );
     }
   }
 };
+
 const creatorUpdateProfile = async ({
   accessToken,
   refreshToken,
@@ -523,7 +524,7 @@ const creatorUpdateProfile = async ({
         category,
         subcategory,
         description,
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -531,7 +532,7 @@ const creatorUpdateProfile = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Updating Profile"
+        error.response?.data?.message || "Error Updating Profile",
       );
     }
   }
@@ -562,7 +563,7 @@ const TeamMemberUpdateProfile = async ({
         state,
         creatorId,
         address,
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -570,7 +571,7 @@ const TeamMemberUpdateProfile = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Updating Team Member Profile"
+        error.response?.data?.message || "Error Updating Team Member Profile",
       );
     }
   }
@@ -598,7 +599,7 @@ const creatorSupportRequest = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Posting Support Request"
+        error.response?.data?.message || "Error Posting Support Request",
       );
     }
   }
@@ -612,7 +613,7 @@ const creatorAllTimeBooking = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/monthly-booking-stats/${ecosystemDomain}`
+      `${PLAIN_API_URL}/monthly-booking-stats/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -621,7 +622,7 @@ const creatorAllTimeBooking = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching all time booking "
+        error.response?.data?.message || "Error fetching all time booking ",
       );
     }
   }
@@ -631,7 +632,7 @@ const creatorProfile = async ({ creatorId, accessToken, refreshToken }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/creator/profile/${creatorId}`
+      `${PLAIN_API_URL}/creator/profile/${creatorId}`,
     );
     return response;
   } catch (error) {
@@ -640,7 +641,7 @@ const creatorProfile = async ({ creatorId, accessToken, refreshToken }) => {
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching creator profile "
+        error.response?.data?.message || "Error fetching creator profile ",
       );
     }
   }
@@ -650,7 +651,7 @@ const TeamMemberProfile = async ({ creatorId, accessToken, refreshToken }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/team-member-profile/${creatorId}`
+      `${PLAIN_API_URL}/team-member-profile/${creatorId}`,
     );
     return response;
   } catch (error) {
@@ -659,11 +660,12 @@ const TeamMemberProfile = async ({ creatorId, accessToken, refreshToken }) => {
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching team Member profile "
+        error.response?.data?.message || "Error fetching team Member profile ",
       );
     }
   }
 };
+
 const creatorSupportBlock = async ({
   ecosystemDomain,
   accessToken,
@@ -672,7 +674,7 @@ const creatorSupportBlock = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/support-request-by-a-creator/${ecosystemDomain}`
+      `${PLAIN_API_URL}/support-request-by-a-creator/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -681,7 +683,7 @@ const creatorSupportBlock = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching creator profile "
+        error.response?.data?.message || "Error fetching creator profile ",
       );
     }
   }
@@ -695,7 +697,7 @@ const creatorSupportTable = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/all-creator-support-requests/${ecosystemDomain}`
+      `${PLAIN_API_URL}/all-creator-support-requests/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -704,7 +706,7 @@ const creatorSupportTable = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching creator profile"
+        error.response?.data?.message || "Error fetching creator profile",
       );
     }
   }
@@ -732,7 +734,7 @@ const creatorUpdateProfileImage = async ({
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -740,7 +742,7 @@ const creatorUpdateProfileImage = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Updating Profile Image"
+        error.response?.data?.message || "Error Updating Profile Image",
       );
     }
   }
@@ -754,7 +756,7 @@ const creatorWebsiteDetails = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/website-details/${ecosystemDomain}`
+      `${PLAIN_API_URL}/website-details/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -763,7 +765,7 @@ const creatorWebsiteDetails = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching website details"
+        error.response?.data?.message || "Error fetching website details",
       );
     }
   }
@@ -777,7 +779,7 @@ const creatorNotification = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/notifications/${ecosystemDomain}`
+      `${PLAIN_API_URL}/notifications/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -786,7 +788,7 @@ const creatorNotification = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching notification"
+        error.response?.data?.message || "Error fetching notification",
       );
     }
   }
@@ -801,7 +803,7 @@ const creatorMarkAsReadNotification = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.put(
-      `${PLAIN_API_URL}/marked-as-read/${ecosystemDomain}/${notificationId}`
+      `${PLAIN_API_URL}/marked-as-read/${ecosystemDomain}/${notificationId}`,
     );
     return response;
   } catch (error) {
@@ -810,11 +812,12 @@ const creatorMarkAsReadNotification = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error marking as read notification"
+        error.response?.data?.message || "Error marking as read notification",
       );
     }
   }
 };
+
 const creatorAddCustomer = async ({
   ecosystemDomain,
   accessToken,
@@ -844,11 +847,12 @@ const creatorAddCustomer = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Adding Customers"
+        error.response?.data?.message || "Error Adding Customers",
       );
     }
   }
 };
+
 const creatorEditCustomer = async ({
   id,
   accessToken,
@@ -878,7 +882,7 @@ const creatorEditCustomer = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Updating Customers Profile"
+        error.response?.data?.message || "Error Updating Customers Profile",
       );
     }
   }
@@ -892,7 +896,7 @@ const creatorGetAllCustomer = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/customers/${ecosystemDomain}`
+      `${PLAIN_API_URL}/customers/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -901,16 +905,17 @@ const creatorGetAllCustomer = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching Customers"
+        error.response?.data?.message || "Error fetching Customers",
       );
     }
   }
 };
+
 const creatorGetACustomer = async ({ id, accessToken, refreshToken }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/customer-details/${id}`
+      `${PLAIN_API_URL}/customer-details/${id}`,
     );
     return response;
   } catch (error) {
@@ -919,11 +924,12 @@ const creatorGetACustomer = async ({ id, accessToken, refreshToken }) => {
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching a Customers"
+        error.response?.data?.message || "Error fetching a Customers",
       );
     }
   }
 };
+
 const creatorGetACustomerAppointment = async ({
   email,
   ecosystemDomain,
@@ -933,7 +939,7 @@ const creatorGetACustomerAppointment = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/get-appointments/${email}/${ecosystemDomain}`
+      `${PLAIN_API_URL}/get-appointments/${email}/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -943,11 +949,12 @@ const creatorGetACustomerAppointment = async ({
     } else {
       throw new Error(
         error.response?.data?.message ||
-          "Error fetching a Customers Appointment"
+          "Error fetching a Customers Appointment",
       );
     }
   }
 };
+
 const creatorDeleteCustomer = async ({
   ecosystemDomain,
   accessToken,
@@ -963,7 +970,7 @@ const creatorDeleteCustomer = async ({
           ecosystemDomain,
           ids: ids.join(","), // Convert array to a comma-separated string if needed
         },
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -971,7 +978,7 @@ const creatorDeleteCustomer = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error deleting Customers"
+        error.response?.data?.message || "Error deleting Customers",
       );
     }
   }
@@ -985,7 +992,7 @@ const creatorSupportMetrics = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/support-box/${ecosystemDomain}`
+      `${PLAIN_API_URL}/support-box/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -994,7 +1001,7 @@ const creatorSupportMetrics = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching Support Metrics"
+        error.response?.data?.message || "Error fetching Support Metrics",
       );
     }
   }
@@ -1008,7 +1015,7 @@ const creatorGetAllSupport = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/support-tickets/${ecosystemDomain}`
+      `${PLAIN_API_URL}/support-tickets/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -1017,7 +1024,7 @@ const creatorGetAllSupport = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching all Support"
+        error.response?.data?.message || "Error fetching all Support",
       );
     }
   }
@@ -1026,7 +1033,7 @@ const creatorGetASupport = async ({ ticketId, accessToken, refreshToken }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/support-ticket/${ticketId}`
+      `${PLAIN_API_URL}/support-ticket/${ticketId}`,
     );
     return response;
   } catch (error) {
@@ -1035,7 +1042,7 @@ const creatorGetASupport = async ({ ticketId, accessToken, refreshToken }) => {
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching a Support"
+        error.response?.data?.message || "Error fetching a Support",
       );
     }
   }
@@ -1055,7 +1062,7 @@ const creatorEcosystemSwitchOnOff = async ({
         creatorId,
         ecosystemDomain,
         status,
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -1064,7 +1071,7 @@ const creatorEcosystemSwitchOnOff = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Switching Ecosystem On or Off"
+        error.response?.data?.message || "Error Switching Ecosystem On or Off",
       );
     }
   }
@@ -1073,7 +1080,7 @@ const creatorMarkBooking = async ({ bookingId, accessToken, refreshToken }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.patch(
-      `${PLAIN_API_URL}/complete-booking/${bookingId}`
+      `${PLAIN_API_URL}/complete-booking/${bookingId}`,
     );
     return response;
   } catch (error) {
@@ -1082,7 +1089,7 @@ const creatorMarkBooking = async ({ bookingId, accessToken, refreshToken }) => {
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Switching Ecosystem On or Off"
+        error.response?.data?.message || "Error Switching Ecosystem On or Off",
       );
     }
   }
@@ -1109,7 +1116,7 @@ const creatorReplySupport = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Replying Support Ticket"
+        error.response?.data?.message || "Error Replying Support Ticket",
       );
     }
   }
@@ -1155,7 +1162,7 @@ const creatorAddTeamMember = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Adding Team Member"
+        error.response?.data?.message || "Error Adding Team Member",
       );
     }
   }
@@ -1168,7 +1175,7 @@ const creatorGetAddedTeamMember = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/get-team-members/${ecosystemDomain}`
+      `${PLAIN_API_URL}/get-team-members/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -1176,7 +1183,7 @@ const creatorGetAddedTeamMember = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Getting Team Members"
+        error.response?.data?.message || "Error Getting Team Members",
       );
     }
   }
@@ -1202,7 +1209,7 @@ const creatorDeleteTeamMember = async ({
         paramsSerializer: (params) => {
           return new URLSearchParams(params).toString();
         },
-      }
+      },
     );
 
     return response;
@@ -1211,7 +1218,7 @@ const creatorDeleteTeamMember = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error deleting team members"
+        error.response?.data?.message || "Error deleting team members",
       );
     }
   }
@@ -1225,7 +1232,7 @@ const creatorGetTeamProfile = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/team-member-profile/${creatorId}`
+      `${PLAIN_API_URL}/team-member-profile/${creatorId}`,
     );
     return response;
   } catch (error) {
@@ -1234,7 +1241,7 @@ const creatorGetTeamProfile = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching a Teams profile"
+        error.response?.data?.message || "Error fetching a Teams profile",
       );
     }
   }
@@ -1255,7 +1262,7 @@ const creatorEditTeamMemberServices = async ({
         services,
         ecosystemDomain,
         teamMemberId,
-      }
+      },
     );
     return response;
   } catch (error) {
@@ -1263,7 +1270,7 @@ const creatorEditTeamMemberServices = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Editing Team Member Services"
+        error.response?.data?.message || "Error Editing Team Member Services",
       );
     }
   }
@@ -1277,7 +1284,7 @@ const creatorGetBusinessHours = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/get-businessHours/${ecosystemDomain}`
+      `${PLAIN_API_URL}/get-businessHours/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -1286,7 +1293,7 @@ const creatorGetBusinessHours = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching a Business Hours"
+        error.response?.data?.message || "Error fetching a Business Hours",
       );
     }
   }
@@ -1301,26 +1308,22 @@ const creatorEditBusinessHours = async ({
 }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
-    const response = await authFetch.put(
-      `${PLAIN_API_URL}/edit-businessHour`,
-      {
-        creatorId,
-        ecosystemDomain,
-        week,
-      }
-    );
+    const response = await authFetch.put(`${PLAIN_API_URL}/edit-businessHour`, {
+      creatorId,
+      ecosystemDomain,
+      week,
+    });
     return response;
   } catch (error) {
     if (error.isTokenExpired) {
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error Editing Business Hours"
+        error.response?.data?.message || "Error Editing Business Hours",
       );
     }
   }
 };
-
 
 const creatorGetFreeOverviewMetrics = async ({
   ecosystemDomain,
@@ -1330,7 +1333,7 @@ const creatorGetFreeOverviewMetrics = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/free-plan-overview/${ecosystemDomain}`
+      `${PLAIN_API_URL}/free-plan-overview/${ecosystemDomain}`,
     );
     return response;
   } catch (error) {
@@ -1339,7 +1342,7 @@ const creatorGetFreeOverviewMetrics = async ({
       navigate("/auth/login");
     } else {
       throw new Error(
-        error.response?.data?.message || "Error fetching a Free plan overview"
+        error.response?.data?.message || "Error fetching a Free plan overview",
       );
     }
   }
@@ -1392,9 +1395,7 @@ export default {
   creatorEditTeamMemberServices,
   TeamMemberProfile,
   TeamMemberUpdateProfile,
-
-
   creatorGetBusinessHours,
   creatorEditBusinessHours,
-  creatorGetFreeOverviewMetrics
+  creatorGetFreeOverviewMetrics,
 };

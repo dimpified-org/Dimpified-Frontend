@@ -134,14 +134,21 @@ const FreeOverview = () => {
     const fetchData = async () => {
       setLoading(true);
       await Promise.all([
-        getMonthlyBooking(), 
+        getMonthlyBooking(),
         getCreatorStats(),
-        getCreatorProfile()
+        getCreatorProfile(),
       ]);
       setLoading(false);
     };
     fetchData();
-  }, [ecosystemDomain, accessToken, refreshToken, dispatch, navigate, creatorId]);
+  }, [
+    ecosystemDomain,
+    accessToken,
+    refreshToken,
+    dispatch,
+    navigate,
+    creatorId,
+  ]);
 
   // Use real bookings data
   const allBookings = monthlyBooking?.allBookings || [];
@@ -152,7 +159,7 @@ const FreeOverview = () => {
       booking.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.service?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      booking.bookingId?.toLowerCase().includes(searchTerm.toLowerCase())
+      booking.bookingId?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Pagination
@@ -227,22 +234,23 @@ const FreeOverview = () => {
                   <Share2 className="w-4 h-4" />
                 </button>
               </div>
-              <ButtonSmallPurple
+              {/* <ButtonSmallPurple
                 bg="[#9F68FE]"
                 className="lg:ml-auto text-[#fff] px-6 py-1 font-semibold flex items-center gap-2 transition-all rounded-xl whitespace-nowrap"
               >
                 <ArrowUpCircle className="w-5 h-5" />
                 Upgrade plan
-              </ButtonSmallPurple>
+              </ButtonSmallPurple> */}
             </div>
-            
+
             {/* Display Ecosystem Name */}
             {creatorProfile?.ecosystemDetails && (
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
                   <span className="text-sm opacity-90">Ecosystem:</span>
                   <span className="ml-2 font-semibold">
-                    {creatorProfile.ecosystemDetails.ecosystemName || ecosystemDomain}
+                    {creatorProfile.ecosystemDetails.ecosystemName ||
+                      ecosystemDomain}
                   </span>
                 </div>
                 {creatorProfile.ecosystemDetails.ecosystemIndustry && (
@@ -429,7 +437,7 @@ const FreeOverview = () => {
                           >
                             {page}
                           </button>
-                        )
+                        ),
                       )}
                     </div>
                   </div>

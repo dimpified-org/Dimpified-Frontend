@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { ArrowUpCircle, Clock, Edit2, Plus, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ArrowUpCircle, Clock, Edit2, Plus, X, Loader2 } from "lucide-react";
 import FreeDashboardLayout from "../../layout/Creator/FreeCreatorDashboard";
 import { ButtonSmallPurple } from "../../component/Buttons";
 import api from "../../api/DashboardApi";
-import api2 from "../../api/authApis";
 import { useSelector } from "react-redux";
 import { FaNairaSign } from "react-icons/fa6";
 import axios from "axios";
+import serviceApi from "../../api/service";
+import { showToast } from "../../component/ShowToast";
 
 const FreeManageServices = () => {
+  const navigate = useNavigate();
   const [serviceGroups, setServiceGroups] = useState([]);
   const [businessHour, setBusinessHour] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [uploadingImageId, setUploadingImageId] = useState(null);
 
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [showAvailabilityModal, setShowAvailabilityModal] = useState(false);
@@ -31,11 +35,24 @@ const FreeManageServices = () => {
     name: "",
     price: "",
     duration: "",
+    description: "",
+    imageFile: null,
+    imagePreview: null,
   });
 
   const [newGroupServices, setNewGroupServices] = useState([
-    { name: "", price: "", duration: "" },
+    {
+      name: "",
+      price: "",
+      duration: "",
+      description: "",
+      imageFile: null,
+      imagePreview: null,
+    },
   ]);
+
+  const [openDurationDropdown, setOpenDurationDropdown] = useState(null);
+  const [editingDurationDropdown, setEditingDurationDropdown] = useState(false);
 
   // Fetch services
   useEffect(() => {
@@ -83,13 +100,48 @@ const FreeManageServices = () => {
   };
 
   const durationOptions = [
+    { value: 15, label: "15 Min" },
     { value: 30, label: "30 Min" },
-    { value: 60, label: "60 Min" },
-    { value: 90, label: "90 Min" },
-    { value: 120, label: "120 Min" },
-    { value: 150, label: "150 Min" },
-    { value: 180, label: "180 Min" },
+    { value: 45, label: "45 Min" },
+    { value: 60, label: "1 hour" },
+    { value: 75, label: "1 hour 15 Min" },
+    { value: 90, label: "1 hour 30 Min" },
+    { value: 105, label: "1 hour 45 Min" },
+    { value: 120, label: "2 hours" },
+    { value: 150, label: "2 hours 30 Min" },
+    { value: 165, label: "2 hours 45 Min" },
+    { value: 180, label: "3 hours" },
+    { value: 210, label: "3 hours 30 Min" },
+    { value: 240, label: "4 hours" },
+    { value: 255, label: "4 hours 15 Min" },
+    { value: 270, label: "4 hours 30 Min" },
+    { value: 285, label: "4 hours 45 Min" },
+    { value: 300, label: "5 hours" },
+    { value: 315, label: "5 hours 15 Min" },
+    { value: 330, label: "5 hours 30 Min" },
+    { value: 345, label: "5 hours 45 Min" },
+    { value: 360, label: "6 hours" },
+    { value: 375, label: "6 hours 15 Min" },
+    { value: 390, label: "6 hours 30 Min" },
+    { value: 405, label: "6 hours 45 Min" },
+    { value: 420, label: "7 hours" },
+    { value: 435, label: "7 hours 15 Min" },
+    { value: 450, label: "7 hours 30 Min" },
+    { value: 465, label: "7 hours 45 Min" },
+    { value: 480, label: "8 hours" },
   ];
+
+  // Filter duration options based on input
+  const getFilteredDurationOptions = (input) => {
+    if (!input) return durationOptions;
+    const inputNum = parseInt(input);
+    if (isNaN(inputNum)) return durationOptions;
+    return durationOptions.filter(
+      (d) =>
+        d.value.toString().includes(input) ||
+        d.label.toLowerCase().includes(input.toLowerCase()),
+    );
+  };
 
   const timeSlots = generateTimeSlots();
 
@@ -204,7 +256,14 @@ const FreeManageServices = () => {
   const addServiceField = () => {
     setNewGroupServices([
       ...newGroupServices,
-      { name: "", price: "", duration: "" },
+      {
+        name: "",
+        price: "",
+        duration: "",
+        description: "",
+        imageFile: null,
+        imagePreview: null,
+      },
     ]);
   };
 
@@ -220,11 +279,12 @@ const FreeManageServices = () => {
 
     const servicesPayload = newGroupServices.map((s) => ({
       name: s.name.trim(),
-      shortDescription: `Professional ${s.name.toLowerCase()} service`,
+      shortDescription:
+        s.description?.trim() || `Professional ${s.name.toLowerCase()} service`,
       price: parseFloat(s.price),
       deliveryTime: parseInt(s.duration),
       priceFormat: "Fixed",
-      serviceImage: "null",
+      serviceImage: s.imageFile ? s.imageFile : "null",
     }));
 
     const header = servicesPayload[0].name;
@@ -255,12 +315,21 @@ const FreeManageServices = () => {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       await fetchServices();
       setShowServiceModal(false);
-      setNewGroupServices([{ name: "", price: "", duration: "" }]);
+      setNewGroupServices([
+        {
+          name: "",
+          price: "",
+          duration: "",
+          description: "",
+          imageFile: null,
+          imagePreview: null,
+        },
+      ]);
       setIsAddingGroup(false);
     } catch (error) {
       console.error("Failed to create service group:", error);
@@ -284,11 +353,15 @@ const FreeManageServices = () => {
         serviceId: editingSubService.serviceGroupId,
         subServiceId: editingSubService._id,
         name: serviceForm.name.trim(),
-        shortDescription: `Professional ${serviceForm.name.toLowerCase()} service`,
+        shortDescription:
+          serviceForm.description?.trim() ||
+          `Professional ${serviceForm.name.toLowerCase()} service`,
         price: parseFloat(serviceForm.price),
         deliveryTime: parseInt(serviceForm.duration),
         priceFormat: "Fixed",
-        serviceImage: "null",
+        serviceImage: serviceForm.imageFile
+          ? serviceForm.imageFile
+          : editingSubService.serviceImage || "null",
       });
 
       await fetchServices();
@@ -308,6 +381,12 @@ const FreeManageServices = () => {
       name: subService.name,
       price: subService.price,
       duration: subService.deliveryTime,
+      description: subService.shortDescription || "",
+      imageFile: null,
+      imagePreview:
+        subService.serviceImage && subService.serviceImage !== "null"
+          ? subService.serviceImage
+          : null,
     });
     setIsAddingGroup(false);
     setShowServiceModal(true);
@@ -315,13 +394,55 @@ const FreeManageServices = () => {
 
   const handleAddServiceGroup = () => {
     setIsAddingGroup(true);
-    setNewGroupServices([{ name: "", price: "", duration: "" }]);
+    setNewGroupServices([
+      {
+        name: "",
+        price: "",
+        duration: "",
+        description: "",
+        imageFile: null,
+        imagePreview: null,
+      },
+    ]);
     setShowServiceModal(true);
   };
 
   const allSubServices = serviceGroups.flatMap((group) =>
-    group.services.map((s) => ({ ...s, groupId: group._id }))
+    group.services.map((s) => ({ ...s, groupId: group._id })),
   );
+
+  const handleImageUpload = async (
+    file,
+    updateCallback,
+    type = "create",
+    id = null,
+    oldImageUrl = null,
+  ) => {
+    if (!file) return;
+
+    setUploadingImageId(id || "editing");
+    try {
+      const response = await serviceApi.uploadServiceImage({
+        oldImageUrl: oldImageUrl || null,
+        image: file,
+        accessToken,
+        refreshToken,
+        navigate,
+      });
+
+      // Store the returned URL
+      if (response.data?.url) {
+        updateCallback(response.data.url);
+        showToast("Image uploaded successfully", "success");
+      } else {
+        showToast("Image uploaded but no URL returned", "error");
+      }
+    } catch (error) {
+      showToast(error.message || "Failed to upload image", "error");
+    } finally {
+      setUploadingImageId(null);
+    }
+  };
 
   return (
     <FreeDashboardLayout>
@@ -337,10 +458,10 @@ const FreeManageServices = () => {
                 Create and manage your service offerings
               </p>
             </div>
-            <ButtonSmallPurple className="bg-[#9F68FE] text-white px-6 py-2 font-semibold flex items-center gap-2 rounded-xl">
+            {/* <ButtonSmallPurple className="bg-[#9F68FE] text-white px-6 py-2 font-semibold flex items-center gap-2 rounded-xl">
               <ArrowUpCircle className="w-5 h-5" />
               Upgrade plan
-            </ButtonSmallPurple>
+            </ButtonSmallPurple> */}
           </div>
 
           {/* Availability Section - Exactly like the screenshot */}
@@ -454,35 +575,58 @@ const FreeManageServices = () => {
                 {allSubServices.map((service) => (
                   <div
                     key={service._id}
-                    className="border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow"
+                    className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
                   >
-                    <div className="flex justify-between items-start mb-4">
-                      <h4 className="font-semibold text-gray-900 text-lg">
-                        {service.name}
-                      </h4>
-                      <button
-                        onClick={() =>
-                          handleEditService(service.groupId, service)
-                        }
-                        className="text-gray-600 hover:text-[#9F68FE] transition-colors"
-                      >
-                        <Edit2 className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm mb-5">
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <Clock className="w-5 h-5" />
-                        <span>{service.deliveryTime} min</span>
+                    {/* Service Image */}
+                    {service.serviceImage && service.serviceImage !== "null" ? (
+                      <img
+                        src={service.serviceImage}
+                        alt={service.name}
+                        className="w-full h-40 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-40 bg-gradient-to-r from-[#9F68FE] to-[#D8B4FE] flex items-center justify-center">
+                        <span className="text-white text-sm">No image</span>
                       </div>
-                      <div className="flex items-center gap-2 font-bold text-gray-900">
-                        <FaNairaSign className="w-5 h-5" />
-                        <span>{service.price.toLocaleString()}</span>
-                      </div>
-                    </div>
+                    )}
 
-                    <div className="bg-purple-100 text-[#9F68FE] py-2.5 rounded-lg text-center text-sm font-semibold">
-                      Active
+                    <div className="p-5">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-semibold text-gray-900 text-lg">
+                          {service.name}
+                        </h4>
+                        <button
+                          onClick={() =>
+                            handleEditService(service.groupId, service)
+                          }
+                          className="text-gray-600 hover:text-[#9F68FE] transition-colors"
+                        >
+                          <Edit2 className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      {/* Description */}
+                      {service.shortDescription &&
+                        service.shortDescription !== "null" && (
+                          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                            {service.shortDescription}
+                          </p>
+                        )}
+
+                      <div className="flex items-center justify-between text-sm mb-5">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Clock className="w-5 h-5" />
+                          <span>{service.deliveryTime} min</span>
+                        </div>
+                        <div className="flex items-center gap-2 font-bold text-gray-900">
+                          <FaNairaSign className="w-5 h-5" />
+                          <span>{service.price.toLocaleString()}</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-purple-100 text-[#9F68FE] py-2.5 rounded-lg text-center text-sm font-semibold">
+                        Active
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -494,8 +638,8 @@ const FreeManageServices = () => {
 
       {/* Service Modal - unchanged */}
       {showServiceModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-xl shadow-lg w-full max-w-lg my-8">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold">
@@ -537,21 +681,118 @@ const FreeManageServices = () => {
                         />
                       </div>
 
-                      <select
-                        value={svc.duration}
+                      <textarea
+                        placeholder="Service Description (optional)"
+                        value={svc.description}
                         onChange={(e) => {
                           const updated = [...newGroupServices];
-                          updated[idx].duration = e.target.value;
+                          updated[idx].description = e.target.value;
                           setNewGroupServices(updated);
                         }}
-                        className="w-full h-14 px-5 rounded-xl border border-gray-300 focus:border-purple-500 outline-none"
-                      >
-                        {durationOptions.map((d) => (
-                          <option key={d.value} value={d.value}>
-                            {d.label}
-                          </option>
-                        ))}
-                      </select>
+                        rows={3}
+                        className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Service Image (optional)
+                        </label>
+                        <div className="flex items-center gap-3">
+                          {svc.imagePreview && (
+                            <div className="relative">
+                              <img
+                                src={svc.imagePreview}
+                                alt="preview"
+                                className="w-16 h-16 object-cover rounded-lg"
+                              />
+                              {uploadingImageId !== `new-${idx}` && (
+                                <button
+                                  onClick={() => {
+                                    const updated = [...newGroupServices];
+                                    updated[idx].imageFile = null;
+                                    updated[idx].imagePreview = null;
+                                    setNewGroupServices(updated);
+                                  }}
+                                  className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                handleImageUpload(
+                                  file,
+                                  (url) => {
+                                    const updated = [...newGroupServices];
+                                    updated[idx].imageFile = url;
+                                    updated[idx].imagePreview = url;
+                                    setNewGroupServices(updated);
+                                  },
+                                  "create",
+                                  `new-${idx}`,
+                                );
+                              }}
+                              disabled={uploadingImageId === `new-${idx}`}
+                              className="w-full px-4 py-2 border rounded-lg disabled:opacity-50"
+                            />
+                            {uploadingImageId === `new-${idx}` && (
+                              <div className="flex items-center gap-2 text-purple-600 text-sm mt-2">
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                Uploading...
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="relative">
+                        <input
+                          type="number"
+                          placeholder="Duration (min)"
+                          value={svc.duration}
+                          onChange={(e) => {
+                            const updated = [...newGroupServices];
+                            updated[idx].duration =
+                              e.target.value === ""
+                                ? ""
+                                : Number(e.target.value);
+                            setNewGroupServices(updated);
+                          }}
+                          onFocus={() => setOpenDurationDropdown(`new-${idx}`)}
+                          onBlur={() =>
+                            setTimeout(() => setOpenDurationDropdown(null), 200)
+                          }
+                          className="w-full h-12 px-4 rounded-xl border border-gray-300 focus:border-purple-500 outline-none"
+                        />
+
+                        {openDurationDropdown === `new-${idx}` && (
+                          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto">
+                            {getFilteredDurationOptions(
+                              svc.duration.toString(),
+                            ).map((option) => (
+                              <button
+                                key={option.value}
+                                type="button"
+                                onClick={() => {
+                                  const updated = [...newGroupServices];
+                                  updated[idx].duration = option.value;
+                                  setNewGroupServices(updated);
+                                  setOpenDurationDropdown(null);
+                                }}
+                                className="w-full text-left px-4 py-3 hover:bg-purple-50 border-b last:border-b-0 transition"
+                              >
+                                {option.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                       {newGroupServices.length > 1 && (
                         <button
                           onClick={() => removeServiceField(idx)}
@@ -579,6 +820,78 @@ const FreeManageServices = () => {
                     }
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
+                  <textarea
+                    placeholder="Service Description (optional)"
+                    value={serviceForm.description}
+                    onChange={(e) =>
+                      setServiceForm({
+                        ...serviceForm,
+                        description: e.target.value,
+                      })
+                    }
+                    rows={3}
+                    className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Service Image (optional)
+                    </label>
+                    <div className="flex items-center gap-3">
+                      {serviceForm.imagePreview && (
+                        <div className="relative">
+                          <img
+                            src={serviceForm.imagePreview}
+                            alt="preview"
+                            className="w-16 h-16 object-cover rounded-lg"
+                          />
+                          {uploadingImageId !== "editing" && (
+                            <button
+                              onClick={() =>
+                                setServiceForm({
+                                  ...serviceForm,
+                                  imageFile: null,
+                                  imagePreview: null,
+                                })
+                              }
+                              className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          )}
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            handleImageUpload(
+                              file,
+                              (url) => {
+                                setServiceForm({
+                                  ...serviceForm,
+                                  imageFile: url,
+                                  imagePreview: url,
+                                });
+                              },
+                              "edit",
+                              null,
+                              editingSubService?.serviceImage,
+                            );
+                          }}
+                          disabled={uploadingImageId === "editing"}
+                          className="w-full px-4 py-2 border rounded-lg disabled:opacity-50"
+                        />
+                        {uploadingImageId === "editing" && (
+                          <div className="flex items-center gap-2 text-purple-600 text-sm mt-2">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Uploading...
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <input
                     type="number"
                     placeholder="Price (NGN)"
@@ -589,22 +902,48 @@ const FreeManageServices = () => {
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
 
-                  <select
-                    value={serviceForm.duration}
-                    onChange={(e) =>
-                      setServiceForm({
-                        ...serviceForm,
-                        duration: e.target.value,
-                      })
-                    }
-                    className="w-full h-14 px-5 rounded-xl border border-gray-300 focus:border-purple-500 outline-none"
-                  >
-                    {durationOptions.map((d) => (
-                      <option key={d.value} value={d.value}>
-                        {d.label}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      placeholder="Duration (min)"
+                      value={serviceForm.duration}
+                      onChange={(e) =>
+                        setServiceForm({
+                          ...serviceForm,
+                          duration:
+                            e.target.value === "" ? "" : Number(e.target.value),
+                        })
+                      }
+                      onFocus={() => setEditingDurationDropdown(true)}
+                      onBlur={() =>
+                        setTimeout(() => setEditingDurationDropdown(false), 200)
+                      }
+                      className="w-full h-12 px-4 rounded-xl border border-gray-300 focus:border-purple-500 outline-none"
+                    />
+
+                    {editingDurationDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto">
+                        {getFilteredDurationOptions(
+                          serviceForm.duration.toString(),
+                        ).map((option) => (
+                          <button
+                            key={option.value}
+                            type="button"
+                            onClick={() => {
+                              setServiceForm({
+                                ...serviceForm,
+                                duration: option.value,
+                              });
+                              setEditingDurationDropdown(false);
+                            }}
+                            className="w-full text-left px-4 py-3 hover:bg-purple-50 border-b last:border-b-0 transition"
+                          >
+                            {option.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -617,8 +956,8 @@ const FreeManageServices = () => {
                   {loading
                     ? "Saving..."
                     : isAddingGroup
-                    ? "Create Services"
-                    : "Save Changes"}
+                      ? "Create Services"
+                      : "Save Changes"}
                 </button>
                 <button
                   onClick={() => setShowServiceModal(false)}

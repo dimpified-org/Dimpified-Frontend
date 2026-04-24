@@ -34,11 +34,13 @@ const FreeBookingPage = () => {
   const [businessInfo, setBusinessInfo] = useState({
     name: "",
     description: "",
+    image: null,
     contact: {
       phone: "",
       email: "",
       address: "",
     },
+    ecosystemDescription: "",
   });
 
   const [eServices, setEServices] = useState([]);
@@ -76,6 +78,7 @@ const FreeBookingPage = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [timeZones, setTimeZones] = useState("");
+  const [showFullDescription, setShowFullDescription] = useState(null);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -86,28 +89,51 @@ const FreeBookingPage = () => {
   const allTimeSlots = useMemo(() => {
     const generateTimeSlots = (startHour = 6, endHour = 22, interval = 30) => {
       const slots = [];
-      for (let hour = startHour; hour <= endHour; hour++) {
-        for (let minute = 0; minute < 60; minute += interval) {
-          if (hour === endHour && minute > 0) break;
-          const time24 = `${hour.toString().padStart(2, "0")}:${minute
-            .toString()
-            .padStart(2, "0")}`;
-          const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-          const period = hour >= 12 ? "PM" : "AM";
+      // Convert start hour to minutes from midnight
+      let totalMinutes = startHour * 60;
+      const endTime = endHour * 60;
 
-          slots.push({
-            value: time24,
-            label: `${displayHour}:${minute
-              .toString()
-              .padStart(2, "0")} ${period}`,
-          });
-        }
+      while (totalMinutes < endTime) {
+        const hour = Math.floor(totalMinutes / 60);
+        const minute = totalMinutes % 60;
+
+        // Calculate end time
+        const endTotalMinutes = totalMinutes + interval;
+        const endHour = Math.floor(endTotalMinutes / 60);
+        const endMinute = endTotalMinutes % 60;
+
+        // Format start time
+        const time24 = `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}`;
+        const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+        const period = hour >= 12 ? "PM" : "AM";
+
+        // Format end time
+        const endDisplayHour =
+          endHour === 0 ? 12 : endHour > 12 ? endHour - 12 : endHour;
+        const endPeriod = endHour >= 12 ? "PM" : "AM";
+
+        slots.push({
+          value: time24,
+          label: `${displayHour}:${minute
+            .toString()
+            .padStart(2, "0")} - ${endDisplayHour}:${endMinute
+            .toString()
+            .padStart(2, "0")} ${period}`,
+        });
+
+        // Add the interval to get next slot
+        totalMinutes += interval;
       }
+
       return slots;
     };
 
-    return generateTimeSlots();
-  }, []);
+    // Use service's deliveryTime as interval, default to 30 minutes
+    const interval = selectedService?.deliveryTime || 30;
+    return generateTimeSlots(6, 22, interval);
+  }, [selectedService?.deliveryTime]);
 
   // Convert 24h time string to minutes
   const timeToMinutes = useCallback((time24) => {
@@ -251,28 +277,30 @@ const FreeBookingPage = () => {
         const effectiveDuration =
           apiDuration || selectedService?.deliveryTime || 30;
 
-        const bookedSlots = new Set();
-        bookedTimes.forEach((bookedTime) => {
+        // Create a set of booked time windows using overlap detection
+        const bookedWindows = bookedTimes.map((bookedTime) => {
           const startMinutes = timeToMinutes(bookedTime);
-          const slotsToBlock = Math.ceil(effectiveDuration / 60);
-
-          for (let i = 0; i < slotsToBlock; i++) {
-            const blockedMinute = startMinutes + i * 60;
-            const blockedSlot = allTimeSlots.find(
-              (s) => timeToMinutes(s.value) === blockedMinute,
-            );
-            if (blockedSlot) bookedSlots.add(blockedSlot.value);
-          }
+          const endMinutes = startMinutes + effectiveDuration;
+          return { startMinutes, endMinutes };
         });
 
         // First: Filter by business hours
         const allowedSlots = getAllowedSlotsForDate(date);
 
-        // Then: Mark booked within allowed
-        const updatedSlots = allowedSlots.map((slot) => ({
-          ...slot,
-          booked: bookedSlots.has(slot.value),
-        }));
+        // Then: Mark booked if slot overlaps with any booked window
+        const updatedSlots = allowedSlots.map((slot) => {
+          const slotStartMinutes = timeToMinutes(slot.value);
+          const slotEndMinutes = slotStartMinutes + effectiveDuration;
+
+          // A slot is booked if it overlaps with any booked window
+          // Overlap occurs when: slotStart < bookedEnd AND slotEnd > bookedStart
+          const isBooked = bookedWindows.some(
+            ({ startMinutes: bookedStart, endMinutes: bookedEnd }) =>
+              slotStartMinutes < bookedEnd && slotEndMinutes > bookedStart,
+          );
+
+          return { ...slot, booked: isBooked };
+        });
 
         setAvailableTimeSlots(updatedSlots.length > 0 ? updatedSlots : []);
         lastFetchedParams.current = paramsKey;
@@ -353,11 +381,14 @@ const FreeBookingPage = () => {
             name:
               serviceData?.businessHoursRecords[0]?.ecosystemName || "Business",
             description: serviceData.description || "Professional services",
+            image: serviceData.serviceImage || null,
             contact: {
               phone: serviceData.phoneNumber || "",
               email: serviceData.email || "",
               address: serviceData.localGovernment || "Not available",
             },
+            ecosystemDescription:
+              serviceData.ecosystemDescription || "Professional services",
           });
 
           const contactInfo = {
@@ -502,6 +533,26 @@ const FreeBookingPage = () => {
     const symbol = getCurrencySymbol("NGN");
     const formattedAmount = new Intl.NumberFormat().format(amount);
     return `${symbol}${formattedAmount}`;
+  };
+
+  const truncateDescription = (text, maxLength = 100) => {
+    if (!text) return "";
+
+    // Trim whitespace first
+    const trimmedText = text.trim();
+
+    // Return as-is if within limit
+    if (trimmedText.length <= maxLength) return trimmedText;
+
+    // Find the last space within the limit to avoid cutting words
+    const truncated = trimmedText.substring(0, maxLength);
+    const lastSpaceIndex = truncated.lastIndexOf(" ");
+
+    // If there's a space, cut at that point; otherwise cut at maxLength
+    const finalText =
+      lastSpaceIndex > 0 ? truncated.substring(0, lastSpaceIndex) : truncated;
+
+    return finalText.trim() + "...";
   };
 
   const PoweredByLogo = () => (
@@ -675,7 +726,7 @@ const FreeBookingPage = () => {
                       Welcome to {businessInfo.name},
                     </h2>
                     <p className="text-base lg:text-xl text-gray-600 mb-6">
-                      {businessInfo.description}
+                      {businessInfo.ecosystemDescription}
                     </p>
                     <h2 className="text-2xl lg:text-4xl font-bold leading-relaxed text-gray-900 mb-3 lg:mb-4">
                       Kindly select a service to book
@@ -698,14 +749,72 @@ const FreeBookingPage = () => {
                           }`}
                           onClick={() => handleServiceChange(service)}
                         >
+                          {/* Service Image - Only show if available */}
+                          {service.serviceImage &&
+                            Array.isArray(service.serviceImage) &&
+                            service.serviceImage.length > 0 &&
+                            service.serviceImage[0] !== "null" && (
+                              <div className="mb-4 -mx-4 lg:-mx-6 -mt-4 lg:-mt-6">
+                                <img
+                                  src={service.serviceImage[0]}
+                                  alt={service.name}
+                                  className="w-full h-40 lg:h-48 object-cover rounded-t-xl lg:rounded-t-2xl"
+                                />
+                              </div>
+                            )}
+
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <h3 className="text-lg lg:text-xl font-semibold text-gray-900 mb-2">
                                 {service.name}
                               </h3>
-                              <p className="text-gray-600 text-sm lg:text-base mb-2">
+
+                              {/* Description - Show truncated with view more */}
+                              {service.shortDescription && (
+                                <p className="text-gray-600 text-sm lg:text-base mb-2">
+                                  {truncateDescription(
+                                    service.shortDescription,
+                                    100,
+                                  )}
+                                  {service.shortDescription.length > 100 && (
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowFullDescription(
+                                          showFullDescription === service._id
+                                            ? null
+                                            : service._id,
+                                        );
+                                      }}
+                                      className="ml-1 text-purple-600 hover:text-purple-700 font-medium text-xs"
+                                    >
+                                      View more
+                                    </button>
+                                  )}
+                                </p>
+                              )}
+
+                              {/* Full description modal - appears when view more is clicked */}
+                              {showFullDescription === service._id && (
+                                <div className="mb-3 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                                  <p className="text-sm text-gray-700 mb-2">
+                                    {service.shortDescription}
+                                  </p>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setShowFullDescription(null);
+                                    }}
+                                    className="text-xs text-purple-600 hover:text-purple-700 font-medium"
+                                  >
+                                    Show less
+                                  </button>
+                                </div>
+                              )}
+
+                              {/* <p className="text-gray-600 text-sm lg:text-base mb-2">
                                 {service.shortDescription}
-                              </p>
+                              </p> */}
                               <div className="flex items-center justify-between mt-3">
                                 <span className="text-lg font-bold text-purple-600">
                                   {formatCurrency(service.price)}
@@ -716,7 +825,7 @@ const FreeBookingPage = () => {
                               </div>
                             </div>
                             <FaChevronRight
-                              className={`text-gray-400 group-hover:text-purple-500 transition-colors duration-200 ${
+                              className={`text-gray-400 group-hover:text-purple-500 transition-colors duration-200 flex-shrink-0 ml-2 ${
                                 selectedService?._id === service._id
                                   ? "text-purple-500"
                                   : ""
@@ -1067,8 +1176,8 @@ const FreeBookingPage = () => {
                   </h2>
 
                   <p className="text-base lg:text-xl text-gray-600 mb-6 lg:mb-8">
-                    To confirm your booking, kindly make payment to the bank details below and send
-                    us the payment receipt.
+                    To confirm your booking, kindly make payment to the bank
+                    details below and send us the payment receipt.
                   </p>
 
                   {/* Amount to Pay */}

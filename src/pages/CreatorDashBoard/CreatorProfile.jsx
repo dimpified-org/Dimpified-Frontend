@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
   businessName: Yup.string().required("Business Name is required"),
   websiteName: Yup.string().required("Website Address is required"),
   localGovernment: Yup.string().required(
-    "Local Government Address is required"
+    "Local Government Address is required",
   ),
   category: Yup.string().required("Business Category is required"),
   subcategory: Yup.string().required("Business Subcategory is required"),
@@ -38,7 +38,7 @@ const validationSchema = Yup.object().shape({
 const CreatorProfile = () => {
   const navigate = useNavigate();
   const [profileImage, setProfileImage] = useState(
-    "https://via.placeholder.com/100"
+    "https://via.placeholder.com/100",
   );
   const [profileImageFile, setProfileImageFile] = useState(null);
 
@@ -120,7 +120,7 @@ const CreatorProfile = () => {
       setValue("fullname", fullname || "");
       setValue(
         "dateOfBirth",
-        dateOfBirth ? new Date(dateOfBirth).toISOString().split("T")[0] : ""
+        dateOfBirth ? new Date(dateOfBirth).toISOString().split("T")[0] : "",
       );
       setValue("gender", gender || "");
       setValue("email", email || "");
@@ -253,12 +253,12 @@ const CreatorProfile = () => {
           </div>
 
           {/* Right Section: Upgrade Plan Button */}
-          <ButtonSmallPurple
+          {/* <ButtonSmallPurple
             onClick={handlePlanUpdate}
             className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 mt-4 lg:mt-0"
           >
             Upgrade Plan
-          </ButtonSmallPurple>
+          </ButtonSmallPurple> */}
         </div>
 
         <div className="flex items-center justify-between pb-2 my-10 mx-5 lg:mx-0">

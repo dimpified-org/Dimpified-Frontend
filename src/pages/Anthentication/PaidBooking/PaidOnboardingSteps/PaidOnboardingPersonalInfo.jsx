@@ -126,11 +126,13 @@ const PaidOnboardingPersonalInfo = () => {
         const userStep = resultAction.payload.user?.step;
 
         showToast("Account created successfully!", "success");
-        // // Navigate based on onboarding step
+        // Navigate based on onboarding step
         if (userStep === 1) {
           navigate("/Paid/auth/email-verification");
         } else if (userStep === 2) {
           navigate("/Paid/auth/business-identity");
+        } else if (userStep === 3) {
+          navigate("/paid/auth/subcription");
         } else if (userStep === 7) {
           navigate("/creator/dashboard/overview");
         } else {
